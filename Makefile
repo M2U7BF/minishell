@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/05/29 11:43:23 by kkamei           ###   ########.fr        #
+#    Updated: 2025/05/30 07:46:18 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ $(NAME): $(OBJS)
 	-I$(FT_DPRINTF_DIR)/include \
 	-L$(LIBFT_DIR) -lft \
 	-L$(FT_DPRINTF_DIR) -lftdprintf \
+	-lreadline \
 	-o $(NAME)
 
 libft:
@@ -58,8 +59,12 @@ test:
 	@test -d $(NAME)_test || git clone git@github.com:M2U7BF/$(NAME)_test.git
 	./$(NAME)_test/test.sh
 
+doc:
+	@test -d $(NAME)_doc || git clone git@github.com:M2U7BF/$(NAME)_doc.git
+
 debug: CFLAG += $(CFLAG_DEBUG)
 debug: $(NAME)
+	ar rcs $(NAME).a $(OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< -o $@

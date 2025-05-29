@@ -1,6 +1,8 @@
 infile
 minishell_test
+minishell_doc
 minishell
+func_test
 *.txt
 .vscode
 
