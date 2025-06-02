@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/02 17:11:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:12:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ctrl_backslash(int signum)
 void	ctrl_c(int signum)
 {
 	// TODO 内容実装
-	printf("ctrl_c, signum:%d\n", signum);
+	(void)signum;
 	exit(EOWNERDEAD);
 }
 
