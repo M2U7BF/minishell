@@ -6,17 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/02 12:55:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/02 16:59:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void ft_free(void *p)
-{
-  free(p);
-  p = NULL;
-}
 
 t_vars	*init_vars(void)
 {
@@ -37,6 +31,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)envp;
 	if (argc != 1)
 		return (1);
+  handle_signal();
 	vars = init_vars();
   while (1)
   {

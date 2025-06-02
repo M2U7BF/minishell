@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/02 12:49:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/02 16:59:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,23 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/signal.h>
 
 typedef struct s_vars
 {
 	char	*input_line;
 	char	*prompt;
 }			t_vars;
+
+// handle_signal.c
+void		ctrl_backslash(int signum);
+void		ctrl_c(int signum);
+void		handle_signal(void);
+
+// util.c
+void		ft_free(void *p);
 
 #endif

@@ -6,11 +6,11 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/05/30 07:46:18 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/02 16:59:58 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_NAMES = main.c
+SRC_NAMES = main.c util.c handle_signal.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra
