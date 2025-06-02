@@ -5,6 +5,7 @@ minishell
 func_test
 *.txt
 .vscode
+outfile
 
 # Prerequisites
 *.d
