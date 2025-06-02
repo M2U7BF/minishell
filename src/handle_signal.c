@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/02 16:58:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:03:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ctrl_c(int signum)
 {
 	// TODO 内容実装
 	printf("ctrl_c, signum:%d\n", signum);
-	exit(0);
+	exit(EOWNERDEAD);
 }
 
 void	handle_signal(void)
