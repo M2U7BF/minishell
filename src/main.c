@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/02 16:59:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/02 17:07:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	main(int argc, char *argv[], char *envp[])
   {
     vars->input_line = readline(vars->prompt);
     printf("s:%s\n", vars->input_line);
+    if (!vars->input_line)
+			exit(0);
     // パース
     // コマンド実行
     ft_free(vars->input_line);
