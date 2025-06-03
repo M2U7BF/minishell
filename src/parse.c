@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 12:53:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/03 17:46:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ void	variable_expansion(char ***words)
 						ft_strlcpy(front_str, (*words)[i], j);
 					}
 					else
-						front_str = "";
-					free((*words)[i]);
+						front_str = ft_strdup("");
+          free((*words)[i]);
 					(*words)[i] = ft_strjoin(front_str, env_var);
+          free(front_str);
 				}
 			}
 		}
