@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   interactive_mode.c                                 :+:      :+:    :+:   */
+/*   non_interactive_mode.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 11:44:51 by kkamei           ###   ########.fr       */
+/*   Created: 2025/06/03 11:40:31 by kkamei            #+#    #+#             */
+/*   Updated: 2025/06/03 12:49:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	exec_interactive(t_exec_vars *e_vars)
+int	exec_non_interactive(t_exec_vars *e_vars)
 {
-	t_i_mode_vars	*i_vars;
+  t_ni_mode_vars	*ni_vars;
 
-	handle_signal();
-	init_i_vars(&e_vars->i_vars);
-	i_vars = &e_vars->i_vars;
-	while (1)
-	{
-		i_vars->input_line = readline(i_vars->prompt);
-		printf("s:%s\n", i_vars->input_line);
-		if (!i_vars->input_line)
-			exit(EXIT_SUCCESS);
-		add_history(i_vars->input_line);
-		// パース
-		parse(i_vars);
-		// コマンド実行
-		ft_free(i_vars->input_line);
-	}
+  (void)ni_vars;
+  (void)e_vars;
+  return (0);
 }

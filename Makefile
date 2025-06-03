@@ -6,11 +6,12 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/03 10:55:26 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/03 12:50:08 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c util.c
+SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
+						non_interactive_mode.c parse.c util.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra
