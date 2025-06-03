@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 12:53:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/03 12:58:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int							exec_non_interactive(t_exec_vars *e_vars);
 
 // parse.c
 void						parse(t_i_mode_vars *i_vars);
+void						variable_expansion(char ***words);
 
 #endif

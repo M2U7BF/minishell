@@ -1,11 +1,11 @@
-infile
+infile*
+outfile*
 minishell_test
 minishell_doc
 minishell
 func_test
 *.txt
 .vscode
-outfile
 
 # Prerequisites
 *.d
