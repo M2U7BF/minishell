@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:30:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 15:14:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:31:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,24 +52,33 @@ static char	*get_fragment(char *str, char *start, int *len)
 	return (str);
 }
 
+static char	**init_str_arr(int elem_count)
+{
+	char	**str;
+
+	str = (char **)malloc(sizeof(char *) * (elem_count + 1));
+	if (!str)
+		return (NULL);
+	str[elem_count] = NULL;
+	return (str);
+}
+
 char	**ft_split_multiple_separators(char *s, char *separator)
 {
 	size_t	i;
 	int		j;
-	int		elem_count;
 	int		s_count;
 	char	**str;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	s_count = 0;
 	if (!s || !separator)
 		return (NULL);
-	elem_count = get_elem_count(s, separator);
-	str = (char **)malloc(sizeof(char *) * (elem_count + 1));
+	str = init_str_arr(get_elem_count(s, separator));
 	if (!str)
 		return (NULL);
-	while (elem_count > 0 && i <= ft_strlen(s))
+	while (get_elem_count(s, separator) > 0 && ++i <= ft_strlen(s))
 	{
 		if (s_count > 0 && (is_separator(separator, s[i]) || !s[i]))
 		{
@@ -79,8 +88,6 @@ char	**ft_split_multiple_separators(char *s, char *separator)
 		}
 		else if (!is_separator(separator, s[i]))
 			s_count++;
-		i++;
 	}
-	str[j] = NULL;
 	return (str);
 }
