@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 12:58:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:04:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ void						handle_signal(void);
 
 // util.c
 void						ft_free(void *p);
+char						*ft_strjoin_all(char **words);
+void						free_str_array(char **array);
+
+// ft_split_leave_separator.c
+char **ft_split_leave_separator(char *s, char separator);
 
 // i_mode_vars.c
 void						init_i_vars(t_i_mode_vars *i_vars);

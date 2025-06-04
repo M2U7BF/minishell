@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 17:51:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 09:56:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,35 @@ void	variable_expansion(char ***words)
 	int		i;
 	int		j;
 	char	*env_var;
-	char	*front_str;
+	char	**dollar_splited_words;
+  // char *old;
 
 	i = -1;
 	while ((*words)[++i])
 	{
-		j = -1;
-		while ((*words)[i][++j])
+		if (ft_strchr((*words)[i], '$'))
 		{
-			if ((*words)[i][j] == '$')
+			dollar_splited_words = ft_split((*words)[i], '$');
+			j = -1;
+			while (dollar_splited_words[++j])
 			{
-				env_var = getenv(&(*words)[i][j + 1]);
+				env_var = getenv(dollar_splited_words[j]);
 				if (env_var)
 				{
-					if (j > 0)
-					{
-						front_str = malloc(sizeof(char) * j);
-						ft_strlcpy(front_str, (*words)[i], j);
-					}
-					else
-						front_str = ft_strdup("");
-          free((*words)[i]);
-					(*words)[i] = ft_strjoin(front_str, env_var);
-          free(front_str);
+					ft_free(dollar_splited_words[j]);
+					dollar_splited_words[j] = ft_strdup(env_var);
 				}
+        else
+        {
+          // 見つからなかったら、元のやつを入れる（もしくは$つけて復元）
+          // old = dollar_splited_words[j];
+          // dollar_splited_words[j] = ft_strjoin("$", old);
+          // ft_free(old);
+        }
 			}
+      ft_free((*words)[i]);
+			(*words)[i] = ft_strjoin_all(dollar_splited_words);
+      free_str_array(dollar_splited_words);
 		}
 	}
 }
