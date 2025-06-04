@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 12:14:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:59:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 char	**word_segmentation(char *input)
 {
-	// TODO getenv("IFS")
-	return (ft_split(input, ' '));
+	char	*ifs;
+
+	ifs = getenv("IFS");
+	return (ft_split_multiple_separators(input, ifs));
 }
 
 // char	*redirect_expansion(char *s)

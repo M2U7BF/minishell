@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 10:04:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:32:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,6 @@ void						ctrl_backslash(int signum);
 void						ctrl_c(int signum);
 void						handle_signal(void);
 
-// util.c
-void						ft_free(void *p);
-char						*ft_strjoin_all(char **words);
-void						free_str_array(char **array);
-
-// ft_split_leave_separator.c
-char **ft_split_leave_separator(char *s, char separator);
-
 // i_mode_vars.c
 void						init_i_vars(t_i_mode_vars *i_vars);
 void						destroy_i_vars(t_i_mode_vars *vars);
@@ -83,5 +75,18 @@ int							exec_non_interactive(t_exec_vars *e_vars);
 // parse.c
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(char ***words);
+
+// util ============================================================
+
+// util.c
+void						ft_free(void *p);
+char						*ft_strjoin_all(char **words);
+void						free_str_array(char **array);
+
+// ft_split_leave_separator.c
+char **ft_split_leave_separator(char *s, char separator);
+
+// ft_split_multiple_separators.c
+char	**ft_split_multiple_separators(char *s, char *separators);
 
 #endif

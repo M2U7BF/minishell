@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_leave_separator.c                         :+:      :+:    :+:   */
+/*   ft_split_multiple_separators.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 12:49:12 by kkamei           ###   ########.fr       */
+/*   Created: 2025/06/04 12:30:18 by kkamei            #+#    #+#             */
+/*   Updated: 2025/06/04 13:17:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	get_elem_count(char const *s, char c)
+static int	is_separator(char *separator, char c)
+{
+	return (ft_strchr(separator, c) != NULL);
+}
+
+static int	get_elem_count(char const *s, char *separator)
 {
 	size_t	i;
 	int		elem_count;
@@ -25,38 +30,29 @@ static int	get_elem_count(char const *s, char c)
 		return (0);
 	while (i < ft_strlen(s) + 1)
 	{
-		if (s_count > 0 && (s[i] == c || s[i] == '\0'))
+		if (s_count > 0 && (is_separator(separator, s[i]) || s[i] == '\0'))
 		{
 			elem_count++;
 			s_count = 0;
 		}
-		s_count++;
+		else if (!is_separator(separator, s[i]))
+			s_count++;
 		i++;
 	}
 	return (elem_count);
 }
 
-static char	*get_fragment(char *str, char *start, int len)
+static char	*get_fragment(char *str, char *start, int *len)
 {
-	str = (char *)malloc(len + 1);
+	str = (char *)malloc(*len + 1);
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, start, len + 1);
+	ft_strlcpy(str, start, *len + 1);
+	*len = 0;
 	return (str);
 }
 
-static char	**free_all(char **arr, int i)
-{
-	while (i >= 0)
-	{
-		free(arr[i]);
-		i--;
-	}
-	free(arr);
-	return (NULL);
-}
-
-char	**ft_split_leave_separator(char *s, char separator)
+char	**ft_split_multiple_separators(char *s, char *separator)
 {
 	size_t	i;
 	int		j;
@@ -66,19 +62,21 @@ char	**ft_split_leave_separator(char *s, char separator)
 	i = 0;
 	j = 0;
 	s_count = 0;
+	if (!s || !separator)
+		return (NULL);
 	str = (char **)malloc(sizeof(char *) * (get_elem_count(s, separator) + 1));
 	if (!str)
 		return (NULL);
 	while (get_elem_count(s, separator) > 0 && i <= ft_strlen(s))
 	{
-		if (s_count > 0 && (s[i] == separator || !s[i]))
+		if (s_count > 0 && (is_separator(separator, s[i]) || !s[i]))
 		{
-			str[j] = get_fragment(str[j], s + i - s_count, s_count);
-			s_count = 0;
+			str[j] = get_fragment(str[j], s + i - s_count, &s_count);
 			if (!str[j++])
-				return (free_all(str, j));
+				return (free_str_array(str), NULL);
 		}
-		s_count++;
+		else if (!is_separator(separator, s[i]))
+			s_count++;
 		i++;
 	}
 	str[j] = NULL;
