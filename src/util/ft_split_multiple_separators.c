@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 12:30:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 13:17:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:14:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	**ft_split_multiple_separators(char *s, char *separator)
 {
 	size_t	i;
 	int		j;
+	int		elem_count;
 	int		s_count;
 	char	**str;
 
@@ -64,10 +65,11 @@ char	**ft_split_multiple_separators(char *s, char *separator)
 	s_count = 0;
 	if (!s || !separator)
 		return (NULL);
-	str = (char **)malloc(sizeof(char *) * (get_elem_count(s, separator) + 1));
+	elem_count = get_elem_count(s, separator);
+	str = (char **)malloc(sizeof(char *) * (elem_count + 1));
 	if (!str)
 		return (NULL);
-	while (get_elem_count(s, separator) > 0 && i <= ft_strlen(s))
+	while (elem_count > 0 && i <= ft_strlen(s))
 	{
 		if (s_count > 0 && (is_separator(separator, s[i]) || !s[i]))
 		{
