@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 12:59:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/04 16:48:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	variable_expansion(char ***words)
 	char	*env_var;
 	char	**dollar_splited_words;
 
+	if (!(*words))
+		return ;
 	i = -1;
 	while ((*words)[++i])
 	{

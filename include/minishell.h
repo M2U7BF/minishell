@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 12:32:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 08:08:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/libft/libft.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -73,6 +74,7 @@ int							exec_interactive(t_exec_vars *e_vars);
 int							exec_non_interactive(t_exec_vars *e_vars);
 
 // parse.c
+char						**word_segmentation(char *input);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(char ***words);
 
@@ -84,9 +86,10 @@ char						*ft_strjoin_all(char **words);
 void						free_str_array(char **array);
 
 // ft_split_leave_separator.c
-char **ft_split_leave_separator(char *s, char separator);
+char						**ft_split_leave_separator(char *s, char separator);
 
 // ft_split_multiple_separators.c
-char	**ft_split_multiple_separators(char *s, char *separators);
+char						**ft_split_multiple_separators(char *s,
+								char *separators);
 
 #endif

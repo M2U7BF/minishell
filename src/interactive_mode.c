@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 11:44:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 08:08:53 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 		add_history(i_vars->input_line);
 		// パース
 		parse(i_vars);
+    printf("s:%s\n", i_vars->input_line);
+    put_strarr(i_vars->words);
 		// コマンド実行
 		ft_free(i_vars->input_line);
 	}

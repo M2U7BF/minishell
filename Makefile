@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/04 12:40:38 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/05 08:14:12 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ NAME = minishell
 LIBFT_DIR = lib/libft/
 FT_DPRINTF_DIR = lib/ft_dprintf
 GNL_DIR = lib/get_next_line
+LIBDEBUG_DIR = $(NAME)_test/ft_libdebug
 
 
 all:			$(NAME)
@@ -43,6 +44,9 @@ libft:
 
 ft_dprintf:
 	make -C $(FT_DPRINTF_DIR)
+
+libdebug:
+	make -C $(LIBDEBUG_DIR)
 
 clean:
 	$(RM) $(OBJS)
@@ -65,7 +69,19 @@ doc:
 	@test -d $(NAME)_doc || git clone git@github.com:M2U7BF/$(NAME)_doc.git
 
 debug: CFLAG += $(CFLAG_DEBUG)
-debug: $(NAME)
+debug: $(OBJS)
+	make libft
+	make ft_dprintf
+	make libdebug
+	$(CC) $(CFLAG) $(OBJS) \
+		-I$(LIBFT_DIR) \
+		-I$(FT_DPRINTF_DIR)/include \
+		-L$(LIBFT_DIR) -lft \
+		-L$(FT_DPRINTF_DIR) -lftdprintf \
+		-L$(FT_DPRINTF_DIR) -lftdprintf \
+		-L$(LIBDEBUG_DIR) -ldebug \
+		-lreadline \
+		-o $(NAME)
 	ar rcs $(NAME).a $(OBJS)
 
 %.o: %.c
