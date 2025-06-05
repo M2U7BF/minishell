@@ -6,20 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 15:29:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 08:25:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// TODO tokenizerで置換予定
-char	**word_segmentation(char *input)
-{
-	char	*ifs;
-
-	ifs = getenv("IFS");
-	return (ft_split_multiple_separators(input, ifs));
-}
 
 // char	*redirect_expansion(char *s)
 // {
