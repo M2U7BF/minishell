@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 10:42:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:51:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_str_array(char **array)
 	int	i;
 
 	i = 0;
-	if (array == NULL)
+	if (!array)
 		return ;
 	while (array[i])
 	{
@@ -52,4 +52,16 @@ char	*ft_strjoin_all(char **words)
 		free(old);
 	}
 	return (result);
+}
+
+int	arrlen(char **arr)
+{
+	int	i;
+
+	if (arr == NULL)
+		return (0);
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
 }
