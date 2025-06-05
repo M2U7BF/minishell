@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 11:32:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:30:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ int	exec_interactive(t_exec_vars *e_vars)
 			exit(EXIT_SUCCESS);
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
+		// 単語分割
+		i_vars->token_list = tokenize(i_vars->input_line);
 		// パース
 		parse(i_vars);
-		put_strarr(i_vars->words);
+    debug_put_token_list(i_vars->token_list);
 		// コマンド実行
 		ft_free(i_vars->input_line);
 	}

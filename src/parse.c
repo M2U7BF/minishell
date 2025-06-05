@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 08:31:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:29:53 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,23 @@ char	**word_segmentation(char *input)
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
 // 細かい挙動はbashに従う。
-void	variable_expansion(char ***words)
+void	variable_expansion(t_token **token_list)
 {
 	int		i;
 	int		j;
 	char	*env_var;
 	char	**dollar_splited_words;
+  t_token *current_token;
 
-	if (!(*words))
+	if (!token_list || !(*token_list))
 		return ;
 	i = -1;
-	while ((*words)[++i])
+  current_token = (*token_list);
+	while (current_token)
 	{
-		if (ft_strchr((*words)[i], '$'))
+		if (ft_strchr(current_token->str, '$'))
 		{
-			dollar_splited_words = ft_split_leave_separator((*words)[i], '$');
+			dollar_splited_words = ft_split_leave_separator(current_token->str, '$');
 			j = -1;
 			while (dollar_splited_words[++j])
 			{
@@ -67,17 +69,17 @@ void	variable_expansion(char ***words)
 					}
 				}
 			}
-			ft_free((*words)[i]);
-			(*words)[i] = ft_strjoin_all(dollar_splited_words);
+			ft_free(current_token->str);
+      current_token->str = ft_strjoin_all(dollar_splited_words);
 			free_str_array(dollar_splited_words);
 		}
+    current_token = current_token->next;
 	}
 }
 
 void	parse(t_i_mode_vars *i_vars)
 {
-	i_vars->words = word_segmentation(i_vars->input_line);
-	variable_expansion(&i_vars->words);
+	variable_expansion(&i_vars->token_list);
 	// TODO プロセス数を判定後、下記を実施。
 	// redirect_expansion(vars->input_line);
 	// pipe_expansion(vars->input_line);

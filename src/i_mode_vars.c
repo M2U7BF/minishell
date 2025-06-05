@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 10:48:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:24:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void init_i_vars(t_i_mode_vars *i_vars)
   i_vars->input_line = NULL;
 	// TODO プロンプトはPS1に合わせて生成が必要？
   i_vars->prompt = "hoge> ";
+  i_vars->token_list = NULL;
 }
 
 void	destroy_i_vars(t_i_mode_vars *vars)

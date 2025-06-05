@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 10:39:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:47:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,42 @@ void	debug_put_token_list(t_token *token_list)
 		current_token = current_token->next;
 		i++;
 	}
+}
+
+int	debug_put_token_list_compare(t_token *t, t_token *t_e)
+{
+	int		i;
+	int		is_not_all_equal;
+	int		is_different;
+	t_token	*current_t;
+	t_token	*current_t_e;
+
+	if (t == NULL)
+		return (-1);
+	i = 0;
+	is_not_all_equal = 0;
+	current_t = t;
+	current_t_e = t_e;
+	while (current_t)
+	{
+		is_different = strncmp(current_t->str, current_t_e->str,
+				strlen(current_t_e->str) + 1);
+		if (is_different != 0)
+			is_not_all_equal = 1;
+		if (is_different)
+			printf("[%d] [❌] result:\"%s\", expected:\"%s\"\n", i,
+				current_t->str, current_t_e->str);
+		else
+			printf("[%d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
+				current_t->str, current_t_e->str);
+		current_t = current_t->next;
+		current_t_e = current_t_e->next;
+	}
+	if (is_not_all_equal == 0)
+		printf("すべて同じ 💎\n");
+	else
+		printf("すべて同じではない 🔥\n");
+	return (is_not_all_equal);
 }
 
 void	free_token_list(t_token *token_list)
