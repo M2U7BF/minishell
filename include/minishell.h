@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 15:48:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:14:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,20 @@
 # include "../lib/libft/libft.h"
 # include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/signal.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 # define DEFAULT_BLANK " \t"
+# define EXIT_CMD_NOT_FOUND 127
+# define EXIT_PERMISSION_DENIED 126
 
 // 起動モード
 typedef enum e_mode
@@ -60,6 +66,9 @@ typedef struct s_i_mode_vars
 	char					*input_line;
 	char					*prompt;
 	t_token					*token_list;
+	int						pro_count;
+	pid_t					*child_pids;
+	char					**envp;
 }							t_i_mode_vars;
 
 // 起動情報などを保持する構造体
@@ -77,7 +86,7 @@ void						ctrl_c(int signum);
 void						handle_signal(void);
 
 // i_mode_vars.c
-void						init_i_vars(t_i_mode_vars *i_vars);
+void						init_i_vars(t_i_mode_vars *i_vars, char *envp[]);
 void						destroy_i_vars(t_i_mode_vars *vars);
 
 // exec_vars.c
@@ -86,7 +95,7 @@ int							parse_exec_arg(int argc, char *argv[],
 								t_exec_vars *e_vars);
 
 // interactive_mode.c
-int							exec_interactive(t_exec_vars *e_vars);
+int							exec_interactive(t_exec_vars *e_vars, char *envp[]);
 
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);
@@ -107,6 +116,12 @@ int							is_reserved_word(char *s);
 char						**word_segmentation(char *input);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
+
+// exec.c
+int							exec(t_i_mode_vars *i_vars);
+
+// error.c
+void						put_error_exit(char *s, int status);
 
 // util ============================================================
 
