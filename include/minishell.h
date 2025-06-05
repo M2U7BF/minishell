@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:14:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:39:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <unistd.h>
 
 # define DEFAULT_BLANK " \t"
 # define EXIT_CMD_NOT_FOUND 127
@@ -68,7 +69,6 @@ typedef struct s_i_mode_vars
 	t_token					*token_list;
 	int						pro_count;
 	pid_t					*child_pids;
-	char					**envp;
 }							t_i_mode_vars;
 
 // 起動情報などを保持する構造体
@@ -86,7 +86,7 @@ void						ctrl_c(int signum);
 void						handle_signal(void);
 
 // i_mode_vars.c
-void						init_i_vars(t_i_mode_vars *i_vars, char *envp[]);
+void						init_i_vars(t_i_mode_vars *i_vars);
 void						destroy_i_vars(t_i_mode_vars *vars);
 
 // exec_vars.c
@@ -95,7 +95,7 @@ int							parse_exec_arg(int argc, char *argv[],
 								t_exec_vars *e_vars);
 
 // interactive_mode.c
-int							exec_interactive(t_exec_vars *e_vars, char *envp[]);
+int							exec_interactive(t_exec_vars *e_vars);
 
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);

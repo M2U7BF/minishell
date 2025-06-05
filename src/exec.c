@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:18:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:39:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	exec(t_i_mode_vars *i_vars)
 			// コマンドパス取得
 			get_command_path(&exec_args[i][0]);
 			// 実行
-			execve(exec_args[i][0], exec_args[i], i_vars->envp);
+			execve(exec_args[i][0], exec_args[i], __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
 		}

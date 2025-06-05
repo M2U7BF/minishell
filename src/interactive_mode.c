@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:19:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:40:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
-int	exec_interactive(t_exec_vars *e_vars, char *envp[])
+int	exec_interactive(t_exec_vars *e_vars)
 {
 	t_i_mode_vars	*i_vars;
 	static int		proc_size = 1;
 	int				status;
 
 	handle_signal();
-	init_i_vars(&e_vars->i_vars, envp);
+	init_i_vars(&e_vars->i_vars);
 	i_vars = &e_vars->i_vars;
 	rl_outstream = stderr;
 	while (1)
