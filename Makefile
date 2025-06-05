@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/05 09:26:47 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/05 11:08:29 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,8 @@ debug: $(OBJS)
 		-lreadline \
 		-o $(NAME)
 	ar rcs $(NAME).a $(OBJS)
+
+re_debug: fclean debug
 
 %.o: %.c
 	$(CC) $(CFLAG) -c $< -o $@
