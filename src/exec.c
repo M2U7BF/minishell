@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:39:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/05 17:46:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,17 @@ int	exec(t_i_mode_vars *i_vars)
 {
 	int		i;
 	t_token	*current_token;
-	char	***exec_args;
+	char	***argv;
 	int		word_count;
 
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
 	i = 0;
 	word_count = 0;
-	exec_args = malloc(sizeof(char **) * (i_vars->pro_count + 1));
-	if (!exec_args)
+	argv = malloc(sizeof(char **) * (i_vars->pro_count + 1));
+	if (!argv)
 		return (EXIT_FAILURE);
-	exec_args[i_vars->pro_count] = NULL;
+	argv[i_vars->pro_count] = NULL;
 	current_token = i_vars->token_list;
 	// cmd + arg + arg ...の配列を作成する
 	while (current_token)
@@ -107,15 +107,15 @@ int	exec(t_i_mode_vars *i_vars)
 			word_count++;
 		else
 		{
-			exec_args[i] = malloc(sizeof(char *) * (word_count + 1));
-			exec_args[i][word_count] = NULL;
+			argv[i] = malloc(sizeof(char *) * (word_count + 1));
+			argv[i][word_count] = NULL;
 			word_count = 0;
 			i++;
 		}
 		current_token = current_token->next;
 	}
-	exec_args[i] = malloc(sizeof(char *) * (word_count + 1));
-	exec_args[i][word_count] = NULL;
+	argv[i] = malloc(sizeof(char *) * (word_count + 1));
+	argv[i][word_count] = NULL;
 	current_token = i_vars->token_list;
 	i = 0;
 	word_count = 0;
@@ -123,7 +123,7 @@ int	exec(t_i_mode_vars *i_vars)
 	{
 		if (current_token->type == WORD)
 		{
-			exec_args[i][word_count] = current_token->str;
+			argv[i][word_count] = current_token->str;
 			word_count++;
 		}
 		else
@@ -140,9 +140,9 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			// コマンドパス取得
-			get_command_path(&exec_args[i][0]);
+			get_command_path(&argv[i][0]);
 			// 実行
-			execve(exec_args[i][0], exec_args[i], __environ);
+			execve(argv[i][0], argv[i], __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
 		}
