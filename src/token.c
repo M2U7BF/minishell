@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 15:47:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:47:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,28 @@ void	append_token(t_token **token_list, char *str, t_token_type type)
 	}
 }
 
+int	is_metacharacter(char *s)
+{
+	int			i;
+	static char	*chars[] = {"|", "&", ";", "(", ")", "<", ">", " ", "\t", "\v"};
+	static int	len = sizeof(chars) / sizeof(chars[0]);
+
+	if (!s)
+		return (0);
+	i = -1;
+	while (++i < len)
+	{
+		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
+			return (1);
+	}
+	return (0);
+}
+
+int	is_word(char *s)
+{
+	return (*s && !is_metacharacter(s));
+}
+
 int	is_control_operator(char *s)
 {
 	int			i;
@@ -156,6 +178,11 @@ int	is_reserved_word(char *s)
 	return (0);
 }
 
+void	tokenize_error(void)
+{
+	ft_dprintf(STDERR_FILENO, "token error\n");
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
@@ -174,8 +201,10 @@ t_token	*tokenize(char *input_line)
 			type = CONTROL_OPERATOR;
 		else if (is_reserved_word(w[i]))
 			type = RESERVED_WORD;
-		else
+		else if (is_word(w[i]))
 			type = WORD;
+		else
+			tokenize_error();
 		if (i == 0)
 			token_list = create_token(w[i], type);
 		else

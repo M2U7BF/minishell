@@ -6,13 +6,14 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 10:42:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:42:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
 # include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
@@ -113,6 +114,7 @@ int							is_control_operator(char *s);
 int							is_reserved_word(char *s);
 
 // parse.c
+int							check_quotation(char *input_line);
 void						quote_removal(t_token *token);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);

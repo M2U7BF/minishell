@@ -6,11 +6,27 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 10:42:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:46:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	check_quotation(char *input_line)
+{
+	// TODO エラー文を修正。strrchrなどでエラー位置を特定する？
+	if (count_chr(input_line, '\'') % 2 == 1)
+	{
+		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
+		return (1);
+	}
+	else if (count_chr(input_line, '\"') % 2 == 1)
+	{
+		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
+		return (1);
+	}
+	return (0);
+}
 
 // （bashの定義と同様に）クォーテーションを削除する。
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
@@ -19,27 +35,28 @@ void	quote_removal(t_token *token)
 	t_token	*current_token;
 	char	**tmp;
 	char	*old;
-  int double_quote_count;
-  int i;
+	int		double_quote_count;
+	int		i;
 
 	current_token = token;
-  double_quote_count = 0;
-  i = -1;
+	double_quote_count = 0;
+	i = -1;
 	while (current_token)
 	{
 		if (ft_strchr(current_token->str, '\'') != NULL)
 		{
 			tmp = ft_multi_split_leave_separator(current_token->str, "\'\"");
-      while (tmp[++i])
-      {
-        if (double_quote_count % 2 == 0 && ft_strchr(tmp[i], '\'') != NULL)
-        {
-          old = tmp[i];
-          tmp[i] = ft_strtrim(tmp[i], "\'");
-          ft_free(old);
-        }
-        double_quote_count += count_chr(tmp[i], '\"');
-      }
+			while (tmp[++i])
+			{
+				if (double_quote_count % 2 == 0 && ft_strchr(tmp[i],
+						'\'') != NULL)
+				{
+					old = tmp[i];
+					tmp[i] = ft_strtrim(tmp[i], "\'");
+					ft_free(old);
+				}
+				double_quote_count += count_chr(tmp[i], '\"');
+			}
 			old = current_token->str;
 			current_token->str = ft_strjoin_all(tmp);
 			free(old);
