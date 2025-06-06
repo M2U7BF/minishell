@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 09:46:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 10:42:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int							is_control_operator(char *s);
 int							is_reserved_word(char *s);
 
 // parse.c
-void						remove_quotation(t_token *token);
+void						quote_removal(t_token *token);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 

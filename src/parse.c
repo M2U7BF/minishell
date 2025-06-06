@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 10:30:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 10:42:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // （bashの定義と同様に）クォーテーションを削除する。
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
-void	remove_quotation(t_token *token)
+void	quote_removal(t_token *token)
 {
 	t_token	*current_token;
 	char	**tmp;
