@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 09:51:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 10:06:29 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_strjoin_all(char **words)
 	char	*result;
 	char	*old;
 
-  if (!words)
+	if (!words)
 		return (NULL);
 	if (!words[0])
 		return (NULL);
@@ -64,4 +64,21 @@ int	arrlen(char **arr)
 	while (arr[i])
 		i++;
 	return (i);
+}
+
+int	count_chr(char *s, char c)
+{
+	int	i;
+	int	count;
+
+	if (!s)
+		return (0);
+	count = 0;
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] == c)
+			count++;
+	}
+	return (count);
 }
