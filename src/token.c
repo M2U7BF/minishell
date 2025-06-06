@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 11:47:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 17:31:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,22 +101,69 @@ t_token	*create_token(char *str, t_token_type type)
 	return (token);
 }
 
-void	append_token(t_token **token_list, char *str, t_token_type type)
+void	append_token(t_token **token_list, t_token *token)
 {
 	t_token	*current_token;
 
-	if (!token_list || !(*token_list) || !str)
+	if (!token_list || !(*token_list) || !token)
 		return ;
 	current_token = (*token_list);
 	while (current_token)
 	{
 		if (!current_token->next)
 		{
-			current_token->next = create_token(str, type);
+			current_token->next = token;
 			break ;
 		}
 		current_token = current_token->next;
 	}
+}
+
+t_token	*token_dup(t_token *token)
+{
+	if (!token)
+		return (NULL);
+	return (create_token(ft_strdup(token->str), token->type));
+}
+
+int	token_list_len(t_token *token_list)
+{
+	t_token	*current_token;
+	int		i;
+
+	if (!token_list)
+		return (0);
+	current_token = token_list;
+	i = 0;
+	while (current_token)
+	{
+		i++;
+		current_token = current_token->next;
+	}
+	return (i);
+}
+
+char	**tokens_to_arr(t_token *token_list)
+{
+  int		i;
+  int  len;
+  char	**arr;
+	t_token	*current_token;
+
+	if (!token_list)
+		return (0);
+  len = token_list_len(token_list);
+	arr = malloc(sizeof(char *) * (len + 1));
+  current_token = token_list;
+	i = 0;
+	while (i < len && current_token)
+	{
+		arr[i] = ft_strdup(current_token->str);
+		current_token = current_token->next;
+		i++;
+	}
+	arr[i] = NULL;
+	return (arr);
 }
 
 int	is_metacharacter(char *s)
@@ -208,7 +255,7 @@ t_token	*tokenize(char *input_line)
 		if (i == 0)
 			token_list = create_token(w[i], type);
 		else
-			append_token(&token_list, w[i], type);
+			append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
 	return (token_list);

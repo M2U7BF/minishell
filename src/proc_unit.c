@@ -1,0 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   proc_unit.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
+/*   Updated: 2025/06/06 17:45:28 by kkamei           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+
+void	debug_put_proc_list(t_proc_unit *proc_unit)
+{
+	t_proc_unit	*current_proc;
+	int			i;
+
+	if (!proc_unit)
+	{
+		printf("(null)\n");
+		return ;
+	}
+	current_proc = proc_unit;
+	i = 0;
+	while (current_proc)
+	{
+		printf("[%d] args:\n", i);
+		debug_put_token_list(proc_unit->args);
+		printf(", type:%d\n", current_proc->type);
+		current_proc = current_proc->next;
+		i++;
+	}
+}
+
+void	free_proc_list(t_proc_unit *proc_list)
+{
+	t_proc_unit	*current_proc;
+	t_proc_unit	*tmp;
+
+	if (!proc_list)
+		return ;
+	current_proc = proc_list;
+	while (current_proc)
+	{
+		tmp = current_proc;
+		current_proc = current_proc->next;
+		free(tmp->args);
+		free(tmp);
+	}
+}
+
+t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type)
+{
+	t_proc_unit	*proc_unit;
+
+	if (!args)
+		return (NULL);
+	proc_unit = malloc(sizeof(t_proc_unit));
+	if (!proc_unit)
+		return (NULL);
+	proc_unit->next = NULL;
+	proc_unit->args = args;
+	proc_unit->type = type;
+	return (proc_unit);
+}
+
+void	append_proc_unit(t_proc_unit **proc_list, t_proc_unit *proc_unit)
+{
+	t_proc_unit	*current_proc;
+
+	if (!proc_list || !(*proc_list) || !proc_unit)
+		return ;
+	current_proc = (*proc_list);
+	while (current_proc)
+	{
+		if (!current_proc->next)
+		{
+			current_proc->next = proc_unit;
+			break ;
+		}
+		current_proc = current_proc->next;
+	}
+}

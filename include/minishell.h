@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 11:42:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 17:43:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,19 @@ typedef struct s_token
 	t_token_type			type;
 	struct s_token			*next;
 }							t_token;
+
+typedef enum e_proc_unit_type
+{
+	SIMPLE_CMD,
+}							t_proc_unit_type;
+
+// cmd + arg + arg ... を保存する連結リスト。
+typedef struct s_proc_unit
+{
+	t_token					*args;
+	t_proc_unit_type		type;
+	struct s_proc_unit		*next;
+}							t_proc_unit;
 
 // 非対話的モードで変数を保持する構造体
 typedef struct s_ni_mode_vars
@@ -105,13 +118,14 @@ int							exec_non_interactive(t_exec_vars *e_vars);
 void						debug_put_token_list(t_token *token_list);
 int							debug_put_token_list_compare(t_token *t,
 								t_token *t_e);
-void						append_token(t_token **token_list, char *str,
-								t_token_type type);
+void						append_token(t_token **token_list, t_token *token);
 t_token						*create_token(char *str, t_token_type type);
 t_token						*tokenize(char *input_line);
 void						free_token_list(t_token *token_list);
 int							is_control_operator(char *s);
 int							is_reserved_word(char *s);
+char						**tokens_to_arr(t_token *token_list);
+t_token						*token_dup(t_token *token);
 
 // parse.c
 int							check_quotation(char *input_line);
@@ -124,6 +138,14 @@ int							exec(t_i_mode_vars *i_vars);
 
 // error.c
 void						put_error_exit(char *s, int status);
+
+// proc_unit.c
+void						debug_put_proc_list(t_proc_unit *proc_list);
+void						free_proc_list(t_proc_unit *proc_list);
+t_proc_unit					*create_proc_unit(t_token *args,
+								t_proc_unit_type type);
+void						append_proc_unit(t_proc_unit **proc_list,
+								t_proc_unit *proc_unit);
 
 // util ============================================================
 

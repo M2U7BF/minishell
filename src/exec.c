@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:46:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 17:49:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,68 +84,61 @@ int	get_command_path(char **cmd_name)
 	return (status);
 }
 
+// TODO ここでprocess数をカウントするようにしてもいいかも？
+t_proc_unit	*process_division(t_token *token_list)
+{
+	t_token		*current_token;
+	t_proc_unit	*proc_list;
+
+  if (!token_list)
+    return (NULL);
+	current_token = token_list;
+  proc_list = NULL;
+	while (current_token)
+	{
+		if (current_token->type == WORD)
+		{
+			if (!proc_list)
+				proc_list = create_proc_unit(token_dup(current_token), SIMPLE_CMD);
+			else
+				append_token(&proc_list->args, token_dup(current_token));
+		}
+		else
+		{
+			// TODO 複数プロセスへの対応
+			printf("");
+		}
+    current_token = current_token->next;
+	}
+	return (proc_list);
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
-	int		i;
-	t_token	*current_token;
-	char	***argv;
-	int		word_count;
+	int			i;
+	t_proc_unit	*proc_list;
+	t_proc_unit	*current_proc;
+	char		**argv;
 
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
-	i = 0;
-	word_count = 0;
-	argv = malloc(sizeof(char **) * (i_vars->pro_count + 1));
-	if (!argv)
-		return (EXIT_FAILURE);
-	argv[i_vars->pro_count] = NULL;
-	current_token = i_vars->token_list;
-	// cmd + arg + arg ...の配列を作成する
-	while (current_token)
-	{
-		if (current_token->type == WORD)
-			word_count++;
-		else
-		{
-			argv[i] = malloc(sizeof(char *) * (word_count + 1));
-			argv[i][word_count] = NULL;
-			word_count = 0;
-			i++;
-		}
-		current_token = current_token->next;
-	}
-	argv[i] = malloc(sizeof(char *) * (word_count + 1));
-	argv[i][word_count] = NULL;
-	current_token = i_vars->token_list;
-	i = 0;
-	word_count = 0;
-	while (current_token)
-	{
-		if (current_token->type == WORD)
-		{
-			argv[i][word_count] = current_token->str;
-			word_count++;
-		}
-		else
-		{
-			word_count = 0;
-			i++;
-		}
-		current_token = current_token->next;
-	}
+	proc_list = process_division(i_vars->token_list);
 	i = -1;
+	current_proc = proc_list;
 	while (++i < i_vars->pro_count)
 	{
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
+			argv = tokens_to_arr(current_proc->args);
 			// コマンドパス取得
-			get_command_path(&argv[i][0]);
+			get_command_path(&argv[0]);
 			// 実行
-			execve(argv[i][0], argv[i], __environ);
+			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
 		}
+		current_proc = current_proc->next;
 	}
 	return (0);
 }
