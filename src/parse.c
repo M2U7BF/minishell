@@ -6,12 +6,14 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 10:08:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/06 10:30:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// （bashの定義と同様に）クォーテーションを削除する。
+// 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
 void	remove_quotation(t_token *token)
 {
 	t_token	*current_token;
@@ -66,7 +68,8 @@ void	remove_quotation(t_token *token)
 
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
-// 細かい挙動はbashに従う。
+// シングルクォートに囲まれている場合、展開は行わない。
+// 先頭から見て、シングルクォートの数が偶数の場合、”シングルクォートに囲まれていない”と判断する。
 void	variable_expansion(t_token **token_list)
 {
 	int		i;
