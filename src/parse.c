@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 11:46:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 08:46:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,17 @@ void	quote_removal(t_token *token)
 			current_token->str = ft_strjoin_all(tmp);
 			free(old);
 		}
+		i = -1;
 		// TODO ダブルクォートの削除
 		if (ft_strchr(current_token->str, '\"') != NULL)
 		{
-			tmp = ft_split(current_token->str, '\"');
+			tmp = ft_split_leave_separator(current_token->str, '\"');
+			while (tmp[++i])
+			{
+				old = tmp[i];
+				tmp[i] = ft_strtrim(tmp[i], "\"");
+				ft_free(old);
+			}
 			old = current_token->str;
 			current_token->str = ft_strjoin_all(tmp);
 			free(old);
