@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 18:18:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 08:27:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	open_infile(char *filename, int *fd)
 
 // 必要なfileをopenしたり、heredocの場合はpipeを作成したり
 void	open_and_redirect_files(char **argv)
-{
+{ 
 	int	i;
 	int	out_fd;
 	int	in_fd;
@@ -183,15 +183,13 @@ void	open_and_redirect_files(char **argv)
 		{
 			if (ft_strncmp(argv[i], ">", 2) == 0)
 			{
-				// TODO: fdは先に計算する？
 				open_outfile(argv[i + 1], &out_fd);
-				dup2(STDOUT_FILENO, out_fd);
+				dup2(out_fd, STDOUT_FILENO);
 			}
 			else if (ft_strncmp(argv[i], "<", 2) == 0)
 			{
-				// TODO:
 				open_infile(argv[i + 1], &in_fd);
-				dup2(STDIN_FILENO, in_fd);
+				dup2(in_fd, STDIN_FILENO);
 			}
 			else if (ft_strncmp(argv[i], ">>", 3) == 0)
 			{
@@ -218,14 +216,14 @@ char	**trim_redirection(char ***argv)
 		i++;
 	if (i == 0)
 		return ((*argv));
-	new = malloc(sizeof(char *) * i + 2);
+	new = malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while ((*argv)[i] && !is_redirection((*argv)[i]))
 	{
 		new[i] = ft_strdup((*argv)[i]);
 		i++;
 	}
-  new[i] = NULL;
+	new[i] = NULL;
 	free_str_array((*argv));
 	return (new);
 }
@@ -240,7 +238,7 @@ int	exec(t_i_mode_vars *i_vars)
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
 	proc_list = process_division(i_vars->token_list);
-  // printf("debug_put_proc_list\n");
+	// printf("debug_put_proc_list\n");
 	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
@@ -250,12 +248,12 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
-      // printf("put_strarr1:\n");
-      // put_strarr(argv);
+			// printf("put_strarr1:\n");
+			// put_strarr(argv);
 			open_and_redirect_files(argv);
 			argv = trim_redirection(&argv);
-      // printf("put_strarr2:\n");
-      // put_strarr(argv);
+			// printf("put_strarr2:\n");
+			// put_strarr(argv);
 			// コマンドパス取得
 			get_command_path(&argv[0]);
 			// 実行
