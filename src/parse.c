@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 08:46:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 16:48:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	quote_removal(t_token *token)
 // 先頭から見て、シングルクォートの数が偶数の場合、”シングルクォートに囲まれていない”と判断する。
 void	variable_expansion(t_token **token_list)
 {
-	int		i;
 	int		j;
 	char	*env_var;
 	char	**dollar_splited_words;
@@ -105,7 +104,6 @@ void	variable_expansion(t_token **token_list)
 
 	if (!token_list || !(*token_list))
 		return ;
-	i = -1;
 	current_token = (*token_list);
 	single_quotation_count = 0;
 	while (current_token)

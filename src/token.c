@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 17:31:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 18:16:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,16 +145,16 @@ int	token_list_len(t_token *token_list)
 
 char	**tokens_to_arr(t_token *token_list)
 {
-  int		i;
-  int  len;
-  char	**arr;
+	int		i;
+	int		len;
+	char	**arr;
 	t_token	*current_token;
 
 	if (!token_list)
 		return (0);
-  len = token_list_len(token_list);
+	len = token_list_len(token_list);
 	arr = malloc(sizeof(char *) * (len + 1));
-  current_token = token_list;
+	current_token = token_list;
 	i = 0;
 	while (i < len && current_token)
 	{
@@ -225,6 +225,23 @@ int	is_reserved_word(char *s)
 	return (0);
 }
 
+int	is_redirection(char *s)
+{
+	int			i;
+	static char	*chars[] = {">", "<", ">>", "<<"};
+	static int	len = sizeof(chars) / sizeof(chars[0]);
+
+	if (!s)
+		return (0);
+	i = -1;
+	while (++i < len)
+	{
+		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
+			return (1);
+	}
+	return (0);
+}
+
 void	tokenize_error(void)
 {
 	ft_dprintf(STDERR_FILENO, "token error\n");
@@ -248,10 +265,15 @@ t_token	*tokenize(char *input_line)
 			type = CONTROL_OPERATOR;
 		else if (is_reserved_word(w[i]))
 			type = RESERVED_WORD;
+    else if (is_redirection(w[i]))
+      type = REDIRECTION;
 		else if (is_word(w[i]))
 			type = WORD;
 		else
+		{
+			printf("w[i]: %s\n", w[i]);
 			tokenize_error();
+		}
 		if (i == 0)
 			token_list = create_token(w[i], type);
 		else

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 12:55:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 18:18:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,47 +88,31 @@ int	get_command_path(char **cmd_name)
 t_proc_unit	*process_division(t_token *token_list)
 {
 	t_token		*current_token;
-	t_proc_unit	*proc_list;
+	t_proc_unit	*current_proc;
 
 	if (!token_list)
 		return (NULL);
 	current_token = token_list;
-	proc_list = NULL;
+	current_proc = NULL;
 	while (current_token)
 	{
-		if (current_token->type == WORD)
+		if (current_token->type == WORD || current_token->type == REDIRECTION)
 		{
-			if (!proc_list)
-				proc_list = create_proc_unit(token_dup(current_token),
+			if (!current_proc)
+				current_proc = create_proc_unit(token_dup(current_token),
 						SIMPLE_CMD);
 			else
-				append_token(&proc_list->args, token_dup(current_token));
+				append_token(&current_proc->args, token_dup(current_token));
 		}
 		else
 		{
 			// TODO 複数プロセスへの対応
-			printf("");
+			printf("TODO 複数プロセスへの対応\n");
+			current_proc = current_proc->next;
 		}
 		current_token = current_token->next;
 	}
-	return (proc_list);
-}
-
-int	is_redirection(char *s)
-{
-	int			i;
-	static char	*chars[] = {">", "<", ">>", "<<"};
-	static int	len = sizeof(chars) / sizeof(chars[0]);
-
-	if (!s)
-		return (0);
-	i = -1;
-	while (++i < len)
-	{
-		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
-			return (1);
-	}
-	return (0);
+	return (current_proc);
 }
 
 int	open_additionalfile(char *filename, int *fd)
@@ -142,7 +126,7 @@ int	open_additionalfile(char *filename, int *fd)
 		if (!is_readable_file(filename))
 			return (EISDIR);
 	}
-  *fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	*fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (*fd == -1)
 		return (EXIT_FAILURE);
 	return (0);
@@ -182,7 +166,9 @@ int	open_infile(char *filename, int *fd)
 // <redirect_in> = '<' <word>
 // <redirect_append> = '>>' <word>
 // <redirect_heredoc> = '<<' <word>
-void	open_files(char **argv)
+
+// 必要なfileをopenしたり、heredocの場合はpipeを作成したり
+void	open_and_redirect_files(char **argv)
 {
 	int	i;
 	int	out_fd;
@@ -190,32 +176,58 @@ void	open_files(char **argv)
 
 	i = -1;
 	out_fd = 0;
-  in_fd = 0;
+	in_fd = 0;
 	while (argv[++i] && argv[i + 1])
 	{
 		if (is_redirection(argv[i]), is_word(argv[i + 1]))
 		{
-			if (ft_strncmp(argv[i + 1], ">", 2) != NULL)
+			if (ft_strncmp(argv[i], ">", 2) == 0)
 			{
 				// TODO: fdは先に計算する？
 				open_outfile(argv[i + 1], &out_fd);
+				dup2(STDOUT_FILENO, out_fd);
 			}
-			else if (ft_strncmp(argv[i + 1], "<", 2) != NULL)
+			else if (ft_strncmp(argv[i], "<", 2) == 0)
 			{
-				// TODO: 
-        open_infile(argv[i + 1], &in_fd);
+				// TODO:
+				open_infile(argv[i + 1], &in_fd);
+				dup2(STDIN_FILENO, in_fd);
 			}
-			else if (ft_strncmp(argv[i + 1], ">>", 3) != NULL)
+			else if (ft_strncmp(argv[i], ">>", 3) == 0)
 			{
 				// 追加出力
-        open_additionalfile(argv[i + 1], &out_fd);
+				open_additionalfile(argv[i + 1], &out_fd);
 			}
-			else if (ft_strncmp(argv[i + 1], "<<", 3) != NULL)
+			else if (ft_strncmp(argv[i], "<<", 3) == 0)
 			{
 				//　ヒアドキュメント
 			}
 		}
 	}
+}
+
+char	**trim_redirection(char ***argv)
+{
+	char	**new;
+	int		i;
+
+	if (!argv || !(*argv))
+		return (NULL);
+	i = 0;
+	while ((*argv)[i] && !is_redirection((*argv)[i]))
+		i++;
+	if (i == 0)
+		return ((*argv));
+	new = malloc(sizeof(char *) * i + 2);
+	i = 0;
+	while ((*argv)[i] && !is_redirection((*argv)[i]))
+	{
+		new[i] = ft_strdup((*argv)[i]);
+		i++;
+	}
+  new[i] = NULL;
+	free_str_array((*argv));
+	return (new);
 }
 
 int	exec(t_i_mode_vars *i_vars)
@@ -228,6 +240,8 @@ int	exec(t_i_mode_vars *i_vars)
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
 	proc_list = process_division(i_vars->token_list);
+  // printf("debug_put_proc_list\n");
+	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
 	while (++i < i_vars->pro_count)
@@ -236,8 +250,12 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
-			open_redirect_files(argv); // 必要なfileをopenしたり、heredocの場合はpipeを作成したり
-			redirect();                // dupを用いて、fdのredirectを行う
+      // printf("put_strarr1:\n");
+      // put_strarr(argv);
+			open_and_redirect_files(argv);
+			argv = trim_redirection(&argv);
+      // printf("put_strarr2:\n");
+      // put_strarr(argv);
 			// コマンドパス取得
 			get_command_path(&argv[0]);
 			// 実行

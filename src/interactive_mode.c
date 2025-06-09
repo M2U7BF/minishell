@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 12:41:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 18:18:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// パース
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
+    // printf("exec前\n");
 		// debug_put_token_list(i_vars->token_list);
 		// コマンド実行
 		exec(i_vars);

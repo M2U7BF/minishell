@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 12:11:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 17:41:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef enum e_token_type
 	WORD,
 	RESERVED_WORD,
 	CONTROL_OPERATOR,
+	REDIRECTION,
 }							t_token_type;
 
 typedef struct s_token
@@ -125,6 +126,7 @@ void						free_token_list(t_token *token_list);
 int							is_word(char *s);
 int							is_control_operator(char *s);
 int							is_reserved_word(char *s);
+int							is_redirection(char *s);
 char						**tokens_to_arr(t_token *token_list);
 t_token						*token_dup(t_token *token);
 
