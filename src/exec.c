@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 17:49:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 12:55:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,17 @@ t_proc_unit	*process_division(t_token *token_list)
 	t_token		*current_token;
 	t_proc_unit	*proc_list;
 
-  if (!token_list)
-    return (NULL);
+	if (!token_list)
+		return (NULL);
 	current_token = token_list;
-  proc_list = NULL;
+	proc_list = NULL;
 	while (current_token)
 	{
 		if (current_token->type == WORD)
 		{
 			if (!proc_list)
-				proc_list = create_proc_unit(token_dup(current_token), SIMPLE_CMD);
+				proc_list = create_proc_unit(token_dup(current_token),
+						SIMPLE_CMD);
 			else
 				append_token(&proc_list->args, token_dup(current_token));
 		}
@@ -108,9 +109,113 @@ t_proc_unit	*process_division(t_token *token_list)
 			// TODO 複数プロセスへの対応
 			printf("");
 		}
-    current_token = current_token->next;
+		current_token = current_token->next;
 	}
 	return (proc_list);
+}
+
+int	is_redirection(char *s)
+{
+	int			i;
+	static char	*chars[] = {">", "<", ">>", "<<"};
+	static int	len = sizeof(chars) / sizeof(chars[0]);
+
+	if (!s)
+		return (0);
+	i = -1;
+	while (++i < len)
+	{
+		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
+			return (1);
+	}
+	return (0);
+}
+
+int	open_additionalfile(char *filename, int *fd)
+{
+	if (filename[0] == '\0')
+		return (ENOENT);
+	if (access(filename, F_OK) == 0)
+	{
+		if (access(filename, R_OK) == -1)
+			return (EACCES);
+		if (!is_readable_file(filename))
+			return (EISDIR);
+	}
+  *fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	if (*fd == -1)
+		return (EXIT_FAILURE);
+	return (0);
+}
+
+int	open_outfile(char *filename, int *fd)
+{
+	if (filename[0] == '\0')
+		return (ENOENT);
+	if (access(filename, F_OK) == 0)
+	{
+		if (access(filename, R_OK) == -1)
+			return (EACCES);
+		if (!is_readable_file(filename))
+			return (EISDIR);
+	}
+	*fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (*fd == -1)
+		return (EXIT_FAILURE);
+	return (0);
+}
+
+int	open_infile(char *filename, int *fd)
+{
+	if (access(filename, F_OK) == -1)
+		return (ENOENT);
+	if (access(filename, R_OK) == -1)
+		return (EACCES);
+	*fd = open(filename, O_RDONLY);
+	if (*fd == -1)
+		return (EXIT_FAILURE);
+	return (0);
+}
+
+// TODO: 下記に対応させる
+// <redirect_out> = '>' <word>
+// <redirect_in> = '<' <word>
+// <redirect_append> = '>>' <word>
+// <redirect_heredoc> = '<<' <word>
+void	open_files(char **argv)
+{
+	int	i;
+	int	out_fd;
+	int	in_fd;
+
+	i = -1;
+	out_fd = 0;
+  in_fd = 0;
+	while (argv[++i] && argv[i + 1])
+	{
+		if (is_redirection(argv[i]), is_word(argv[i + 1]))
+		{
+			if (ft_strncmp(argv[i + 1], ">", 2) != NULL)
+			{
+				// TODO: fdは先に計算する？
+				open_outfile(argv[i + 1], &out_fd);
+			}
+			else if (ft_strncmp(argv[i + 1], "<", 2) != NULL)
+			{
+				// TODO: 
+        open_infile(argv[i + 1], &in_fd);
+			}
+			else if (ft_strncmp(argv[i + 1], ">>", 3) != NULL)
+			{
+				// 追加出力
+        open_additionalfile(argv[i + 1], &out_fd);
+			}
+			else if (ft_strncmp(argv[i + 1], "<<", 3) != NULL)
+			{
+				//　ヒアドキュメント
+			}
+		}
+	}
 }
 
 int	exec(t_i_mode_vars *i_vars)
@@ -131,6 +236,8 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
+			open_redirect_files(argv); // 必要なfileをopenしたり、heredocの場合はpipeを作成したり
+			redirect();                // dupを用いて、fdのredirectを行う
 			// コマンドパス取得
 			get_command_path(&argv[0]);
 			// 実行

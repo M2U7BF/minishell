@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 17:50:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 12:41:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 	while (i < pro_count)
 	{
 		waitpid(child_pids[i], &status, 0);
+    // reset_redirect();
 		i++;
 	}
 	if (WIFEXITED(status))
@@ -46,8 +47,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 			exit(EXIT_SUCCESS);
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
-    if (check_quotation(i_vars->input_line) != 0)
-      exit(EXIT_FAILURE);
+		if (check_quotation(i_vars->input_line) != 0)
+			exit(EXIT_FAILURE);
 		// 単語分割
 		i_vars->token_list = tokenize(i_vars->input_line);
 		// TODO 単語分割の結果から、全体のプロセスの数を計算しmalloc
@@ -56,7 +57,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// パース
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
-    // debug_put_token_list(i_vars->token_list);
+		// debug_put_token_list(i_vars->token_list);
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);

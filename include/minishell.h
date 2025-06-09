@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 17:43:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/09 12:11:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void						append_token(t_token **token_list, t_token *token);
 t_token						*create_token(char *str, t_token_type type);
 t_token						*tokenize(char *input_line);
 void						free_token_list(t_token *token_list);
+int							is_word(char *s);
 int							is_control_operator(char *s);
 int							is_reserved_word(char *s);
 char						**tokens_to_arr(t_token *token_list);
