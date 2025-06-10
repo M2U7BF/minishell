@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 09:04:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 09:40:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ t_token	*tokenize(char *input_line)
 				append_token(&token_list, create_token("<<", REDIRECTION));
 				old = w[i];
         new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 2);
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
 				w[i] = new;
 				ft_free(old);
 			}
@@ -285,7 +285,7 @@ t_token	*tokenize(char *input_line)
 				append_token(&token_list, create_token(">>", REDIRECTION));
 				old = w[i];
         new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 2);
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
 				w[i] = new;
 				ft_free(old);
 			}
@@ -294,7 +294,7 @@ t_token	*tokenize(char *input_line)
 				append_token(&token_list, create_token("<", REDIRECTION));
 				old = w[i];
         new = malloc(sizeof(char) * ft_strlen(old));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
+        ft_strlcpy(new, old + 1, ft_strlen(old));
 				w[i] = new;
 				ft_free(old);
 			}
@@ -303,7 +303,7 @@ t_token	*tokenize(char *input_line)
 				append_token(&token_list, create_token(">", REDIRECTION));
 				old = w[i];
         new = malloc(sizeof(char) * ft_strlen(old));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
+        ft_strlcpy(new, old + 1, ft_strlen(old));
 				w[i] = new;
 				ft_free(old);
 			}

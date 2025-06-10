@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 17:41:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 09:36:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <unistd.h>
 
 # define DEFAULT_BLANK " \t"
+# define EXIT_SYNTAX_ERROR 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
 
@@ -149,6 +150,9 @@ t_proc_unit					*create_proc_unit(t_token *args,
 								t_proc_unit_type type);
 void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);
+
+// syntax.c
+int							check_syntax_error(t_token *token_list);
 
 // util ============================================================
 

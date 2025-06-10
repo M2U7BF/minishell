@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 18:18:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 09:37:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ int	exec_interactive(t_exec_vars *e_vars)
 			exit(EXIT_FAILURE);
 		// 単語分割
 		i_vars->token_list = tokenize(i_vars->input_line);
+    // tokenize後の構文エラーを検知する
+    debug_put_token_list(i_vars->token_list);
+    if (check_syntax_error(i_vars->token_list) != 0)
+      exit(EXIT_SYNTAX_ERROR);
 		// TODO 単語分割の結果から、全体のプロセスの数を計算しmalloc
 		i_vars->pro_count = proc_size;
 		i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
