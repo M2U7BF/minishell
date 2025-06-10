@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 07:44:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/04/30 08:59:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 13:55:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	(void)lst;
-	return (NULL);
+	t_list	*current_lst;
+
+	if (!lst)
+		return (NULL);
+	current_lst = lst;
+	while (current_lst->next)
+		current_lst = current_lst->next;
+	return (current_lst);
 }
