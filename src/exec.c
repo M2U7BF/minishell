@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 08:27:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 09:06:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ void	open_and_redirect_files(char **argv)
 			{
 				// 追加出力
 				open_additionalfile(argv[i + 1], &out_fd);
+        dup2(out_fd, STDOUT_FILENO);
 			}
 			else if (ft_strncmp(argv[i], "<<", 3) == 0)
 			{

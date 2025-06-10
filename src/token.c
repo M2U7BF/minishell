@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/09 18:16:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 09:04:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,8 @@ t_token	*tokenize(char *input_line)
 	int				i;
 	t_token			*token_list;
 	t_token_type	type;
+	char			*old;
+	char			*new;
 
 	if (!input_line)
 		return (NULL);
@@ -265,10 +267,48 @@ t_token	*tokenize(char *input_line)
 			type = CONTROL_OPERATOR;
 		else if (is_reserved_word(w[i]))
 			type = RESERVED_WORD;
-    else if (is_redirection(w[i]))
-      type = REDIRECTION;
+		else if (is_redirection(w[i]))
+			type = REDIRECTION;
 		else if (is_word(w[i]))
+		{
+			if (w[i][0] == '<' && w[i][1] == '<')
+			{
+				append_token(&token_list, create_token("<<", REDIRECTION));
+				old = w[i];
+        new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 2);
+				w[i] = new;
+				ft_free(old);
+			}
+			else if (w[i][0] == '>' && w[i][1] == '>')
+			{
+				append_token(&token_list, create_token(">>", REDIRECTION));
+				old = w[i];
+        new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 2);
+				w[i] = new;
+				ft_free(old);
+			}
+			else if (w[i][0] == '<')
+			{
+				append_token(&token_list, create_token("<", REDIRECTION));
+				old = w[i];
+        new = malloc(sizeof(char) * ft_strlen(old));
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
+				w[i] = new;
+				ft_free(old);
+			}
+			else if (w[i][0] == '>')
+			{
+				append_token(&token_list, create_token(">", REDIRECTION));
+				old = w[i];
+        new = malloc(sizeof(char) * ft_strlen(old));
+        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
+				w[i] = new;
+				ft_free(old);
+			}
 			type = WORD;
+		}
 		else
 		{
 			printf("w[i]: %s\n", w[i]);
