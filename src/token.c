@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 09:40:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 10:44:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ t_token	*tokenize(char *input_line)
 
 	if (!input_line)
 		return (NULL);
-	w = ft_split_multiple_separators(input_line, DEFAULT_BLANK);
+	w = ft_multi_split(input_line, DEFAULT_BLANK);
 	// TODO NULLの場合の処理必要？
 	i = -1;
 	while (w[++i])

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_multiple_separators.c                     :+:      :+:    :+:   */
+/*   ft_multi_split.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -63,7 +63,7 @@ static char	**init_str_arr(int elem_count)
 	return (str);
 }
 
-char	**ft_split_multiple_separators(char *s, char *separator)
+char	**ft_multi_split(char *s, char *separator)
 {
 	size_t	i;
 	int		j;
