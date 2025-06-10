@@ -6,14 +6,15 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/10 10:44:18 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/10 14:29:29 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						non_interactive_mode.c parse.c util/util.c util/ft_split_leave_separator.c \
 						util/ft_multi_split.c token.c exec.c error.c \
-						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c
+						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c \
+						util/ft_split_by_word_leave_separator.c util/ft_splitarr_by_word_leave_separator.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra
@@ -41,7 +42,7 @@ $(NAME): $(OBJS)
 	-o $(NAME)
 
 libft:
-	make -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR) bonus
 
 ft_dprintf:
 	make -C $(FT_DPRINTF_DIR)

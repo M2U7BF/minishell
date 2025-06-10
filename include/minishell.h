@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 10:44:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 15:31:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define EXIT_SYNTAX_ERROR 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
+# define REDIRECTION_LIST {">>", "<<", ">", "<", NULL}
 
 // 起動モード
 typedef enum e_mode
@@ -162,6 +163,8 @@ char						*ft_strjoin_all(char **words);
 void						free_str_array(char **array);
 int							arrlen(char **arr);
 int							count_chr(char *s, char c);
+char						**lst_to_str_arr(t_list *lst);
+void						debug_put_lst(t_list *lst);
 
 // ft_multi_split_leave_separator.c
 char						**ft_multi_split_leave_separator(char *s,
@@ -171,7 +174,16 @@ char						**ft_multi_split_leave_separator(char *s,
 char						**ft_split_leave_separator(char *s, char separator);
 
 // ft_multi_split.c
-char						**ft_multi_split(char *s,
-								char *separators);
+char						**ft_multi_split(char *s, char *separators);
+
+// ft_split_by_word_leave_separator.c
+char						**ft_split_by_word_leave_separator(char *str,
+								char *word);
+
+// ft_splitarr_by_word_leave_separator.c
+char						**ft_splitarr_by_word_leave_separator(char **arr,
+								char *separator);
+char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
+								char **separator);
 
 #endif

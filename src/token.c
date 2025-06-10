@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 10:44:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 15:33:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,13 +228,12 @@ int	is_reserved_word(char *s)
 int	is_redirection(char *s)
 {
 	int			i;
-	static char	*chars[] = {">", "<", ">>", "<<"};
-	static int	len = sizeof(chars) / sizeof(chars[0]);
+	static char	*chars[] = REDIRECTION_LIST;
 
 	if (!s)
 		return (0);
 	i = -1;
-	while (++i < len)
+	while (chars[++i])
 	{
 		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
 			return (1);
@@ -253,12 +252,14 @@ t_token	*tokenize(char *input_line)
 	int				i;
 	t_token			*token_list;
 	t_token_type	type;
-	char			*old;
-	char			*new;
+  static char *redirection_list[] = REDIRECTION_LIST;
 
 	if (!input_line)
 		return (NULL);
 	w = ft_multi_split(input_line, DEFAULT_BLANK);
+  w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
+  // printf("w:\n");
+  // put_strarr(w);
 	// TODO NULLの場合の処理必要？
 	i = -1;
 	while (w[++i])
@@ -271,42 +272,6 @@ t_token	*tokenize(char *input_line)
 			type = REDIRECTION;
 		else if (is_word(w[i]))
 		{
-			if (w[i][0] == '<' && w[i][1] == '<')
-			{
-				append_token(&token_list, create_token("<<", REDIRECTION));
-				old = w[i];
-        new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
-				w[i] = new;
-				ft_free(old);
-			}
-			else if (w[i][0] == '>' && w[i][1] == '>')
-			{
-				append_token(&token_list, create_token(">>", REDIRECTION));
-				old = w[i];
-        new = malloc(sizeof(char) * (ft_strlen(old) - 2 + 1));
-        ft_strlcpy(new, old + 2, ft_strlen(old) - 1);
-				w[i] = new;
-				ft_free(old);
-			}
-			else if (w[i][0] == '<')
-			{
-				append_token(&token_list, create_token("<", REDIRECTION));
-				old = w[i];
-        new = malloc(sizeof(char) * ft_strlen(old));
-        ft_strlcpy(new, old + 1, ft_strlen(old));
-				w[i] = new;
-				ft_free(old);
-			}
-			else if (w[i][0] == '>')
-			{
-				append_token(&token_list, create_token(">", REDIRECTION));
-				old = w[i];
-        new = malloc(sizeof(char) * ft_strlen(old));
-        ft_strlcpy(new, old + 1, ft_strlen(old));
-				w[i] = new;
-				ft_free(old);
-			}
 			type = WORD;
 		}
 		else

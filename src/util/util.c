@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 10:06:29 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/10 15:34:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,39 @@ int	count_chr(char *s, char c)
 			count++;
 	}
 	return (count);
+}
+
+char	**lst_to_str_arr(t_list *lst)
+{
+	int		i;
+	char	**new;
+	t_list	*current_lst;
+
+	if (!lst)
+		return (NULL);
+	i = 0;
+	new = malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
+  new[ft_lstsize(lst)] = NULL;
+	current_lst = lst;
+	while (current_lst)
+	{
+		new[i] = ft_strdup((char *)current_lst->content);
+		current_lst = current_lst->next;
+    i++;
+	}
+	return (new);
+}
+
+void	debug_put_lst(t_list *lst)
+{
+	t_list *current_lst;
+	int i;
+
+	current_lst = lst;
+	i = 0;
+	while (current_lst)
+	{
+		current_lst = current_lst->next;
+		i++;
+	}
 }
