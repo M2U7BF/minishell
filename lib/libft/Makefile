@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 12:26:21 by kkamei            #+#    #+#              #
-#    Updated: 2024/11/19 08:32:46 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/10 14:25:44 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,8 @@ all:			$(NAME)
 $(NAME):		$(OBJS)
 				ar rcs $(NAME) $(OBJS)
 
-bonus:			$(NAME) $(BONUS_OBJS)
-				ar rcs $(NAME) $(BONUS_OBJS)
+bonus:			$(NAME) $(OBJS) $(BONUS_OBJS)
+				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
 
 clean:
 				$(RM) $(OBJS) $(BONUS_OBJS)
