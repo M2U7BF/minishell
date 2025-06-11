@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 12:10:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 13:24:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ t_token	*tokenize(char *input_line)
 	static char		*redirection_list[] = REDIRECTION_LIST;
 	static char		*blank_list[] = BLANK_LIST;
 	static char		*quotation_list[] = QUOTATION_LIST;
-	static char		*dollar[] = {"$", NULL};
+	// static char		*dollar[] = {"$", NULL};
 
 	if (!input_line)
 		return (NULL);
@@ -270,7 +270,7 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
-	w = ft_multi_splitarr_by_word_leave_separator(w, dollar);
+  w = ft_splitarr_leave_separator(w, '$');
 	printf("w:\n");
 	put_strarr(w);
 	// TODO NULLの場合の処理必要？

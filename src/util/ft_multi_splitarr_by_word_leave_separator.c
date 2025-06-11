@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 13:09:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 13:25:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ static char	**inner_process(char **arr, char **separators)
 	return (new);
 }
 
+// char **arr: 文字列の配列
+// char **separators: 分割文字の配列
+// 複数の文字列にマッチして、配列を更新する。
 char	**ft_multi_splitarr_by_word_leave_separator(char **arr,
 		char **separators)
 {
