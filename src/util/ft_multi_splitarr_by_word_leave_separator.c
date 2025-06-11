@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_splitarr_by_word_leave_separator.c              :+:      :+:    :+:   */
+/*   ft_multi_splitarr_by_word_leave_separator.c        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 10:23:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 10:23:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,22 @@ static void	del_content(void *content)
 	free(content);
 }
 
-char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
+int	is_include_separator(char *str, char **words)
+{
+	int	str_len;
+	int	k;
+
+	str_len = ft_strlen(str);
+	k = -1;
+	while (words[++k])
+	{
+		if (ft_strnstr(str, words[k], str_len))
+			return (1);
+	}
+	return (0);
+}
+
+char	**ft_multi_splitarr_by_word_leave_separator(char **arr, char **separators)
 {
 	int		i;
 	int		j;
@@ -30,9 +45,9 @@ char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
 	while (arr[++i])
 	{
 		// printf("[%d], separator:[%s], arr[i]:[%s]\n", i, separator, arr[i]);
-		if (ft_strnstr(arr[i], separator, ft_strlen(arr[i])) != NULL)
+		if (is_include_separator(arr[i], separators))
 		{
-			tmp = ft_split_by_word_leave_separator(arr[i], separator);
+			tmp = ft_multi_split_by_word_leave_separator(arr[i], separators);
 			// printf("tmp:\n");
 			// put_strarr(tmp);
 			j = 0;

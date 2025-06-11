@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 15:31:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 10:26:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@
 # define EXIT_SYNTAX_ERROR 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
-# define REDIRECTION_LIST {">>", "<<", ">", "<", NULL}
+# define REDIRECTION_LIST           \
+	{                              \
+		">>", "<<", ">", "<", NULL \
+	}
 
 // 起動モード
 typedef enum e_mode
@@ -180,9 +183,16 @@ char						**ft_multi_split(char *s, char *separators);
 char						**ft_split_by_word_leave_separator(char *str,
 								char *word);
 
+// TODO: 削除予定
 // ft_splitarr_by_word_leave_separator.c
 char						**ft_splitarr_by_word_leave_separator(char **arr,
 								char *separator);
+
+// ft_multi_split_by_word_leave_separator.c
+char						**ft_multi_split_by_word_leave_separator(char *str,
+								char **words);
+
+// ft_multi_splitarr_by_word_leave_separator.c
 char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
 								char **separator);
 
