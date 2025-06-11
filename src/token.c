@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 15:33:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 12:10:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,13 @@ int	is_reserved_word(char *s)
 	return (0);
 }
 
+int	is_variable(char *s)
+{
+	if (!s)
+		return (0);
+	return (s[0] == '$');
+}
+
 int	is_redirection(char *s)
 {
 	int			i;
@@ -252,14 +259,20 @@ t_token	*tokenize(char *input_line)
 	int				i;
 	t_token			*token_list;
 	t_token_type	type;
-  static char *redirection_list[] = REDIRECTION_LIST;
+	static char		*redirection_list[] = REDIRECTION_LIST;
+	static char		*blank_list[] = BLANK_LIST;
+	static char		*quotation_list[] = QUOTATION_LIST;
+	static char		*dollar[] = {"$", NULL};
 
 	if (!input_line)
 		return (NULL);
-	w = ft_multi_split(input_line, DEFAULT_BLANK);
-  w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
-  // printf("w:\n");
-  // put_strarr(w);
+	w = ft_multi_split_leave_separator(input_line, DEFAULT_BLANK);
+	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
+	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
+	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
+	w = ft_multi_splitarr_by_word_leave_separator(w, dollar);
+	printf("w:\n");
+	put_strarr(w);
 	// TODO NULLの場合の処理必要？
 	i = -1;
 	while (w[++i])
@@ -268,6 +281,8 @@ t_token	*tokenize(char *input_line)
 			type = CONTROL_OPERATOR;
 		else if (is_reserved_word(w[i]))
 			type = RESERVED_WORD;
+		else if (is_variable(w[i]))
+			type = VARIABLE;
 		else if (is_redirection(w[i]))
 			type = REDIRECTION;
 		else if (is_word(w[i]))

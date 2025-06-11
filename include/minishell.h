@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 10:26:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 12:00:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,14 @@
 	{                              \
 		">>", "<<", ">", "<", NULL \
 	}
+# define BLANK_LIST      \
+	{                   \
+		" ", "\t", NULL \
+	}
+# define QUOTATION_LIST   \
+	{                    \
+		"\"", "\'", NULL \
+	}
 
 // 起動モード
 typedef enum e_mode
@@ -50,6 +58,7 @@ typedef enum e_token_type
 {
 	WORD,
 	RESERVED_WORD,
+  VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
 }							t_token_type;
