@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 13:24:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 14:30:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,9 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
   w = ft_splitarr_leave_separator(w, '$');
+  // TODO: クォートの処理（クォートでエスケープされる文字はすべて結合する）
+  // TODO: blankの削除
+  w = remove_elem(w, blank_list);
 	printf("w:\n");
 	put_strarr(w);
 	// TODO NULLの場合の処理必要？

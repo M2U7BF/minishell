@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 13:20:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 14:21:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef enum e_token_type
 {
 	WORD,
 	RESERVED_WORD,
-  VARIABLE,
+	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
 }							t_token_type;
@@ -206,6 +206,10 @@ char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
 								char **separator);
 
 // ft_splitarr_leave_separator.c
-char	**ft_splitarr_leave_separator(char **arr, char separator);
+char						**ft_splitarr_leave_separator(char **arr,
+								char separator);
+
+// remove_elem.c
+char						**remove_elem(char **arr, char **remove_list);
 
 #endif
