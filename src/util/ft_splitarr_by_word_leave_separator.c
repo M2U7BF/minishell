@@ -6,16 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 10:23:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 15:25:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static void	del_content(void *content)
-{
-	free(content);
-}
 
 char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
 {

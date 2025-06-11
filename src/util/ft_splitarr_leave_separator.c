@@ -6,16 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 13:28:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 15:25:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static void	del_content(void *content)
-{
-	free(content);
-}
 
 // char **arr: 文字列の配列
 // char separator: 分割文字

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 14:37:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 16:01:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,50 @@ void	tokenize_error(void)
 	ft_dprintf(STDERR_FILENO, "token error\n");
 }
 
+void	del_token(t_token **token_list, t_token *token)
+{
+	t_token	*current;
+	t_token	*prev;
+
+	current = *token_list;
+	prev = NULL;
+	if (!token_list || !*token_list || !token)
+		return ;
+	if (*token_list == token)
+		*token_list = token->next;
+	else
+	{
+		while (current && current != token)
+		{
+			prev = current;
+			current = current->next;
+		}
+		if (current == token)
+			prev->next = token->next;
+	}
+	ft_free(token->str);
+	free(token);
+}
+
+void	remove_blank(t_token *token_list)
+{
+	t_token		*current_token;
+	t_token		*old;
+
+	current_token = token_list;
+	while (current_token)
+	{
+		if (current_token->type == BLANK)
+		{
+			old = current_token;
+			current_token = current_token->next;
+			del_token(&token_list, old);
+		}
+		else
+			current_token = current_token->next;
+	}
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
@@ -262,7 +306,6 @@ t_token	*tokenize(char *input_line)
 	static char		*redirection_list[] = REDIRECTION_LIST;
 	static char		*blank_list[] = BLANK_LIST;
 	static char		*quotation_list[] = QUOTATION_LIST;
-	// static char		*dollar[] = {"$", NULL};
 
 	if (!input_line)
 		return (NULL);
@@ -270,12 +313,9 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
-  w = ft_splitarr_leave_separator(w, '$');
-  // TODO: クォートの処理（クォートでエスケープされる文字はすべて結合する）
-  // TODO: blankの削除
-  w = remove_elem(w, blank_list);
-	// printf("w:\n");
-	// put_strarr(w);
+	w = ft_splitarr_leave_separator(w, '$');
+	printf("w:\n");
+	put_strarr(w);
 	// TODO NULLの場合の処理必要？
 	i = -1;
 	while (w[++i])
@@ -289,9 +329,9 @@ t_token	*tokenize(char *input_line)
 		else if (is_redirection(w[i]))
 			type = REDIRECTION;
 		else if (is_word(w[i]))
-		{
 			type = WORD;
-		}
+    else if (is_include(w[i], blank_list))
+      type = BLANK;
 		else
 		{
 			printf("w[i]: %s\n", w[i]);
@@ -303,5 +343,8 @@ t_token	*tokenize(char *input_line)
 			append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
+	// TODO: クォートの処理
+
+	remove_blank(token_list);
 	return (token_list);
 }

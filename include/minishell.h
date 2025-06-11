@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 14:21:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/11 15:58:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef enum e_token_type
 {
 	WORD,
 	RESERVED_WORD,
+  BLANK,
 	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
@@ -177,6 +178,8 @@ int							arrlen(char **arr);
 int							count_chr(char *s, char c);
 char						**lst_to_str_arr(t_list *lst);
 void						debug_put_lst(t_list *lst);
+void						del_content(void *content);
+int							is_include(char *s, char **words);
 
 // ft_multi_split_leave_separator.c
 char						**ft_multi_split_leave_separator(char *s,
