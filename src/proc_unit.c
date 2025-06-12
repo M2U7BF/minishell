@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/06 17:45:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:28:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	debug_put_proc_list(t_proc_unit *proc_unit)
 	{
 		printf("[%d] args:\n", i);
 		debug_put_token_list(proc_unit->args);
-		printf(", type:%d\n", current_proc->type);
+		printf("type:%d\n", current_proc->type);
 		current_proc = current_proc->next;
 		i++;
 	}

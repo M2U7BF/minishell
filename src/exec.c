@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 16:12:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:56:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,49 +100,46 @@ t_proc_unit	*process_division(t_token *token_list)
 	return (current_proc);
 }
 
-// TODO: 下記に対応させる
-// <redirect_out> = '>' <word>
-// <redirect_in> = '<' <word>
-// <redirect_append> = '>>' <word>
-// <redirect_heredoc> = '<<' <word>
-
-// 必要なfileをopenしたり、heredocの場合はpipeを作成したり
-void	open_and_redirect_files(char **argv)
+// 必要なfileをopenし、リダイレクトを行う。
+t_list	*open_and_redirect_files(t_token *argv)
 {
-	int	i;
-	int	out_fd;
-	int	in_fd;
+	int		*fd;
+	t_token	*current;
+	t_list	*opened_fds;
 
-	i = -1;
-	out_fd = 0;
-	in_fd = 0;
-	while (argv[++i] && argv[i + 1])
+	current = argv;
+	opened_fds = NULL;
+	while (current && current->next)
 	{
-		if (is_redirection(argv[i]), is_word(argv[i + 1]))
+		if (current->type == REDIRECTION && current->next->type == WORD)
 		{
-			if (ft_strncmp(argv[i], ">", 2) == 0)
+			fd = malloc(sizeof(int));
+			if (ft_strncmp(current->str, ">", 2) == 0)
 			{
-				open_outfile(argv[i + 1], &out_fd);
-				dup2(out_fd, STDOUT_FILENO);
+				open_outfile(current->next->str, fd);
+				dup2(*fd, STDOUT_FILENO);
 			}
-			else if (ft_strncmp(argv[i], "<", 2) == 0)
+			else if (ft_strncmp(current->str, "<", 2) == 0)
 			{
-				open_infile(argv[i + 1], &in_fd);
-				dup2(in_fd, STDIN_FILENO);
+				open_infile(current->next->str, fd);
+				dup2(*fd, STDIN_FILENO);
 			}
-			else if (ft_strncmp(argv[i], ">>", 3) == 0)
+			else if (ft_strncmp(current->str, ">>", 3) == 0)
 			{
-				// 追加出力
-				open_additionalfile(argv[i + 1], &out_fd);
-				dup2(out_fd, STDOUT_FILENO);
+				open_additionalfile(current->next->str, fd);
+				dup2(*fd, STDOUT_FILENO);
 			}
-			else if (ft_strncmp(argv[i], "<<", 3) == 0)
+			else if (ft_strncmp(current->str, "<<", 3) == 0)
 			{
-				in_fd = here_doc(argv[i + 1]);
-				dup2(in_fd, STDIN_FILENO);
+				*fd = here_doc(current->next->str);
+				dup2(*fd, STDIN_FILENO);
 			}
+			ft_lstadd_back(&opened_fds, ft_lstnew((void *)fd));
+      current = current->next;
 		}
+    current = current->next;
 	}
+	return (opened_fds);
 }
 
 char	**trim_redirection(char ***argv)
@@ -169,12 +166,28 @@ char	**trim_redirection(char ***argv)
 	return (new);
 }
 
+static void	close_all(t_list *opened_fds)
+{
+	t_list	*current;
+
+	if (!opened_fds)
+		return ;
+	current = opened_fds;
+	while (current)
+	{
+		close(*(int *)current->content);
+		current = current->next;
+	}
+	ft_lstclear(&current, del_content);
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
 	int			i;
 	t_proc_unit	*proc_list;
 	t_proc_unit	*current_proc;
 	char		**argv;
+	t_list		*opened_fds;
 
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
@@ -183,15 +196,16 @@ int	exec(t_i_mode_vars *i_vars)
 	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
+	opened_fds = NULL;
 	while (++i < i_vars->pro_count)
 	{
-		i_vars->child_pids[i] = fork();
+		opened_fds = open_and_redirect_files(current_proc->args);
+    i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
 			// printf("put_strarr1:\n");
 			// put_strarr(argv);
-			open_and_redirect_files(argv);
 			argv = trim_redirection(&argv);
 			// printf("put_strarr2:\n");
 			// put_strarr(argv);
@@ -202,6 +216,8 @@ int	exec(t_i_mode_vars *i_vars)
 			perror("execve");
 			return (EXIT_FAILURE);
 		}
+		else
+			close_all(opened_fds);
 		current_proc = current_proc->next;
 	}
 	return (0);

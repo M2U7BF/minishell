@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 10:05:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:30:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void	debug_put_lst(t_list *lst)
 	i = 0;
 	while (current_lst)
 	{
-    printf("[%d] \"%s\"\n", i, (char *)current_lst->content);
+    // printf("[%d] \"%s\"\n", i, (char *)current_lst->content);
+    printf("[%d] \"%d\"\n", i, *(int *)current_lst->content);
 		current_lst = current_lst->next;
 		i++;
 	}
