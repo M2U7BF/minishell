@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 16:01:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 09:18:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,10 +278,84 @@ void	del_token(t_token **token_list, t_token *token)
 	free(token);
 }
 
+void	insert_token(t_token *token, t_token *add)
+{
+	t_token	*next;
+
+	next = token->next;
+	token->next = add;
+	add->next = next;
+}
+
+t_token	*get_prev_token(t_token **token_list, t_token *token)
+{
+	t_token	*current_token;
+	t_token	*prev;
+
+	current_token = *token_list;
+	prev = NULL;
+	while (current_token)
+	{
+		if (current_token == token)
+			return (prev);
+		prev = current_token;
+		current_token = current_token->next;
+	}
+	return (NULL);
+}
+
+// TODO: シングルクォート内の文字列はすべて1つのWORDとして結合する
+// TODO: ダブルクォート内の文字列は展開される文字列だけ特別扱いして、それ以外は結合
+void	process_quote(t_token *token_list)
+{
+	int		i;
+	t_list	*tmp;
+	t_token	*current_token;
+	t_token	*old;
+	int		single_quote_count;
+	char	**tmp_arr;
+	char	*tmp_str;
+
+	i = 0;
+	current_token = token_list;
+	single_quote_count = 0;
+	tmp = NULL;
+	while (current_token)
+	{
+		if (ft_strncmp(current_token->str, "\'", 2) == 0)
+		{
+			// 終端のシングルクォートの結合
+			if (single_quote_count > 0)
+			{
+				old = current_token;
+				current_token = get_prev_token(&token_list, old);
+				ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+				del_token(&token_list, old);
+				tmp_arr = lst_to_str_arr(tmp);
+				tmp_str = ft_strjoin_all(tmp_arr);
+				free_str_array(tmp_arr);
+				ft_lstclear(&tmp, del_content);
+				insert_token(current_token, create_token(tmp_str, WORD));
+			}
+			single_quote_count++;
+		}
+		// 先端のシングルクォート、シングルクォートで囲まれている文字列の結合
+		if (single_quote_count % 2 == 1)
+		{
+			old = current_token;
+			current_token = get_prev_token(&token_list, old);
+			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+			del_token(&token_list, old);
+		}
+		current_token = current_token->next;
+		i++;
+	}
+}
+
 void	remove_blank(t_token *token_list)
 {
-	t_token		*current_token;
-	t_token		*old;
+	t_token	*current_token;
+	t_token	*old;
 
 	current_token = token_list;
 	while (current_token)
@@ -314,8 +388,8 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
 	w = ft_splitarr_leave_separator(w, '$');
-	printf("w:\n");
-	put_strarr(w);
+	// printf("w:\n");
+	// put_strarr(w);
 	// TODO NULLの場合の処理必要？
 	i = -1;
 	while (w[++i])
@@ -330,8 +404,8 @@ t_token	*tokenize(char *input_line)
 			type = REDIRECTION;
 		else if (is_word(w[i]))
 			type = WORD;
-    else if (is_include(w[i], blank_list))
-      type = BLANK;
+		else if (is_include(w[i], blank_list))
+			type = BLANK;
 		else
 		{
 			printf("w[i]: %s\n", w[i]);
@@ -344,7 +418,7 @@ t_token	*tokenize(char *input_line)
 	}
 	ft_free(w);
 	// TODO: クォートの処理
-
+	process_quote(token_list);
 	remove_blank(token_list);
 	return (token_list);
 }

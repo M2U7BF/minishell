@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 15:58:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:37:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef enum e_token_type
 {
 	WORD,
 	RESERVED_WORD,
-  BLANK,
+	BLANK,
 	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
@@ -144,6 +144,7 @@ int							is_reserved_word(char *s);
 int							is_redirection(char *s);
 char						**tokens_to_arr(t_token *token_list);
 t_token						*token_dup(t_token *token);
+void						process_quote(t_token *token_list);
 
 // parse.c
 int							check_quotation(char *input_line);
