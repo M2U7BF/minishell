@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:00:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 11:06:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ int	exec(t_i_mode_vars *i_vars)
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
 	proc_list = process_division(i_vars->token_list);
-	// printf("debug_put_proc_list\n");
+	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
@@ -249,8 +249,8 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
-			// printf("put_strarr1:\n");
-			// put_strarr(argv);
+			printf("put_strarr1:\n");
+			put_strarr(argv);
 			open_and_redirect_files(argv);
 			argv = trim_redirection(&argv);
 			// printf("put_strarr2:\n");
