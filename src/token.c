@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 09:18:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 11:01:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,13 +278,23 @@ void	del_token(t_token **token_list, t_token *token)
 	free(token);
 }
 
-void	insert_token(t_token *token, t_token *add)
+void	insert_token(t_token **first_token, t_token *token, t_token *add)
 {
-	t_token	*next;
+	t_token	*next_token;
 
-	next = token->next;
-	token->next = add;
-	add->next = next;
+	if (!add)
+		return ;
+	if (!token)
+	{
+		add->next = *first_token;
+		*first_token = add;
+	}
+	else
+	{
+		next_token = token->next;
+		token->next = add;
+		add->next = next_token;
+	}
 }
 
 t_token	*get_prev_token(t_token **token_list, t_token *token)
@@ -292,6 +302,8 @@ t_token	*get_prev_token(t_token **token_list, t_token *token)
 	t_token	*current_token;
 	t_token	*prev;
 
+	if (*token_list == token)
+		return (NULL);
 	current_token = *token_list;
 	prev = NULL;
 	while (current_token)
@@ -308,7 +320,6 @@ t_token	*get_prev_token(t_token **token_list, t_token *token)
 // TODO: ダブルクォート内の文字列は展開される文字列だけ特別扱いして、それ以外は結合
 void	process_quote(t_token *token_list)
 {
-	int		i;
 	t_list	*tmp;
 	t_token	*current_token;
 	t_token	*old;
@@ -316,7 +327,6 @@ void	process_quote(t_token *token_list)
 	char	**tmp_arr;
 	char	*tmp_str;
 
-	i = 0;
 	current_token = token_list;
 	single_quote_count = 0;
 	tmp = NULL;
@@ -335,7 +345,8 @@ void	process_quote(t_token *token_list)
 				tmp_str = ft_strjoin_all(tmp_arr);
 				free_str_array(tmp_arr);
 				ft_lstclear(&tmp, del_content);
-				insert_token(current_token, create_token(tmp_str, WORD));
+				insert_token(&token_list, current_token, create_token(tmp_str,
+						WORD));
 			}
 			single_quote_count++;
 		}
@@ -348,8 +359,48 @@ void	process_quote(t_token *token_list)
 			del_token(&token_list, old);
 		}
 		current_token = current_token->next;
-		i++;
 	}
+}
+
+// BLANK, REDIRECTION, を挟まずに隣り合う文字列を結合する。
+t_token	*join_tokens(t_token *token_list)
+{
+	t_list	*tmp;
+	t_token	*current;
+	t_token	*prev;
+	t_token	*old;
+	t_token	*old_prev;
+	char	**tmp_arr;
+	char	*tmp_str;
+
+	current = token_list;
+	prev = NULL;
+	tmp = NULL;
+	while (current)
+	{
+		if (current != NULL && prev != NULL && prev->type == WORD
+			&& current->type == WORD)
+		{
+			old_prev = prev;
+			old = current;
+			current = get_prev_token(&token_list, old_prev);
+			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old_prev->str)));
+			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+			del_token(&token_list, old);
+			del_token(&token_list, old_prev);
+			tmp_arr = lst_to_str_arr(tmp);
+			tmp_str = ft_strjoin_all(tmp_arr);
+			free_str_array(tmp_arr);
+			ft_lstclear(&tmp, del_content);
+			insert_token(&token_list, current, create_token(tmp_str, WORD));
+		}
+		prev = current;
+		if (!current)
+			current = token_list;
+		else
+			current = current->next;
+	}
+	return (token_list);
 }
 
 void	remove_blank(t_token *token_list)
@@ -419,6 +470,7 @@ t_token	*tokenize(char *input_line)
 	ft_free(w);
 	// TODO: クォートの処理
 	process_quote(token_list);
+	join_tokens(token_list);
 	remove_blank(token_list);
 	return (token_list);
 }
