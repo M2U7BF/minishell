@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 10:47:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 11:11:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int							is_redirection(char *s);
 char						**tokens_to_arr(t_token *token_list);
 t_token						*token_dup(t_token *token);
 t_token						*join_tokens(t_token *token_list);
-void						process_quote(t_token *token_list);
+void						process_single_quote(t_token *token_list);
 
 // parse.c
 int							check_quotation(char *input_line);

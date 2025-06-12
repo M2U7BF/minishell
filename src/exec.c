@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:06:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 11:14:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,8 +249,8 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
-			printf("put_strarr1:\n");
-			put_strarr(argv);
+			// printf("put_strarr1:\n");
+			// put_strarr(argv);
 			open_and_redirect_files(argv);
 			argv = trim_redirection(&argv);
 			// printf("put_strarr2:\n");
