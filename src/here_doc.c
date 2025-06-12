@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 12:09:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 12:27:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	here_doc(char *delimiter, char *tmp_filename)
 		exit(status);
 	while (1)
 	{
+    ft_dprintf(STDERR_FILENO, "> ");
 		line = get_next_line(STDIN_FILENO, 0);
 		if (is_delimiter(line, delimiter))
 		{
