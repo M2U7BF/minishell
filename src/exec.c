@@ -6,26 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:14:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 12:17:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-int	is_readable_file(char *pathname)
-{
-	int		fd;
-	char	buf;
-	ssize_t	bytes;
-
-	fd = open(pathname, O_RDONLY);
-	if (fd == -1)
-		return (0);
-	bytes = read(fd, &buf, 1);
-	if (bytes == -1)
-		return (close(fd), 0);
-	return (close(fd), 1);
-}
 
 static int	search_command_path(char **cmd_name, char **path_env)
 {
@@ -115,52 +100,6 @@ t_proc_unit	*process_division(t_token *token_list)
 	return (current_proc);
 }
 
-int	open_additionalfile(char *filename, int *fd)
-{
-	if (filename[0] == '\0')
-		return (ENOENT);
-	if (access(filename, F_OK) == 0)
-	{
-		if (access(filename, R_OK) == -1)
-			return (EACCES);
-		if (!is_readable_file(filename))
-			return (EISDIR);
-	}
-	*fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0664);
-	if (*fd == -1)
-		return (EXIT_FAILURE);
-	return (0);
-}
-
-int	open_outfile(char *filename, int *fd)
-{
-	if (filename[0] == '\0')
-		return (ENOENT);
-	if (access(filename, F_OK) == 0)
-	{
-		if (access(filename, R_OK) == -1)
-			return (EACCES);
-		if (!is_readable_file(filename))
-			return (EISDIR);
-	}
-	*fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	if (*fd == -1)
-		return (EXIT_FAILURE);
-	return (0);
-}
-
-int	open_infile(char *filename, int *fd)
-{
-	if (access(filename, F_OK) == -1)
-		return (ENOENT);
-	if (access(filename, R_OK) == -1)
-		return (EACCES);
-	*fd = open(filename, O_RDONLY);
-	if (*fd == -1)
-		return (EXIT_FAILURE);
-	return (0);
-}
-
 // TODO: 下記に対応させる
 // <redirect_out> = '>' <word>
 // <redirect_in> = '<' <word>
@@ -194,12 +133,14 @@ void	open_and_redirect_files(char **argv)
 			else if (ft_strncmp(argv[i], ">>", 3) == 0)
 			{
 				// 追加出力
-				open_additionalfile(argv[i + 1], &out_fd);
+				open_additionalfile(argv[i + 1], &out_fd); 
         dup2(out_fd, STDOUT_FILENO);
 			}
 			else if (ft_strncmp(argv[i], "<<", 3) == 0)
 			{
-				//　ヒアドキュメント
+        here_doc(argv[i + 1], TMPFILE_NAME);
+        open_infile(TMPFILE_NAME, &in_fd);
+        dup2(in_fd, STDIN_FILENO);
 			}
 		}
 	}

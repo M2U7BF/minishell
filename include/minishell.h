@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:11:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 12:16:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
 # include "../minishell_test/ft_libdebug/libdebug.h"
+# include "get_next_line.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -45,6 +46,7 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
+# define TMPFILE_NAME "tmp_here_doc"
 
 // 起動モード
 typedef enum e_mode
@@ -169,6 +171,15 @@ void						append_proc_unit(t_proc_unit **proc_list,
 
 // syntax.c
 int							check_syntax_error(t_token *token_list);
+
+// here_doc.c
+int							here_doc(char *delimiter, char *tmp_filename);
+
+// file.c
+int							is_readable_file(char *pathname);
+int							open_additionalfile(char *filename, int *fd);
+int							open_outfile(char *filename, int *fd);
+int							open_infile(char *filename, int *fd);
 
 // util ============================================================
 

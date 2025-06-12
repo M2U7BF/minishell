@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/11 14:22:14 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/12 11:46:47 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c \
 						util/ft_split_by_word_leave_separator.c util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_multi_split_by_word_leave_separator.c util/ft_multi_splitarr_by_word_leave_separator.c \
-						util/ft_splitarr_leave_separator.c util/remove_elem.c
+						util/ft_splitarr_leave_separator.c util/remove_elem.c here_doc.c get_next_line.c file.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra
