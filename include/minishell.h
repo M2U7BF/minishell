@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 12:16:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 16:19:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void						append_proc_unit(t_proc_unit **proc_list,
 int							check_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter, char *tmp_filename);
+int							here_doc(char *delimiter);
 
 // file.c
 int							is_readable_file(char *pathname);

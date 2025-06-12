@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 12:17:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/12 16:12:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ t_proc_unit	*process_division(t_token *token_list)
 
 // 必要なfileをopenしたり、heredocの場合はpipeを作成したり
 void	open_and_redirect_files(char **argv)
-{ 
+{
 	int	i;
 	int	out_fd;
 	int	in_fd;
@@ -133,14 +133,13 @@ void	open_and_redirect_files(char **argv)
 			else if (ft_strncmp(argv[i], ">>", 3) == 0)
 			{
 				// 追加出力
-				open_additionalfile(argv[i + 1], &out_fd); 
-        dup2(out_fd, STDOUT_FILENO);
+				open_additionalfile(argv[i + 1], &out_fd);
+				dup2(out_fd, STDOUT_FILENO);
 			}
 			else if (ft_strncmp(argv[i], "<<", 3) == 0)
 			{
-        here_doc(argv[i + 1], TMPFILE_NAME);
-        open_infile(TMPFILE_NAME, &in_fd);
-        dup2(in_fd, STDIN_FILENO);
+				in_fd = here_doc(argv[i + 1]);
+				dup2(in_fd, STDIN_FILENO);
 			}
 		}
 	}
