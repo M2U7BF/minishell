@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/13 09:13:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/13 11:58:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef enum e_token_type
 	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
+  PIPE,
 }							t_token_type;
 
 typedef struct s_token

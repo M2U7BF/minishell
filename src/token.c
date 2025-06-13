@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:23:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/13 12:36:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,7 +482,7 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
-	// w = ft_splitarr_leave_separator(w, '$');
+	w = ft_splitarr_by_word_leave_separator(w, "|");
 	// printf("w:\n");
 	// put_strarr(w);
 	// TODO NULLの場合の処理必要？
@@ -499,6 +499,8 @@ t_token	*tokenize(char *input_line)
 			type = WORD;
 		else if (is_include(w[i], blank_list))
 			type = BLANK;
+    else if (ft_strncmp(w[i], "|", 2) == 0)
+      type = PIPE;
 		else
 		{
 			printf("w[i]: %s\n", w[i]);
