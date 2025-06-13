@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 17:30:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/13 09:10:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,4 +140,23 @@ int	is_include(char *s, char **words)
 			return (1);
 	}
 	return (0);
+}
+
+t_list	*get_prev_lst(t_list **list, t_list *elem)
+{
+	t_list	*current;
+	t_list	*prev;
+
+	if (*list == elem)
+		return (NULL);
+	current = *list;
+	prev = NULL;
+	while (current)
+	{
+		if (current == elem)
+			return (prev);
+		prev = current;
+		current = current->next;
+	}
+	return (NULL);
 }

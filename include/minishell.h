@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 16:19:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/13 09:13:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ char						**lst_to_str_arr(t_list *lst);
 void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
 int							is_include(char *s, char **words);
+t_list						*get_prev_lst(t_list **list, t_list *elem);
 
 // ft_multi_split_leave_separator.c
 char						**ft_multi_split_leave_separator(char *s,

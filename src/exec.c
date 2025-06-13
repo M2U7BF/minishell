@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 17:56:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/13 09:23:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,46 +100,73 @@ t_proc_unit	*process_division(t_token *token_list)
 	return (current_proc);
 }
 
+int	stashfd(int fd)
+{
+	int	stashfd;
+
+	stashfd = fcntl(fd, F_DUPFD, 10);
+	if (stashfd < 0)
+		perror("fcntl");
+	close(fd);
+	return (stashfd);
+}
+
 // 必要なfileをopenし、リダイレクトを行う。
 t_list	*open_and_redirect_files(t_token *argv)
 {
 	int		*fd;
+	int		target_fd;
+	int		stashed_target_fd;
 	t_token	*current;
-	t_list	*opened_fds;
+	t_list	*redirect_fds;
+	int		*content;
 
 	current = argv;
-	opened_fds = NULL;
+	redirect_fds = NULL;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && current->next->type == WORD)
 		{
 			fd = malloc(sizeof(int));
+			content = malloc(sizeof(int) * 2);
 			if (ft_strncmp(current->str, ">", 2) == 0)
 			{
 				open_outfile(current->next->str, fd);
-				dup2(*fd, STDOUT_FILENO);
+				*fd = stashfd(*fd);
+				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<", 2) == 0)
 			{
 				open_infile(current->next->str, fd);
-				dup2(*fd, STDIN_FILENO);
+				*fd = stashfd(*fd);
+				target_fd = STDIN_FILENO;
 			}
 			else if (ft_strncmp(current->str, ">>", 3) == 0)
 			{
 				open_additionalfile(current->next->str, fd);
-				dup2(*fd, STDOUT_FILENO);
+				*fd = stashfd(*fd);
+				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
 			{
 				*fd = here_doc(current->next->str);
-				dup2(*fd, STDIN_FILENO);
+				*fd = stashfd(*fd);
+				target_fd = STDIN_FILENO;
 			}
-			ft_lstadd_back(&opened_fds, ft_lstnew((void *)fd));
-      current = current->next;
+			stashed_target_fd = stashfd(target_fd);
+			if (*fd != target_fd)
+			{
+				dup2(*fd, target_fd);
+				close(*fd);
+			}
+			content[0] = stashed_target_fd;
+			content[1] = target_fd;
+			ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+			current = current->next;
 		}
-    current = current->next;
+		current = current->next;
 	}
-	return (opened_fds);
+	return (redirect_fds);
 }
 
 char	**trim_redirection(char ***argv)
@@ -166,17 +193,23 @@ char	**trim_redirection(char ***argv)
 	return (new);
 }
 
-static void	close_all(t_list *opened_fds)
+static void	reset_redirection(t_list *redirect_fds)
 {
 	t_list	*current;
+	int		*content;
 
-	if (!opened_fds)
+	if (!redirect_fds)
 		return ;
-	current = opened_fds;
-	while (current)
-	{
-		close(*(int *)current->content);
+	current = redirect_fds;
+	while (current->next)
 		current = current->next;
+	while (1)
+	{
+		content = (int *)current->content;
+		dup2(content[0], content[1]);
+		if (current == redirect_fds)
+			break ;
+		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&current, del_content);
 }
@@ -187,7 +220,7 @@ int	exec(t_i_mode_vars *i_vars)
 	t_proc_unit	*proc_list;
 	t_proc_unit	*current_proc;
 	char		**argv;
-	t_list		*opened_fds;
+	t_list		*redirect_fds;
 
 	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
 	// TODO プロセスごとにforkして実行
@@ -196,11 +229,11 @@ int	exec(t_i_mode_vars *i_vars)
 	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
-	opened_fds = NULL;
+	redirect_fds = NULL;
 	while (++i < i_vars->pro_count)
 	{
-		opened_fds = open_and_redirect_files(current_proc->args);
-    i_vars->child_pids[i] = fork();
+		redirect_fds = open_and_redirect_files(current_proc->args);
+		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
@@ -217,7 +250,7 @@ int	exec(t_i_mode_vars *i_vars)
 			return (EXIT_FAILURE);
 		}
 		else
-			close_all(opened_fds);
+			reset_redirection(redirect_fds);
 		current_proc = current_proc->next;
 	}
 	return (0);
