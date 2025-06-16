@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 09:55:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 11:57:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
 # include "../minishell_test/ft_libdebug/libdebug.h"
-# include "get_next_line.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
