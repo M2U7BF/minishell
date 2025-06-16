@@ -6,13 +6,13 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 12:14:15 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/16 14:58:15 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile	sig_atomic_t g_recieve_signal = 0;;
+volatile	sig_atomic_t g_recieve_signal = 0;
 // void	ctrl_backslash(int signum)
 // {
 // 	// TODO 内容実装
