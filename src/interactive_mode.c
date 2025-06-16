@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 11:51:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 11:52:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);
-    // TODO heredocのファイルを削除する
-    unlink(TMPFILE_NAME);
 		ft_free(i_vars->input_line);
 	}
 }
