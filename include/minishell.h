@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/13 11:58:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 09:55:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_token
 typedef enum e_proc_unit_type
 {
 	SIMPLE_CMD,
+  PIPE_LINE,
 }							t_proc_unit_type;
 
 // cmd + arg + arg ... を保存する連結リスト。
@@ -85,6 +86,8 @@ typedef struct s_proc_unit
 	t_token					*args;
 	t_proc_unit_type		type;
 	struct s_proc_unit		*next;
+  int in_fd;
+  int out_fd;
 }							t_proc_unit;
 
 // 非対話的モードで変数を保持する構造体
@@ -166,7 +169,7 @@ void						put_error_exit(char *s, int status);
 void						debug_put_proc_list(t_proc_unit *proc_list);
 void						free_proc_list(t_proc_unit *proc_list);
 t_proc_unit					*create_proc_unit(t_token *args,
-								t_proc_unit_type type);
+								t_proc_unit_type type, int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);
 

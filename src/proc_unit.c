@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 17:28:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 10:30:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	debug_put_proc_list(t_proc_unit *proc_unit)
 	while (current_proc)
 	{
 		printf("[%d] args:\n", i);
-		debug_put_token_list(proc_unit->args);
+		debug_put_token_list(current_proc->args);
 		printf("type:%d\n", current_proc->type);
 		current_proc = current_proc->next;
 		i++;
@@ -51,7 +51,7 @@ void	free_proc_list(t_proc_unit *proc_list)
 	}
 }
 
-t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type)
+t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type, int in_fd, int out_fd)
 {
 	t_proc_unit	*proc_unit;
 
@@ -63,6 +63,8 @@ t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type)
 	proc_unit->next = NULL;
 	proc_unit->args = args;
 	proc_unit->type = type;
+  proc_unit->in_fd = in_fd;
+  proc_unit->out_fd = out_fd;
 	return (proc_unit);
 }
 

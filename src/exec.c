@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/13 09:23:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 11:43:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,34 +70,45 @@ int	get_command_path(char **cmd_name)
 }
 
 // TODO ここでprocess数をカウントするようにしてもいいかも？
-t_proc_unit	*process_division(t_token *token_list)
+t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 {
 	t_token		*current_token;
+	t_proc_unit	*result;
 	t_proc_unit	*current_proc;
+	int			pipe_fds[2];
+	int			i;
 
 	if (!token_list)
 		return (NULL);
 	current_token = token_list;
+	result = NULL;
 	current_proc = NULL;
+	i = 0;
 	while (current_token)
 	{
-		if (current_token->type == WORD || current_token->type == REDIRECTION)
+		if (current_token->type == PIPE)
 		{
-			if (!current_proc)
-				current_proc = create_proc_unit(token_dup(current_token),
-						SIMPLE_CMD);
-			else
-				append_token(&current_proc->args, token_dup(current_token));
+			pipe(pipe_fds);
+			current_proc->out_fd = pipe_fds[1];
+			current_token = current_token->next;
+			current_proc->next = create_proc_unit(token_dup(current_token),
+					PIPE_LINE, pipe_fds[0], STDOUT_FILENO);
+			current_proc = current_proc->next;
+			i++;
+		}
+		else if (!current_proc)
+		{
+			current_proc = create_proc_unit(token_dup(current_token),
+					SIMPLE_CMD, STDIN_FILENO, STDOUT_FILENO);
+			result = current_proc;
+			i++;
 		}
 		else
-		{
-			// TODO 複数プロセスへの対応
-			printf("TODO 複数プロセスへの対応\n");
-			current_proc = current_proc->next;
-		}
+			append_token(&current_proc->args, token_dup(current_token));
 		current_token = current_token->next;
 	}
-	return (current_proc);
+	*pro_count = i;
+	return (result);
 }
 
 int	stashfd(int fd)
@@ -112,17 +123,15 @@ int	stashfd(int fd)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-t_list	*open_and_redirect_files(t_token *argv)
+t_list	*open_and_redirect_files(t_token *argv, t_list *redirect_fds)
 {
 	int		*fd;
 	int		target_fd;
 	int		stashed_target_fd;
 	t_token	*current;
-	t_list	*redirect_fds;
 	int		*content;
 
 	current = argv;
-	redirect_fds = NULL;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && current->next->type == WORD)
@@ -214,6 +223,50 @@ static void	reset_redirection(t_list *redirect_fds)
 	ft_lstclear(&current, del_content);
 }
 
+t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
+{
+	int	target_fd;
+	int	stashed_target_fd;
+	int	*content;
+
+	if (!proc)
+		return (redirect_fds);
+	target_fd = 0;
+	if (proc->in_fd != STDIN_FILENO)
+	{
+		content = malloc(sizeof(int) * 2);
+		proc->in_fd = stashfd(proc->in_fd);
+		target_fd = STDIN_FILENO;
+		stashed_target_fd = stashfd(target_fd);
+		dup2(proc->in_fd, target_fd);
+		close(proc->in_fd);
+		content[0] = stashed_target_fd;
+		content[1] = target_fd;
+		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+	}
+	if (proc->out_fd != STDOUT_FILENO)
+	{
+		content = malloc(sizeof(int) * 2);
+		proc->out_fd = stashfd(proc->out_fd);
+		target_fd = STDOUT_FILENO;
+		stashed_target_fd = stashfd(target_fd);
+		dup2(proc->out_fd, target_fd);
+		close(proc->out_fd);
+		content[0] = stashed_target_fd;
+		content[1] = target_fd;
+		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+	}
+	return (redirect_fds);
+}
+
+void	close_pipe(t_proc_unit *proc)
+{
+	if (proc->in_fd != STDIN_FILENO)
+		close(proc->in_fd);
+	if (proc->out_fd != STDOUT_FILENO)
+		close(proc->out_fd);
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
 	int			i;
@@ -222,35 +275,33 @@ int	exec(t_i_mode_vars *i_vars)
 	char		**argv;
 	t_list		*redirect_fds;
 
-	// TODO 制御演算子が見つかるごとに、みたいな処理でいいかも
-	// TODO プロセスごとにforkして実行
-	proc_list = process_division(i_vars->token_list);
+	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
+	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
-	redirect_fds = NULL;
-	while (++i < i_vars->pro_count)
+	while (++i <= i_vars->pro_count && current_proc)
 	{
-		redirect_fds = open_and_redirect_files(current_proc->args);
+		redirect_fds = NULL;
+		redirect_fds = pipe_redirect(current_proc, redirect_fds);
+		redirect_fds = open_and_redirect_files(current_proc->args,
+				redirect_fds);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
 			argv = tokens_to_arr(current_proc->args);
-			// printf("put_strarr1:\n");
-			// put_strarr(argv);
 			argv = trim_redirection(&argv);
-			// printf("put_strarr2:\n");
-			// put_strarr(argv);
-			// コマンドパス取得
 			get_command_path(&argv[0]);
-			// 実行
 			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
 		}
 		else
+		{
 			reset_redirection(redirect_fds);
+      close_pipe(current_proc);
+		}
 		current_proc = current_proc->next;
 	}
 	return (0);
