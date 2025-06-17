@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 18:52:22 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/17 21:41:23 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,18 @@ int	exec_interactive(t_exec_vars *e_vars)
 		g_recieve_signal = 0;
 
 		i_vars->input_line = readline(i_vars->prompt);
+		/*Ctrl+D*/
+		if (!i_vars->input_line)
+		{
+			ft_putendl_fd("exit", STDOUT_FILENO);
+			exit(EXIT_SUCCESS);
+		}
 		/*Ctrl+C*/
 		if(g_recieve_signal == SIGINT)
 		{
 			status = 130;
 			ft_free(i_vars->input_line);
 			continue;
-		}
-		/*Ctrl+D*/
-		if (!i_vars->input_line)
-		{
-			ft_putendl_fd("exit", STDOUT_FILENO);
-			exit(EXIT_SUCCESS);
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
