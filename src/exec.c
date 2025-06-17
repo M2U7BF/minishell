@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 10:05:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 10:42:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,40 +233,27 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 	target_fd = 0;
 	if (proc->read_fd != STDIN_FILENO)
 	{
-		// content = malloc(sizeof(int) * 2);
-		// proc->read_fd = stashfd(proc->read_fd);
-		// target_fd = STDIN_FILENO;
-		// stashed_target_fd = stashfd(target_fd);
-		// dup2(proc->read_fd, target_fd);
-		// close(proc->read_fd);
-		// content[0] = stashed_target_fd;
-		// content[1] = target_fd;
-		// ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
 		content = malloc(sizeof(int) * 2);
-		stashed_target_fd = stashfd(STDIN_FILENO);
-		dup2(proc->read_fd, STDIN_FILENO);
+		proc->read_fd = stashfd(proc->read_fd);
+		target_fd = STDIN_FILENO;
+		stashed_target_fd = stashfd(target_fd);
+		dup2(proc->read_fd, target_fd);
+		close(proc->read_fd);
 		content[0] = stashed_target_fd;
-		content[1] = STDIN_FILENO;
-		ft_lstadd_back(&redirect_fds, ft_lstnew(content));
+		content[1] = target_fd;
+		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
 	}
 	if (proc->write_fd != STDOUT_FILENO)
 	{
-		// content = malloc(sizeof(int) * 2);
-		// proc->write_fd = stashfd(proc->write_fd);
-		// target_fd = STDOUT_FILENO;
-		// stashed_target_fd = stashfd(target_fd);
-		// dup2(proc->write_fd, target_fd);
-		// close(proc->write_fd);
-		// content[0] = stashed_target_fd;
-		// content[1] = target_fd;
-		// ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
-
-    content = malloc(sizeof(int) * 2);
-		stashed_target_fd = stashfd(STDOUT_FILENO);
-		dup2(proc->read_fd, STDOUT_FILENO);
+		content = malloc(sizeof(int) * 2);
+		proc->write_fd = stashfd(proc->write_fd);
+		target_fd = STDOUT_FILENO;
+		stashed_target_fd = stashfd(target_fd);
+		dup2(proc->write_fd, target_fd);
+		close(proc->write_fd);
 		content[0] = stashed_target_fd;
-		content[1] = STDOUT_FILENO;
-		ft_lstadd_back(&redirect_fds, ft_lstnew(content));
+		content[1] = target_fd;
+		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
 	}
 	return (redirect_fds);
 }
