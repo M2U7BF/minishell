@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 14:58:15 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:29:03 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,18 @@ void	signal_hander(int signum)
 
 void	handle_signal(void)
 {
-	signal(SIGINT, signal_hander);
-	signal(SIGQUIT, SIG_IGN);
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
+
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_flags = 0;
+	sa_int.sa_handler = signal_hander;
+	if(sigaction(SIGINT, &sa_int, NULL) < 0)
+		put_error_exit("sigaction", EXIT_FAILURE);
+
+	sigemptyset(&sa_quit.sa_mask);
+	sa_quit.sa_flags = 0;
+	sa_quit.sa_handler = SIG_IGN;
+	if(sigaction(SIGQUIT, &sa_quit, NULL) < 0)
+		put_error_exit("sigaction", EXIT_FAILURE);
 }
