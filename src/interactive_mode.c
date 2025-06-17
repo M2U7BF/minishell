@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 15:54:15 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:25:28 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,22 @@ int	exec_interactive(t_exec_vars *e_vars)
 		g_recieve_signal = 0;
 
 		i_vars->input_line = readline(i_vars->prompt);
+		/*Ctrl+C*/
+		if(g_recieve_signal == SIGINT)
+		{
+			status = 130;
+			ft_putstr_fd("\n", STDOUT_FILENO);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			// rl_redisplay();
+			ft_free(i_vars->input_line);
+			continue;
+		}
 		/*Ctrl+D*/
 		if (!i_vars->input_line)
 		{
 			ft_putendl_fd("exit", STDOUT_FILENO);
 			exit(EXIT_SUCCESS);
-		}
-		/*Ctrl+C*/
-		if(g_recieve_signal == SIGINT)
-		{
-			ft_putstr_fd("\n", STDOUT_FILENO);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-			/*TODO:シェルの終了ステータス130*/
-			ft_free(i_vars->input_line);
-			continue;
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
