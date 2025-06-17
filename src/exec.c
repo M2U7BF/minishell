@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 10:42:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 17:25:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ t_list	*open_and_redirect_files(t_proc_unit *current_proc,
 	current = current_proc->args;
 	while (current && current->next)
 	{
-		if (current->type == REDIRECTION && current->next->type == WORD)
+		if (current->type == REDIRECTION && (current->next->type == WORD
+				|| current->next->type == DELIMITER))
 		{
 			fd = malloc(sizeof(int));
 			content = malloc(sizeof(int) * 2);
@@ -216,7 +217,7 @@ static void	reset_redirection(t_list *redirect_fds)
 		dup2(content[0], content[1]);
 		if (current == redirect_fds)
 			break ;
-    close(content[0]);
+		close(content[0]);
 		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&redirect_fds, del_content);
@@ -300,7 +301,8 @@ int	exec(t_i_mode_vars *i_vars)
 				&& get_prev_proc(&proc_list,
 					current_proc)->write_fd != STDOUT_FILENO)
 				close(get_prev_proc(&proc_list, current_proc)->write_fd);
-			if (current_proc->next && current_proc->next->read_fd != STDIN_FILENO)
+			if (current_proc->next
+				&& current_proc->next->read_fd != STDIN_FILENO)
 				close(current_proc->next->read_fd);
 			argv = tokens_to_arr(current_proc->args);
 			argv = trim_redirection(&argv);

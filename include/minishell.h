@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 09:40:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 13:30:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
-# define TMPFILE_NAME "tmp_here_doc"
 
 // 起動モード
 typedef enum e_mode
@@ -64,6 +63,7 @@ typedef enum e_token_type
 	CONTROL_OPERATOR,
 	REDIRECTION,
 	PIPE,
+  DELIMITER,
 }							t_token_type;
 
 typedef struct s_token

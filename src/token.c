@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 10:01:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 17:25:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -471,6 +471,7 @@ t_token	*tokenize(char *input_line)
 	char			**w;
 	int				i;
 	t_token			*token_list;
+	t_token			*current;
 	t_token_type	type;
 	static char		*redirection_list[] = REDIRECTION_LIST;
 	static char		*blank_list[] = BLANK_LIST;
@@ -514,7 +515,17 @@ t_token	*tokenize(char *input_line)
 	ft_free(w);
 	process_single_quote(token_list);
   process_double_quote(token_list);
-	join_tokens(token_list);
+	token_list = join_tokens(token_list);
 	remove_blank(token_list);
+  current = token_list;
+  while (current)
+  {
+    if (current->type == REDIRECTION && ft_strncmp(current->str, "<<", 3) == 0)
+    {
+      if (current->next)
+        current->next->type = DELIMITER;
+    }
+    current = current->next;
+  }
 	return (token_list);
 }
