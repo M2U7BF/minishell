@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 12:17:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/16 11:52:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 int	exec_interactive(t_exec_vars *e_vars)
 {
 	t_i_mode_vars	*i_vars;
-	static int		proc_size = 1;
 	int				status;
 
 	handle_signal();
@@ -56,9 +55,6 @@ int	exec_interactive(t_exec_vars *e_vars)
     // debug_put_token_list(i_vars->token_list);
     if (check_syntax_error(i_vars->token_list) != 0)
       exit(EXIT_SYNTAX_ERROR);
-		// TODO 単語分割の結果から、全体のプロセスの数を計算しmalloc
-		i_vars->pro_count = proc_size;
-		i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
 		// パース
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
@@ -67,8 +63,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);
-    // TODO heredocのファイルを削除する
-    unlink(TMPFILE_NAME);
 		ft_free(i_vars->input_line);
 	}
 }
