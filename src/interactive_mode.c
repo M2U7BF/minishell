@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 17:16:49 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:53:21 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 			ft_putstr_fd("\n", STDOUT_FILENO);
 			rl_on_new_line();
 			rl_replace_line("", 0);
-			// rl_redisplay();
+			rl_redisplay();
 			ft_free(i_vars->input_line);
 			continue;
 		}
