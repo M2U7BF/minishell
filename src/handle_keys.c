@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 18:29:03 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:51:37 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ volatile	sig_atomic_t g_recieve_signal = 0;
 void	signal_hander(int signum)
 {
 	g_recieve_signal = signum;
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void	handle_signal(void)
