@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 09:25:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 11:48:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	quote_removal(t_token *token)
 			}
 			old = current_token->str;
 			current_token->str = ft_strjoin_all(tmp);
-      free_str_array(tmp);
+			free_str_array(tmp);
 			free(old);
 		}
 		i = -1;
@@ -81,16 +81,6 @@ void	quote_removal(t_token *token)
 	}
 }
 
-// char	*redirect_expansion(char *s)
-// {
-// 	//
-// }
-
-// char	*pipe_expansion(char *s)
-// {
-// 	//
-// }
-
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
 // シングルクォートに囲まれている場合、展開は行わない。
@@ -102,6 +92,7 @@ void	variable_expansion(t_token **token_list)
 	char	**dollar_splited_words;
 	t_token	*current_token;
 	int		single_quotation_count;
+	char	**tmp;
 
 	if (!token_list || !(*token_list))
 		return ;
@@ -116,7 +107,19 @@ void	variable_expansion(t_token **token_list)
 			j = -1;
 			while (dollar_splited_words[++j])
 			{
-				if (ft_strchr(dollar_splited_words[j], '$') != NULL
+				if (ft_strncmp(dollar_splited_words[j], "$?", 2) == 0
+					&& single_quotation_count % 2 == 0)
+				{
+					tmp = ft_split_by_word_leave_separator(dollar_splited_words[j],
+							"$?");
+					ft_free(tmp[0]);
+					// TODO: 直前のプロセスの最終ステータスを取得する
+					tmp[0] = ft_itoa(0);
+					ft_free(dollar_splited_words[j]);
+					dollar_splited_words[j] = ft_strjoin_all(tmp);
+					free_str_array(tmp);
+				}
+				else if (ft_strchr(dollar_splited_words[j], '$') != NULL
 					&& single_quotation_count % 2 == 0)
 				{
 					env_var = getenv(&dollar_splited_words[j][1]);
@@ -145,7 +148,4 @@ void	variable_expansion(t_token **token_list)
 void	parse(t_i_mode_vars *i_vars)
 {
 	variable_expansion(&i_vars->token_list);
-	// TODO プロセス数を判定後、下記を実施。
-	// redirect_expansion(vars->input_line);
-	// pipe_expansion(vars->input_line);
 }
