@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 16:25:28 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:16:49 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ int	exec_interactive(t_exec_vars *e_vars)
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
+		else
+		{
+			ft_free(i_vars->input_line); // 空行のメモリを解放
+			continue;                    // ループの先頭に戻り、新しいプロンプトを表示
+		}
 		if (check_quotation(i_vars->input_line) != 0)
 			exit(EXIT_FAILURE);
 		// 単語分割
