@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 15:40:18 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:46:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
 # include "../minishell_test/ft_libdebug/libdebug.h"
-# include "get_next_line.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -46,7 +45,6 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
-# define TMPFILE_NAME "tmp_here_doc"
 
 // 起動モード
 typedef enum e_mode
@@ -64,7 +62,8 @@ typedef enum e_token_type
 	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIRECTION,
-  PIPE,
+	PIPE,
+	DELIMITER,
 }							t_token_type;
 
 typedef struct s_token
@@ -77,6 +76,7 @@ typedef struct s_token
 typedef enum e_proc_unit_type
 {
 	SIMPLE_CMD,
+	PIPE_LINE,
 }							t_proc_unit_type;
 
 // cmd + arg + arg ... を保存する連結リスト。
@@ -85,6 +85,8 @@ typedef struct s_proc_unit
 	t_token					*args;
 	t_proc_unit_type		type;
 	struct s_proc_unit		*next;
+	int						read_fd;
+	int						write_fd;
 }							t_proc_unit;
 
 // 非対話的モードで変数を保持する構造体
@@ -148,7 +150,8 @@ int							is_redirection(char *s);
 char						**tokens_to_arr(t_token *token_list);
 t_token						*token_dup(t_token *token);
 t_token						*join_tokens(t_token *token_list);
-void						process_single_quote(t_token *token_list);
+t_token						*process_single_quote(t_token *token_list);
+t_token						*process_double_quote(t_token *token_list);
 
 // parse.c
 int							check_quotation(char *input_line);
@@ -166,9 +169,11 @@ void						put_error_exit(char *s, int status);
 void						debug_put_proc_list(t_proc_unit *proc_list);
 void						free_proc_list(t_proc_unit *proc_list);
 t_proc_unit					*create_proc_unit(t_token *args,
-								t_proc_unit_type type);
+								t_proc_unit_type type, int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);
+t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
+								t_proc_unit *proc);
 
 // syntax.c
 int							check_syntax_error(t_token *token_list);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 21:41:23 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:47:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 int	exec_interactive(t_exec_vars *e_vars)
 {
 	t_i_mode_vars	*i_vars;
-	static int		proc_size = 1;
 	int				status;
 
 	handle_signal();
@@ -74,11 +73,11 @@ int	exec_interactive(t_exec_vars *e_vars)
     // tokenize後の構文エラーを検知する
     // printf("tokenize後\n");
     // debug_put_token_list(i_vars->token_list);
-		if (check_syntax_error(i_vars->token_list) != 0)
-			exit(EXIT_SYNTAX_ERROR);
-		// TODO 単語分割の結果から、全体のプロセスの数を計算しmalloc
-		i_vars->pro_count = proc_size;
-		i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
+    if (check_syntax_error(i_vars->token_list) != 0)
+    {
+      ft_dprintf(STDERR_FILENO, "syntax_error\n");
+      exit(EXIT_SYNTAX_ERROR);
+    }
 		// パース
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
@@ -99,9 +98,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 			/*TODO: ここでシェルの終了ステータスを131に更新*/
 		}
 
-
-    // TODO heredocのファイルを削除する
-    	unlink(TMPFILE_NAME);
 		ft_free(i_vars->input_line);
 	}
 }

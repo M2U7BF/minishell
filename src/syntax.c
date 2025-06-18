@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/10 09:32:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 13:38:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_redirection_syntax(t_token *token_list)
 	while (current_token)
 	{
 		if (current_token->type == REDIRECTION && (current_token->next == NULL
-				|| current_token->next->type != WORD))
+				|| (current_token->next->type != WORD && current_token->next->type != DELIMITER)))
 			return (-1);
 		current_token = current_token->next;
 	}
