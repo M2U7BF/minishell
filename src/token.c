@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 08:54:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/18 11:09:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ t_token	*process_single_quote(t_token *token_list)
 	int		single_quote_count;
 	char	**tmp_arr;
 	char	*tmp_str;
-	int		i;
+	int		i; // デバッグ用
 
 	current_token = token_list;
 	single_quote_count = 0;
@@ -342,6 +342,8 @@ t_token	*process_single_quote(t_token *token_list)
 		{
 			if (single_quote_count % 2 == 0 && current_token->next)
 			{
+        if (ft_strncmp(current_token->next->str, "\'", 2) == 0)
+          single_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);
@@ -409,6 +411,8 @@ t_token	*process_double_quote(t_token *token_list)
 		{
 			if (double_quote_count % 2 == 0 && current_token->next)
 			{
+        if (ft_strncmp(current_token->next->str, "\"", 2) == 0)
+          double_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);

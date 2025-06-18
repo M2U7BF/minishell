@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 13:40:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/18 13:03:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,28 @@ int	check_quotation(char *input_line)
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
 void	quote_removal(t_token *token)
 {
-	t_token	*current_token;
-	char	**tmp;
-	char	*old;
-	int		double_quote_count;
-	int		i;
+	t_token		*current_token;
+	char		**tmp;
+	char		*old;
+	int			double_quote_count;
+	int			i;
+	static char	*quote[] = {"\"", "\'", NULL};
 
 	current_token = token;
 	double_quote_count = 0;
 	i = -1;
 	while (current_token)
 	{
-    if (current_token->type == DELIMITER)
-    {
-      current_token = current_token->next;  
-      continue;
-    }
+		if (current_token->type == DELIMITER)
+		{
+			current_token = current_token->next;
+			continue ;
+		}
 		if (ft_strchr(current_token->str, '\'') != NULL)
 		{
-			tmp = ft_multi_split_leave_separator(current_token->str, "\'\"");
+			tmp = ft_multi_split_by_word_leave_separator(current_token->str, quote);
+			// printf("tmp:\n");
+			// put_strarr(tmp);
 			while (tmp[++i])
 			{
 				if (double_quote_count % 2 == 0 && ft_strchr(tmp[i],
