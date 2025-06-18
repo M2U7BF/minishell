@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 13:48:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/18 14:17:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 	while (i < pro_count)
 	{
 		waitpid(child_pids[i], &status, 0);
-		// reset_redirect();
 		i++;
 	}
 	if (WIFEXITED(status))
@@ -37,7 +36,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 	t_i_mode_vars	*i_vars;
 	int				status;
 
-	handle_signal();
 	init_i_vars(&e_vars->i_vars);
 	i_vars = &e_vars->i_vars;
 	rl_outstream = stderr;
