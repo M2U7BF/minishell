@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 10:01:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/18 08:54:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,8 @@ void	del_token(t_token **token_list, t_token *token)
 	free(token);
 }
 
+// tokenの次の要素にaddを挿入する。
+// tokenがNULLなら、addが先頭になる。
 void	insert_token(t_token **first_token, t_token *token, t_token *add)
 {
 	t_token	*next_token;
@@ -316,94 +318,138 @@ t_token	*get_prev_token(t_token **token_list, t_token *token)
 	return (NULL);
 }
 
-// シングルクォート内の文字列はすべて1つのWORDとして結合する
-void	process_single_quote(t_token *token_list)
+// シングルクォートが隣接する文字列を探し、隣接するシングルクォートとその文字列を1つの要素にまとめる
+t_token	*process_single_quote(t_token *token_list)
 {
 	t_list	*tmp;
 	t_token	*current_token;
 	t_token	*old;
+	t_token	*old_next;
+	t_token	*old_prev;
 	int		single_quote_count;
 	char	**tmp_arr;
 	char	*tmp_str;
+	int		i;
 
 	current_token = token_list;
 	single_quote_count = 0;
 	tmp = NULL;
+	i = 0;
 	while (current_token)
 	{
+		// 現在のcountが偶数、かつ現在の要素がダブルクォートなら、現在の要素と次の要素を結合
 		if (ft_strncmp(current_token->str, "\'", 2) == 0)
 		{
-			// 終端のシングルクォートの結合
-			if (single_quote_count > 0)
+			if (single_quote_count % 2 == 0 && current_token->next)
 			{
 				old = current_token;
-				current_token = get_prev_token(&token_list, old);
+				old_next = current_token->next;
+				old_prev = get_prev_token(&token_list, old);
 				ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+				ft_lstadd_back(&tmp,
+					ft_lstnew((void *)ft_strdup(old_next->str)));
 				del_token(&token_list, old);
+				del_token(&token_list, old_next);
 				tmp_arr = lst_to_str_arr(tmp);
 				tmp_str = ft_strjoin_all(tmp_arr);
 				free_str_array(tmp_arr);
 				ft_lstclear(&tmp, del_content);
-				insert_token(&token_list, current_token, create_token(tmp_str,
-						WORD));
+				current_token = create_token(tmp_str, WORD);
+				insert_token(&token_list, old_prev, current_token);
 			}
 			single_quote_count++;
 		}
-		// 先端のシングルクォート、シングルクォートで囲まれている文字列の結合
-		if (single_quote_count % 2 == 1)
+		// 現在のcountが奇数、かつ、次の要素がダブルクォートならなら、現在の要素と次の要素を結合
+		else if (single_quote_count % 2 == 1 && current_token->next
+			&& ft_strncmp(current_token->next->str, "\'", 2) == 0)
 		{
 			old = current_token;
-			current_token = get_prev_token(&token_list, old);
+			old_next = current_token->next;
+			old_prev = get_prev_token(&token_list, old);
 			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old_next->str)));
 			del_token(&token_list, old);
+			del_token(&token_list, old_next);
+			tmp_arr = lst_to_str_arr(tmp);
+			tmp_str = ft_strjoin_all(tmp_arr);
+			free_str_array(tmp_arr);
+			ft_lstclear(&tmp, del_content);
+			current_token = create_token(tmp_str, WORD);
+			insert_token(&token_list, old_prev, current_token);
+			single_quote_count++;
 		}
-		current_token = current_token->next;
+		else
+			current_token = current_token->next;
+		i++;
 	}
+	return (token_list);
 }
 
-// TODO: ダブルクォート内の文字列は展開される文字列だけ特別扱いして、それ以外は結合
-void	process_double_quote(t_token *token_list)
+// ダブルクォートが隣接する文字列を探し、隣接するダブルクォートとその文字列を1つの要素にまとめる
+t_token	*process_double_quote(t_token *token_list)
 {
 	t_list	*tmp;
 	t_token	*current_token;
 	t_token	*old;
+	t_token	*old_next;
+	t_token	*old_prev;
 	int		double_quote_count;
 	char	**tmp_arr;
 	char	*tmp_str;
+	int		i;
 
 	current_token = token_list;
 	double_quote_count = 0;
 	tmp = NULL;
+	i = 0;
 	while (current_token)
 	{
+		// 現在のcountが偶数、かつ現在の要素がダブルクォートなら、現在の要素と次の要素を結合
 		if (ft_strncmp(current_token->str, "\"", 2) == 0)
 		{
-			// 終端のシングルクォートの結合
-			if (double_quote_count > 0)
+			if (double_quote_count % 2 == 0 && current_token->next)
 			{
 				old = current_token;
-				current_token = get_prev_token(&token_list, old);
+				old_next = current_token->next;
+				old_prev = get_prev_token(&token_list, old);
 				ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+				ft_lstadd_back(&tmp,
+					ft_lstnew((void *)ft_strdup(old_next->str)));
 				del_token(&token_list, old);
+				del_token(&token_list, old_next);
 				tmp_arr = lst_to_str_arr(tmp);
 				tmp_str = ft_strjoin_all(tmp_arr);
 				free_str_array(tmp_arr);
 				ft_lstclear(&tmp, del_content);
-				insert_token(&token_list, current_token, create_token(tmp_str,
-						WORD));
+				current_token = create_token(tmp_str, WORD);
+				insert_token(&token_list, old_prev, current_token);
 			}
 			double_quote_count++;
 		}
-		// 先端のシングルクォート、シングルクォートで囲まれている文字列の結合
-		if (double_quote_count % 2 == 1)
+		// 現在のcountが奇数、かつ、次の要素がダブルクォートならなら、現在の要素と次の要素を結合
+		else if (double_quote_count % 2 == 1 && current_token->next
+			&& ft_strncmp(current_token->next->str, "\"", 2) == 0)
 		{
 			old = current_token;
-			current_token = get_prev_token(&token_list, old);
+			old_next = current_token->next;
+			old_prev = get_prev_token(&token_list, old);
 			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old_next->str)));
 			del_token(&token_list, old);
+			del_token(&token_list, old_next);
+			tmp_arr = lst_to_str_arr(tmp);
+			tmp_str = ft_strjoin_all(tmp_arr);
+			free_str_array(tmp_arr);
+			ft_lstclear(&tmp, del_content);
+			current_token = create_token(tmp_str, WORD);
+			insert_token(&token_list, old_prev, current_token);
+			double_quote_count++;
 		}
-		current_token = current_token->next;
+		else
+			current_token = current_token->next;
+		i++;
 	}
+	return (token_list);
 }
 
 // BLANK, REDIRECTION, を挟まずに隣り合う文字列を結合する。
@@ -471,6 +517,7 @@ t_token	*tokenize(char *input_line)
 	char			**w;
 	int				i;
 	t_token			*token_list;
+	t_token			*current;
 	t_token_type	type;
 	static char		*redirection_list[] = REDIRECTION_LIST;
 	static char		*blank_list[] = BLANK_LIST;
@@ -489,8 +536,8 @@ t_token	*tokenize(char *input_line)
 	i = -1;
 	while (w[++i])
 	{
-    if (ft_strncmp(w[i], "|", 2) == 0)
-      type = PIPE;
+		if (ft_strncmp(w[i], "|", 2) == 0)
+			type = PIPE;
 		else if (is_control_operator(w[i]))
 			type = CONTROL_OPERATOR;
 		else if (is_reserved_word(w[i]))
@@ -512,9 +559,20 @@ t_token	*tokenize(char *input_line)
 			append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
-	process_single_quote(token_list);
-  process_double_quote(token_list);
-	join_tokens(token_list);
+	token_list = process_single_quote(token_list);
+	token_list = process_double_quote(token_list);
+	token_list = join_tokens(token_list);
 	remove_blank(token_list);
+	current = token_list;
+	while (current)
+	{
+		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
+				3) == 0)
+		{
+			if (current->next)
+				current->next->type = DELIMITER;
+		}
+		current = current->next;
+	}
 	return (token_list);
 }

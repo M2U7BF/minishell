@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 11:52:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/17 14:03:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ int	exec_interactive(t_exec_vars *e_vars)
     // printf("tokenize後\n");
     // debug_put_token_list(i_vars->token_list);
     if (check_syntax_error(i_vars->token_list) != 0)
+    {
+      ft_dprintf(STDERR_FILENO, "syntax_error\n");
       exit(EXIT_SYNTAX_ERROR);
+    }
 		// パース
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
