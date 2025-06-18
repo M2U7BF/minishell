@@ -3,28 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 18:51:37 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:48:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 volatile	sig_atomic_t g_recieve_signal = 0;
-// void	ctrl_backslash(int signum)
-// {
-// 	// TODO 内容実装
-// 	printf("ctrl_backslash, signum:%d\n", signum);
-// }
-
-// void	ctrl_c(int signum)
-// {
-// 	// TODO 内容実装
-// 	(void)signum;
-// 	exit(EOWNERDEAD);
-// }
 
 /*受け取ったシグナルの番号をグルーバル変数に入れる*/
 void	signal_hander(int signum)
