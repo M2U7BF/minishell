@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/16 11:57:08 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/18 09:53:22 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ NAME = minishell
 LIBFT_DIR = lib/libft/
 FT_DPRINTF_DIR = lib/ft_dprintf
 LIBDEBUG_DIR = $(NAME)_test/ft_libdebug
+LIBTEST_DIR = $(NAME)_test/ft_libtest
 
 
 all:			$(NAME)
@@ -51,6 +52,9 @@ ft_dprintf:
 libdebug:
 	make -C $(LIBDEBUG_DIR)
 
+libtest:
+	make -C $(LIBTEST_DIR)
+
 clean:
 	$(RM) $(OBJS)
 	$(RM) $(BONUS_OBJS)
@@ -66,6 +70,8 @@ re: fclean $(NAME)
 
 test:
 	@test -d $(NAME)_test || git clone git@github.com:M2U7BF/$(NAME)_test.git
+	@test -d $(LIBTEST_DIR) || git clone git@github.com:M2U7BF/ft_libtest.git $(LIBTEST_DIR)
+	@test -d $(LIBDEBUG_DIR) || git clone git@github.com:M2U7BF/ft_libdebug.git $(LIBDEBUG_DIR)
 	./$(NAME)_test/test.sh
 
 doc:
@@ -76,6 +82,7 @@ debug: $(OBJS)
 	make libft
 	make ft_dprintf
 	make libdebug
+	make libtest
 	$(CC) $(CFLAG) $(OBJS) \
 		-I$(LIBFT_DIR) \
 		-I$(FT_DPRINTF_DIR)/include \
