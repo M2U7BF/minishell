@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 09:17:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 09:59:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	quote_removal(t_token *token)
 	double_quote_count = 0;
 	while (current_token)
 	{
-    // printf("current_token->str:[%s]\n", current_token->str);
 		if (current_token->type == DELIMITER)
 		{
 			current_token = current_token->next;
@@ -62,14 +61,11 @@ void	quote_removal(t_token *token)
 		{
 			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
 					quote);
-			// printf(">>> tmp:\n");
-			// put_strarr(tmp);
       i = -1;
 			current_quote = NULL;
       tmp_list = NULL;
 			while (tmp[++i])
 			{
-        // printf(">>> [%d] tmp[i]:[%s], current_quote:[%s]\n", i, tmp[i], current_quote);
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 						|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
@@ -79,16 +75,12 @@ void	quote_removal(t_token *token)
         // xクォートと一致したら、そこまでの要素を結合する
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
-          // printf(">>> [%d] current_quote:[%s], tmp[i]:[%s]\n", i, current_quote, tmp[i]);
 					current_quote = NULL;
-					// 結合
 					tmp_strarr = lst_to_str_arr(tmp_list);
 					tmp_str = ft_strjoin_all(tmp_strarr);
           free_str_array(tmp_strarr);
-          // printf("tmp_str:%s\n", tmp_str);
           if (tmp_str != NULL)
           {
-            // printf(">>> tmp_str:%s\n", tmp_str);
   					ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
           }
 					ft_lstclear(&tmp_list, del_content);
@@ -112,7 +104,6 @@ void	quote_removal(t_token *token)
 			  current_token->str = tmp_str;
       else
         current_token->str = ft_strdup("");
-      // printf("current_token->str:[%s]\n", current_token->str);
 			free_str_array(tmp);
       ft_lstclear(&tmp2, del_content);
 			free_str_array(tmp_strarr);

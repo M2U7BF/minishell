@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 09:08:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 09:58:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,12 +334,10 @@ t_token	*process_single_quote(t_token *token_list)
 	int		single_quote_count;
 	char	**tmp_arr;
 	char	*tmp_str;
-	int		i; // デバッグ用
 
 	current_token = token_list;
 	single_quote_count = 0;
 	tmp = NULL;
-	i = 0;
 	while (current_token)
 	{
 		// 現在のcountが偶数、かつ現在の要素がダブルクォートなら、現在の要素と次の要素を結合
@@ -387,7 +385,6 @@ t_token	*process_single_quote(t_token *token_list)
 		}
 		else
 			current_token = current_token->next;
-		i++;
 	}
 	return (token_list);
 }
