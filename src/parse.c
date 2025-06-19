@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 08:50:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 09:17:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	quote_removal(t_token *token)
       tmp_list = NULL;
 			while (tmp[++i])
 			{
-        // printf(">>> [%d] current_quote:[%s]\n", i, current_quote);
+        // printf(">>> [%d] tmp[i]:[%s], current_quote:[%s]\n", i, tmp[i], current_quote);
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 						|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
@@ -95,12 +95,24 @@ void	quote_removal(t_token *token)
 					continue ;
 				}
         ft_lstadd_back(&tmp_list, ft_lstnew((void *)ft_strdup(tmp[i])));
-				// if (current_quote && ft_strncmp(current_quote, tmp[i], 2) != 0)
-				// 	ft_lstadd_back(&tmp_list, ft_lstnew((void *)ft_strdup(tmp[i])));
 			}
+      if (tmp_list != NULL)
+      {
+        tmp_strarr = lst_to_str_arr(tmp_list);
+        tmp_str = ft_strjoin_all(tmp_strarr);
+        free_str_array(tmp_strarr);
+        if (tmp_str != NULL)
+          ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
+        ft_lstclear(&tmp_list, del_content);
+      }
 			old = current_token->str;
       tmp_strarr = lst_to_str_arr(tmp2);
-			current_token->str = ft_strjoin_all(tmp_strarr);
+      tmp_str = ft_strjoin_all(tmp_strarr);
+      if (tmp_str)
+			  current_token->str = tmp_str;
+      else
+        current_token->str = ft_strdup("");
+      // printf("current_token->str:[%s]\n", current_token->str);
 			free_str_array(tmp);
       ft_lstclear(&tmp2, del_content);
 			free_str_array(tmp_strarr);
