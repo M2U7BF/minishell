@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 09:58:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 12:31:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	debug_put_token_list(t_token *token_list)
 	i = 0;
 	while (current_token)
 	{
-		printf("[%d] str:\"%s\", type:%d\n", i, current_token->str,
+		printf("[%2d] str:\"%s\", type:%d\n", i, current_token->str,
 			current_token->type);
 		current_token = current_token->next;
 		i++;
@@ -42,30 +42,34 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 	t_token	*current_t_e;
 
 	if (t == NULL)
+	{
+		printf("(null)\n");
 		return (-1);
+	}
 	i = 0;
 	is_not_all_equal = 0;
 	current_t = t;
 	current_t_e = t_e;
 	while (current_t)
 	{
-    if (!current_t_e)
-    {
-      printf("current_t_e is null\n");
-      break;
-    }
+		if (!current_t_e)
+		{
+			printf("current_t_e is null\n");
+			break ;
+		}
 		is_different = strncmp(current_t->str, current_t_e->str,
 				strlen(current_t_e->str) + 1);
 		if (is_different != 0)
 			is_not_all_equal = 1;
 		if (is_different)
-			printf("[%d] [❌] result:\"%s\", expected:\"%s\"\n", i,
+			printf("[%2d] [❌] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
 		else
-			printf("[%d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
+			printf("[%2d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
 		current_t = current_t->next;
 		current_t_e = current_t_e->next;
+		i++;
 	}
 	if (is_not_all_equal == 0)
 		printf("すべて同じ 💎\n");
@@ -345,8 +349,8 @@ t_token	*process_single_quote(t_token *token_list)
 		{
 			if (single_quote_count % 2 == 0 && current_token->next)
 			{
-        if (ft_strncmp(current_token->next->str, "\'", 2) == 0)
-          single_quote_count++;
+				if (ft_strncmp(current_token->next->str, "\'", 2) == 0)
+					single_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);
@@ -413,8 +417,8 @@ t_token	*process_double_quote(t_token *token_list)
 		{
 			if (double_quote_count % 2 == 0 && current_token->next)
 			{
-        if (ft_strncmp(current_token->next->str, "\"", 2) == 0)
-          double_quote_count++;
+				if (ft_strncmp(current_token->next->str, "\"", 2) == 0)
+					double_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);
