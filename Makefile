@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/19 10:05:47 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/19 13:53:38 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,11 +69,18 @@ fclean: clean
 
 re: fclean $(NAME)
 
-test:
+prepare_test:
 	@test -d $(NAME)_test || git clone git@github.com:M2U7BF/$(NAME)_test.git
 	@test -d $(LIBTEST_DIR) || git clone git@github.com:M2U7BF/ft_libtest.git $(LIBTEST_DIR)
 	@test -d $(LIBDEBUG_DIR) || git clone git@github.com:M2U7BF/ft_libdebug.git $(LIBDEBUG_DIR)
+
+test:
+	@make prepare_test
 	./$(NAME)_test/test.sh
+
+test_all:
+	@make prepare_test
+	./$(NAME)_test/test.sh -a
 
 doc:
 	@test -d $(NAME)_doc || git clone git@github.com:M2U7BF/$(NAME)_doc.git
