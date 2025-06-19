@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 11:45:39 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/12 11:47:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:33:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	is_readable_file(char *pathname)
+bool	is_readable_file(char *pathname)
 {
 	int		fd;
 	char	buf;
@@ -20,11 +20,11 @@ int	is_readable_file(char *pathname)
 
 	fd = open(pathname, O_RDONLY);
 	if (fd == -1)
-		return (0);
-	bytes = read(fd, &buf, 1);
+		return (false);
+	bytes = read(fd, &buf, true);
 	if (bytes == -1)
-		return (close(fd), 0);
-	return (close(fd), 1);
+		return (close(fd), false);
+	return (close(fd), true);
 }
 
 int	open_additionalfile(char *filename, int *fd)

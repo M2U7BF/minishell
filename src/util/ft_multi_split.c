@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static int	is_separator(char *separator, char c)
+static bool	is_separator(char *separator, char c)
 {
 	return (ft_strchr(separator, c) != NULL);
 }

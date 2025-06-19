@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 15:25:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:34:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_include_separator(char *str, char **words)
+static bool	is_include_separator(char *str, char **words)
 {
 	int	str_len;
 	int	k;
@@ -22,9 +22,9 @@ static int	is_include_separator(char *str, char **words)
 	while (words[++k])
 	{
 		if (ft_strnstr(str, words[k], str_len))
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
 static char	**inner_process(char **arr, char **separators)

@@ -6,26 +6,26 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 12:42:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:35:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_quotation(char *input_line)
+bool	is_quotation_error(char *input_line)
 {
 	// TODO エラー文を修正。strrchrなどでエラー位置を特定する？
 	if (count_chr(input_line, '\'') % 2 == 1)
 	{
 		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (1);
+		return (true);
 	}
 	else if (count_chr(input_line, '\"') % 2 == 1)
 	{
 		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (1);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
 // （bashの定義と同様に）クォーテーションを削除する。
@@ -125,12 +125,12 @@ void	variable_expansion(t_token **token_list)
 	t_token	*current_token;
 	char	*current_quote;
 	char	**tmp;
-	int		is_expand;
+	bool	is_expand;
 
 	if (!token_list || !(*token_list))
 		return ;
 	current_token = (*token_list);
-	is_expand = 1;
+	is_expand = true;
 	while (current_token)
 	{
 		if (ft_strchr(current_token->str, '$'))
@@ -141,19 +141,19 @@ void	variable_expansion(t_token **token_list)
 			current_quote = NULL;
 			while (splited_words[++j])
 			{
-				if (current_quote && ft_strchr(splited_words[j], current_quote[0]))
+				if (current_quote && ft_strchr(splited_words[j],
+						current_quote[0]))
 				{
 					current_quote = NULL;
-					is_expand = 1;
+					is_expand = true;
 				}
 				else if (!current_quote && (ft_strchr(splited_words[j], '"')
 						|| ft_strchr(splited_words[j], '\'')))
 				{
 					current_quote = splited_words[j];
 					if (ft_strncmp(current_quote, "\'", 2) == 0)
-						is_expand = 0;
+						is_expand = false;
 				}
-        // printf("[%2d] splited_words[j]:[%s], current_quote:[%s], is_expand:[%d]\n", j, splited_words[j], current_quote, is_expand);
 				if (ft_strncmp(splited_words[j], "$?", 2) == 0 && is_expand)
 				{
 					tmp = ft_split_by_word_leave_separator(splited_words[j],
