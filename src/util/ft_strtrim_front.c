@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 09:36:39 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 09:46:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:32:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_set(char c, char const *set)
+static bool	is_set(char c, char const *set)
 {
 	int	i;
 
@@ -20,10 +20,10 @@ static int	is_set(char c, char const *set)
 	while (set[i])
 	{
 		if (c == set[i])
-			return (1);
+			return (true);
 		i++;
 	}
-	return (0);
+	return (false);
 }
 
 static char	*get_start(const char *s1, const char *set)

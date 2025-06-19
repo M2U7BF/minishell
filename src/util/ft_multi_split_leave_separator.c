@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 13:27:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:31:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_separator(char *separator, char c)
+static bool	is_separator(char *separator, char c)
 {
 	return (ft_strchr(separator, c) != NULL);
 }

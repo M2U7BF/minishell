@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 12:31:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:30:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	debug_put_token_list(t_token *token_list)
 int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 {
 	int		i;
-	int		is_not_all_equal;
-	int		is_different;
+	bool	is_not_all_equal;
+	bool	is_different;
 	t_token	*current_t;
 	t_token	*current_t_e;
 
@@ -47,7 +47,7 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 		return (-1);
 	}
 	i = 0;
-	is_not_all_equal = 0;
+	is_not_all_equal = false;
 	current_t = t;
 	current_t_e = t_e;
 	while (current_t)
@@ -59,11 +59,12 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 		}
 		is_different = strncmp(current_t->str, current_t_e->str,
 				strlen(current_t_e->str) + 1);
-		if (is_different != 0)
-			is_not_all_equal = 1;
 		if (is_different)
+		{
+			is_not_all_equal = true;
 			printf("[%2d] [❌] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
+		}
 		else
 			printf("[%2d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
@@ -71,7 +72,7 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 		current_t_e = current_t_e->next;
 		i++;
 	}
-	if (is_not_all_equal == 0)
+	if (!is_not_all_equal)
 		printf("すべて同じ 💎\n");
 	else
 		printf("すべて同じではない 🔥\n");
@@ -175,29 +176,29 @@ char	**tokens_to_arr(t_token *token_list)
 	return (arr);
 }
 
-int	is_metacharacter(char *s)
+bool	is_metacharacter(char *s)
 {
 	int			i;
 	static char	*chars[] = {"|", "&", ";", "(", ")", "<", ">", " ", "\t", "\v"};
 	static int	len = sizeof(chars) / sizeof(chars[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-int	is_word(char *s)
+bool	is_word(char *s)
 {
 	return (*s && !is_metacharacter(s));
 }
 
-int	is_control_operator(char *s)
+bool	is_control_operator(char *s)
 {
 	int			i;
 	static char	*opes[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "|&",
@@ -205,17 +206,17 @@ int	is_control_operator(char *s)
 	static int	len = sizeof(opes) / sizeof(opes[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, opes[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-int	is_reserved_word(char *s)
+bool	is_reserved_word(char *s)
 {
 	int			i;
 	static char	*words[] = {"!", "case", "do", "done", "elif", "else", "esac",
@@ -224,37 +225,30 @@ int	is_reserved_word(char *s)
 	static int	len = sizeof(words) / sizeof(words[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, words[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-// int	is_variable(char *s)
-// {
-// 	if (!s)
-// 		return (0);
-// 	return (s[0] == '$');
-// }
-
-int	is_redirection(char *s)
+bool	is_redirection(char *s)
 {
 	int			i;
 	static char	*chars[] = REDIRECTION_LIST;
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (chars[++i])
 	{
 		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
 void	tokenize_error(void)

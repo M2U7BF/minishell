@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 10:05:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:35:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	exec_interactive(t_exec_vars *e_vars)
     i_vars->input_line = ft_strtrim_front(i_vars->input_line, DEFAULT_BLANK);
     if (i_vars->input_line[0] == '\0')
       continue;
-		if (check_quotation(i_vars->input_line) != 0)
+		if (is_quotation_error(i_vars->input_line) != 0)
 			exit(EXIT_FAILURE);
 		// 単語分割
 		i_vars->token_list = tokenize(i_vars->input_line);

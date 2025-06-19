@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 17:32:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:25:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	here_doc(char *delimiter)
 {
 	char	*line;
 	int		pipe_fds[2];
-	int		is_quoted;
+	bool	is_quoted;
 	t_token	*tmp_token;
 	char	**tmp_arr;
 	char	*tmp_str;

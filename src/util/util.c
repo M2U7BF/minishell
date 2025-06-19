@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/16 16:19:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:32:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	del_content(void *content)
 	free(content);
 }
 
-int	is_include(char *s, char **words)
+bool	is_include(char *s, char **words)
 {
 	int	i;
 	int	str_len;
@@ -137,9 +137,9 @@ int	is_include(char *s, char **words)
 	while (words[++i])
 	{
 		if (ft_strncmp(s, words[i], str_len + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
 t_list	*get_prev_lst(t_list **list, t_list *elem)

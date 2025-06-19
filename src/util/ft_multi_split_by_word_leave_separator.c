@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:48:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 12:52:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:31:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 	char	*word_position;
 	char	**result;
 	char	*result_str;
-	char	is_end;
+	bool	is_end;
 
-	is_end = 0;
+	is_end = false;
 	if (!str || !words || !words[0] || words[0][0] == '\0')
 		return (NULL);
 	str_len = ft_strlen(str);
@@ -55,7 +55,7 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 		else
 		{
 			l = 1;
-			is_end = 0;
+			is_end = false;
 			while (i + l < str_len)
 			{
 				k = -1;
@@ -63,7 +63,7 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 				{
 					if (ft_strncmp(str + i + l, words[k],
 							ft_strlen(words[k])) == 0)
-						is_end = 1;
+						is_end = true;
 				}
 				if (is_end)
 					break ;
@@ -104,7 +104,7 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 		else
 		{
 			l = 1;
-			is_end = 0;
+			is_end = false;
 			while (i + l < str_len)
 			{
 				k = -1;
@@ -112,7 +112,7 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 				{
 					if (ft_strncmp(str + i + l, words[k],
 							ft_strlen(words[k])) == 0)
-						is_end = 1;
+						is_end = true;
 				}
 				if (is_end)
 					break ;
