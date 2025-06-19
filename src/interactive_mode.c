@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 12:54:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/19 10:05:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ int	exec_interactive(t_exec_vars *e_vars)
 			exit(EXIT_SUCCESS);
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
+    i_vars->input_line = ft_strtrim_front(i_vars->input_line, DEFAULT_BLANK);
+    if (i_vars->input_line[0] == '\0')
+      continue;
 		if (check_quotation(i_vars->input_line) != 0)
 			exit(EXIT_FAILURE);
 		// 単語分割
