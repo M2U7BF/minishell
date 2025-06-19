@@ -8,6 +8,7 @@ func_test
 *.txt
 .vscode
 *out
+some_dir
 
 # Prerequisites
 *.d
