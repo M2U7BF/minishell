@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 17:25:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:57:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,7 @@ int	exec(t_i_mode_vars *i_vars)
 	char		**argv;
 	t_list		*redirect_fds;
 	int			pipe_fds[2];
+  int status;
 
 	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
@@ -306,7 +307,11 @@ int	exec(t_i_mode_vars *i_vars)
 				close(current_proc->next->read_fd);
 			argv = tokens_to_arr(current_proc->args);
 			argv = trim_redirection(&argv);
-			get_command_path(&argv[0]);
+      // printf("argv:\n");
+      // put_strarr(argv);
+			status = get_command_path(&argv[0]);
+      if (status != 0)
+        exit(status);
 			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);

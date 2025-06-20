@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:35:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:54:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ void	quote_removal(t_token *token)
 	double_quote_count = 0;
 	while (current_token)
 	{
+    str_len = ft_strlen(current_token->str);
 		if (current_token->type == DELIMITER)
 		{
 			current_token = current_token->next;
 			continue ;
 		}
-		str_len = ft_strlen(current_token->str);
 		if (ft_strchr(current_token->str, '\'') != NULL
 				|| ft_strchr(current_token->str, '\"') != NULL)
 		{
