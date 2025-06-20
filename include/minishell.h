@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 12:29:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:59:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
+char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
 

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 10:57:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 15:59:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,25 +179,29 @@ t_list	*open_and_redirect_files(t_proc_unit *current_proc,
 
 char	**trim_redirection(char ***argv)
 {
-	char	**new;
 	int		i;
+	char	**new;
+	t_list	*tmp_lst;
+  int len;
 
 	if (!argv || !(*argv))
 		return (NULL);
 	i = 0;
-	while ((*argv)[i] && !is_redirection((*argv)[i]))
-		i++;
-	if (i == 0)
-		return ((*argv));
-	new = malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while ((*argv)[i] && !is_redirection((*argv)[i]))
+  tmp_lst = NULL;
+  len = arrlen((*argv));
+	while (i < len)
 	{
-		new[i] = ft_strdup((*argv)[i]);
+		if (is_redirection((*argv)[i]) && (*argv)[i + 1])
+    {
+			i += 2;
+      continue;
+    }
+		ft_lstadd_back(&tmp_lst, ft_lstnew((void *)ft_strdup((*argv)[i])));
 		i++;
 	}
-	new[i] = NULL;
 	free_str_array((*argv));
+	new = lst_to_str_arr(tmp_lst);
+  ft_lstclear(&tmp_lst, del_content);
 	return (new);
 }
 
@@ -275,7 +279,7 @@ int	exec(t_i_mode_vars *i_vars)
 	char		**argv;
 	t_list		*redirect_fds;
 	int			pipe_fds[2];
-  int status;
+	int			status;
 
 	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
@@ -308,10 +312,12 @@ int	exec(t_i_mode_vars *i_vars)
 			argv = tokens_to_arr(current_proc->args);
 			argv = trim_redirection(&argv);
       // printf("argv:\n");
-      // put_strarr(argv);
+			// put_strarr(argv);
+      if (!argv)
+        exit(EXIT_SUCCESS);
 			status = get_command_path(&argv[0]);
-      if (status != 0)
-        exit(status);
+			if (status != 0)
+				exit(status);
 			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
