@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:30:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:12:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -536,7 +536,8 @@ t_token	*tokenize(char *input_line)
 	w = ft_splitarr_by_word_leave_separator(w, "|");
 	// printf("w:\n");
 	// put_strarr(w);
-	// TODO NULLの場合の処理必要？
+  if (!w)
+    return (NULL);
 	i = -1;
 	while (w[++i])
 	{
@@ -573,7 +574,7 @@ t_token	*tokenize(char *input_line)
 		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
 				3) == 0)
 		{
-			if (current->next)
+			if (current->next && current->next->type == WORD)
 				current->next->type = DELIMITER;
 		}
 		current = current->next;

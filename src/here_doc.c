@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:25:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 12:49:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	here_doc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
+    if (!line)
+      line = ft_strdup("");
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 		{
 			ft_free(line);

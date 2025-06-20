@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 10:50:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:17:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	exec_interactive(t_exec_vars *e_vars)
     // tokenize後の構文エラーを検知する
     // printf("tokenize後\n");
     // debug_put_token_list(i_vars->token_list);
-    if (check_syntax_error(i_vars->token_list) != 0)
+    if (is_syntax_error(i_vars->token_list))
     {
       ft_dprintf(STDERR_FILENO, "syntax_error\n");
       exit(EXIT_SYNTAX_ERROR);

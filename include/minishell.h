@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 08:45:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 12:29:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 								t_proc_unit *proc);
 
 // syntax.c
-int							check_syntax_error(t_token *token_list);
+bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
 int							here_doc(char *delimiter);
