@@ -6,33 +6,48 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 13:38:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:13:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_redirection_syntax(t_token *token_list)
+bool	is_redirection_syntax_error(t_token *token_list)
 {
-	t_token	*current_token;
+	t_token	*current;
+	t_token	*prev;
 
 	// redirection の後ろに制御文字があったらエラー
-	current_token = token_list;
-	while (current_token)
+	prev = NULL;
+	current = token_list;
+	while (current)
 	{
-		if (current_token->type == REDIRECTION && (current_token->next == NULL
-				|| (current_token->next->type != WORD && current_token->next->type != DELIMITER)))
-			return (-1);
-		current_token = current_token->next;
+		if (current->type == REDIRECTION)
+		{
+			if (ft_strncmp(current->str, "<", 2) == 0 || ft_strncmp(current->str, "<<", 3) == 0)
+			{
+				if (!current->next)
+					return (true);
+        if (current->next && current->next->type != WORD && current->next->type != DELIMITER)
+					return (true);
+			}
+			else if (ft_strncmp(current->str, ">", 2) == 0 || ft_strncmp(current->str, ">>", 3) == 0)
+			{
+				if (!current->next || current->next->type != WORD)
+					return (true);
+			}
+		}
+		prev = current;
+		current = current->next;
 	}
-	return (0);
+	return (false);
 }
 
-int	check_syntax_error(t_token *token_list)
+bool	is_syntax_error(t_token *token_list)
 {
 	if (!token_list)
-		return (-1);
-	if (check_redirection_syntax(token_list) != 0)
-		return (-1);
-	return (0);
+		return (true);
+	if (is_redirection_syntax_error(token_list))
+		return (true);
+	return (false);
 }
