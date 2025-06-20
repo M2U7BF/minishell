@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 15:59:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:36:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,24 @@ void	close_pipe(t_proc_unit *proc)
 		close(proc->write_fd);
 }
 
+void	handle_error(int *status, char *cmd_path)
+{
+	if (*status == EXIT_CMD_NOT_FOUND)
+		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
+	else if (*status == ENOENT)
+	{
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s", cmd_path, strerror(*status));
+		*status = EXIT_CMD_NOT_FOUND;
+	}
+	else if (*status == EACCES || *status == EISDIR)
+	{
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s", cmd_path, strerror(*status));
+		*status = EXIT_PERMISSION_DENIED;
+	}
+	else
+		perror("pipex");
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
 	int			i;
@@ -317,7 +335,10 @@ int	exec(t_i_mode_vars *i_vars)
         exit(EXIT_SUCCESS);
 			status = get_command_path(&argv[0]);
 			if (status != 0)
+      {
+        handle_error(&status, argv[0]);
 				exit(status);
+      }
 			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
