@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:36:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:46:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,16 +277,16 @@ void	handle_error(int *status, char *cmd_path)
 		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
 	else if (*status == ENOENT)
 	{
-		ft_dprintf(STDERR_FILENO, "pipex: %s: %s", cmd_path, strerror(*status));
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path, strerror(*status));
 		*status = EXIT_CMD_NOT_FOUND;
 	}
 	else if (*status == EACCES || *status == EISDIR)
 	{
-		ft_dprintf(STDERR_FILENO, "pipex: %s: %s", cmd_path, strerror(*status));
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path, strerror(*status));
 		*status = EXIT_PERMISSION_DENIED;
 	}
 	else
-		perror("pipex");
+		perror("minishell");
 }
 
 int	exec(t_i_mode_vars *i_vars)
