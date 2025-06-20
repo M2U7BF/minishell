@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 15:25:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 12:54:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
 	t_list	*new_lst;
 	char	**new;
 
+	if (!arr || !*arr)
+		return (NULL);
 	new_lst = NULL;
 	i = -1;
 	while (arr[++i])

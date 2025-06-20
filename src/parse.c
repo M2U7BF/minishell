@@ -6,80 +6,107 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 13:40:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:54:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_quotation(char *input_line)
+bool	is_quotation_error(char *input_line)
 {
 	// TODO エラー文を修正。strrchrなどでエラー位置を特定する？
 	if (count_chr(input_line, '\'') % 2 == 1)
 	{
 		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (1);
+		return (true);
 	}
 	else if (count_chr(input_line, '\"') % 2 == 1)
 	{
 		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (1);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
 // （bashの定義と同様に）クォーテーションを削除する。
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
 void	quote_removal(t_token *token)
 {
-	t_token	*current_token;
-	char	**tmp;
-	char	*old;
-	int		double_quote_count;
-	int		i;
+	t_token		*current_token;
+	char		**tmp;
+	char		*old;
+	int			double_quote_count;
+	int			i;
+	static char	*quote[] = {"\"", "\'", NULL};
+	char		*current_quote;
+	t_list		*tmp_list;
+	t_list		*tmp2;
+	int			str_len;
+	char		**tmp_strarr;
+	char		*tmp_str;
 
+	tmp2 = NULL;
 	current_token = token;
 	double_quote_count = 0;
-	i = -1;
 	while (current_token)
 	{
-    if (current_token->type == DELIMITER)
-    {
-      current_token = current_token->next;  
-      continue;
-    }
-		if (ft_strchr(current_token->str, '\'') != NULL)
+    str_len = ft_strlen(current_token->str);
+		if (current_token->type == DELIMITER)
 		{
-			tmp = ft_multi_split_leave_separator(current_token->str, "\'\"");
-			while (tmp[++i])
-			{
-				if (double_quote_count % 2 == 0 && ft_strchr(tmp[i],
-						'\'') != NULL)
-				{
-					old = tmp[i];
-					tmp[i] = ft_strtrim(tmp[i], "\'");
-					ft_free(old);
-				}
-				double_quote_count += count_chr(tmp[i], '\"');
-			}
-			old = current_token->str;
-			current_token->str = ft_strjoin_all(tmp);
-			free_str_array(tmp);
-			free(old);
+			current_token = current_token->next;
+			continue ;
 		}
-		i = -1;
-		// TODO ダブルクォートの削除
-		if (ft_strchr(current_token->str, '\"') != NULL)
+		if (ft_strchr(current_token->str, '\'') != NULL
+				|| ft_strchr(current_token->str, '\"') != NULL)
 		{
-			tmp = ft_split_leave_separator(current_token->str, '\"');
+			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
+					quote);
+			i = -1;
+			current_quote = NULL;
+			tmp_list = NULL;
 			while (tmp[++i])
 			{
-				old = tmp[i];
-				tmp[i] = ft_strtrim(tmp[i], "\"");
-				ft_free(old);
+				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
+							|| ft_strncmp("\'", tmp[i], 2) == 0))
+				{
+					current_quote = tmp[i];
+					continue ;
+				}
+				// xクォートと一致したら、そこまでの要素を結合する
+				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
+				{
+					current_quote = NULL;
+					tmp_strarr = lst_to_str_arr(tmp_list);
+					tmp_str = ft_strjoin_all(tmp_strarr);
+					free_str_array(tmp_strarr);
+					if (tmp_str != NULL)
+					{
+						ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
+					}
+					ft_lstclear(&tmp_list, del_content);
+					continue ;
+				}
+				ft_lstadd_back(&tmp_list, ft_lstnew((void *)ft_strdup(tmp[i])));
+			}
+			if (tmp_list != NULL)
+			{
+				tmp_strarr = lst_to_str_arr(tmp_list);
+				tmp_str = ft_strjoin_all(tmp_strarr);
+				free_str_array(tmp_strarr);
+				if (tmp_str != NULL)
+					ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
+				ft_lstclear(&tmp_list, del_content);
 			}
 			old = current_token->str;
-			current_token->str = ft_strjoin_all(tmp);
+			tmp_strarr = lst_to_str_arr(tmp2);
+			tmp_str = ft_strjoin_all(tmp_strarr);
+			if (tmp_str)
+				current_token->str = tmp_str;
+			else
+				current_token->str = ft_strdup("");
+			free_str_array(tmp);
+			ft_lstclear(&tmp2, del_content);
+			free_str_array(tmp_strarr);
 			free(old);
 		}
 		current_token = current_token->next;
@@ -94,57 +121,68 @@ void	variable_expansion(t_token **token_list)
 {
 	int		j;
 	char	*env_var;
-	char	**dollar_splited_words;
+	char	**splited_words;
 	t_token	*current_token;
-	int		single_quotation_count;
+	char	*current_quote;
 	char	**tmp;
+	bool	is_expand;
 
 	if (!token_list || !(*token_list))
 		return ;
 	current_token = (*token_list);
-	single_quotation_count = 0;
+	is_expand = true;
 	while (current_token)
 	{
 		if (ft_strchr(current_token->str, '$'))
 		{
-			dollar_splited_words = ft_multi_split_leave_separator(current_token->str,
+			splited_words = ft_multi_split_leave_separator(current_token->str,
 					"$\'\"");
 			j = -1;
-			while (dollar_splited_words[++j])
+			current_quote = NULL;
+			while (splited_words[++j])
 			{
-				if (ft_strncmp(dollar_splited_words[j], "$?", 2) == 0
-					&& single_quotation_count % 2 == 0)
+				if (current_quote && ft_strchr(splited_words[j],
+						current_quote[0]))
 				{
-					tmp = ft_split_by_word_leave_separator(dollar_splited_words[j],
+					current_quote = NULL;
+					is_expand = true;
+				}
+				else if (!current_quote && (ft_strchr(splited_words[j], '"')
+						|| ft_strchr(splited_words[j], '\'')))
+				{
+					current_quote = splited_words[j];
+					if (ft_strncmp(current_quote, "\'", 2) == 0)
+						is_expand = false;
+				}
+				if (ft_strncmp(splited_words[j], "$?", 2) == 0 && is_expand)
+				{
+					tmp = ft_split_by_word_leave_separator(splited_words[j],
 							"$?");
 					ft_free(tmp[0]);
 					// TODO: 直前のプロセスの最終ステータスを取得する
 					tmp[0] = ft_itoa(0);
-					ft_free(dollar_splited_words[j]);
-					dollar_splited_words[j] = ft_strjoin_all(tmp);
+					ft_free(splited_words[j]);
+					splited_words[j] = ft_strjoin_all(tmp);
 					free_str_array(tmp);
 				}
-				else if (ft_strchr(dollar_splited_words[j], '$') != NULL
-					&& single_quotation_count % 2 == 0)
+				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
 				{
-					env_var = getenv(&dollar_splited_words[j][1]);
+					env_var = getenv(&splited_words[j][1]);
 					if (env_var)
 					{
-						ft_free(dollar_splited_words[j]);
-						dollar_splited_words[j] = ft_strdup(env_var);
+						ft_free(splited_words[j]);
+						splited_words[j] = ft_strdup(env_var);
 					}
 					else
 					{
-						ft_free(dollar_splited_words[j]);
-						dollar_splited_words[j] = ft_strdup("");
+						ft_free(splited_words[j]);
+						splited_words[j] = ft_strdup("");
 					}
 				}
-				single_quotation_count += count_chr(dollar_splited_words[j],
-						'\'');
 			}
 			ft_free(current_token->str);
-			current_token->str = ft_strjoin_all(dollar_splited_words);
-			free_str_array(dollar_splited_words);
+			current_token->str = ft_strjoin_all(splited_words);
+			free_str_array(splited_words);
 		}
 		current_token = current_token->next;
 	}

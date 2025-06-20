@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/16 11:57:08 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/19 13:53:38 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c \
 						util/ft_split_by_word_leave_separator.c util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_multi_split_by_word_leave_separator.c util/ft_multi_splitarr_by_word_leave_separator.c \
-						util/ft_splitarr_leave_separator.c util/remove_elem.c here_doc.c file.c
+						util/ft_splitarr_leave_separator.c util/remove_elem.c here_doc.c file.c \
+						util/ft_strtrim_front.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra
@@ -27,6 +28,7 @@ NAME = minishell
 LIBFT_DIR = lib/libft/
 FT_DPRINTF_DIR = lib/ft_dprintf
 LIBDEBUG_DIR = $(NAME)_test/ft_libdebug
+LIBTEST_DIR = $(NAME)_test/ft_libtest
 
 
 all:			$(NAME)
@@ -51,6 +53,9 @@ ft_dprintf:
 libdebug:
 	make -C $(LIBDEBUG_DIR)
 
+libtest:
+	make -C $(LIBTEST_DIR)
+
 clean:
 	$(RM) $(OBJS)
 	$(RM) $(BONUS_OBJS)
@@ -64,9 +69,18 @@ fclean: clean
 
 re: fclean $(NAME)
 
-test:
+prepare_test:
 	@test -d $(NAME)_test || git clone git@github.com:M2U7BF/$(NAME)_test.git
+	@test -d $(LIBTEST_DIR) || git clone git@github.com:M2U7BF/ft_libtest.git $(LIBTEST_DIR)
+	@test -d $(LIBDEBUG_DIR) || git clone git@github.com:M2U7BF/ft_libdebug.git $(LIBDEBUG_DIR)
+
+test:
+	@make prepare_test
 	./$(NAME)_test/test.sh
+
+test_all:
+	@make prepare_test
+	./$(NAME)_test/test.sh -a
 
 doc:
 	@test -d $(NAME)_doc || git clone git@github.com:M2U7BF/$(NAME)_doc.git
@@ -76,6 +90,7 @@ debug: $(OBJS)
 	make libft
 	make ft_dprintf
 	make libdebug
+	make libtest
 	$(CC) $(CFLAG) $(OBJS) \
 		-I$(LIBFT_DIR) \
 		-I$(FT_DPRINTF_DIR)/include \

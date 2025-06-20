@@ -1,13 +1,12 @@
 tmp*
-infile*
-outfile*
-minishell_test
-minishell_doc
-minishell
-func_test
+*
+!*/
+!Makefile
 *.txt
-.vscode
-*out
+.vscode/
+minishell_test/
+minishell_doc/
+some_dir/
 
 # Prerequisites
 *.d

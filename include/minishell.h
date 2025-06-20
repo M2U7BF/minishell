@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 07:46:28 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:50:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/signal.h>
@@ -145,10 +146,10 @@ void						append_token(t_token **token_list, t_token *token);
 t_token						*create_token(char *str, t_token_type type);
 t_token						*tokenize(char *input_line);
 void						free_token_list(t_token *token_list);
-int							is_word(char *s);
-int							is_control_operator(char *s);
-int							is_reserved_word(char *s);
-int							is_redirection(char *s);
+bool						is_word(char *s);
+bool						is_control_operator(char *s);
+bool						is_reserved_word(char *s);
+bool						is_redirection(char *s);
 char						**tokens_to_arr(t_token *token_list);
 t_token						*token_dup(t_token *token);
 t_token						*join_tokens(t_token *token_list);
@@ -156,13 +157,16 @@ t_token						*process_single_quote(t_token *token_list);
 t_token						*process_double_quote(t_token *token_list);
 
 // parse.c
-int							check_quotation(char *input_line);
+bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
+char						**trim_redirection(char ***argv);
+int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
+void						handle_error(int *status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
@@ -178,13 +182,13 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 								t_proc_unit *proc);
 
 // syntax.c
-int							check_syntax_error(t_token *token_list);
+bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
 int							here_doc(char *delimiter);
 
 // file.c
-int							is_readable_file(char *pathname);
+bool						is_readable_file(char *pathname);
 int							open_additionalfile(char *filename, int *fd);
 int							open_outfile(char *filename, int *fd);
 int							open_infile(char *filename, int *fd);
@@ -200,8 +204,11 @@ int							count_chr(char *s, char c);
 char						**lst_to_str_arr(t_list *lst);
 void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
-int							is_include(char *s, char **words);
+bool						is_include(char *s, char **words);
 t_list						*get_prev_lst(t_list **list, t_list *elem);
+
+// ft_strtrim_front.c
+char						*ft_strtrim_front(char const *s1, char const *set);
 
 // ft_multi_split_leave_separator.c
 char						**ft_multi_split_leave_separator(char *s,

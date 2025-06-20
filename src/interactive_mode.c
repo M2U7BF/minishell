@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 08:26:02 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:54:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ int	exec_interactive(t_exec_vars *e_vars)
 				if (g_recieve_signal == SIGINT)
 				{
 					status = 130; // BashはCtrl+Cで終了ステータスを130にする
-					continue;     // ループを継続して新しいプロンプトを表示
+					continue ;     // ループを継続して新しいプロンプトを表示
 				}
 				// ft_putendl_fd("Ctrl+Dが押されました", STDOUT_FILENO);
-                // printf("プロセスID %d がexit()を呼び出します。\n", getpid());
-                // fflush(stdout); // printfのバッファを強制的に出力
-				ft_putendl_fd("exit!", STDOUT_FILENO);
+				// printf("プロセスID %d がexit()を呼び出します。\n", getpid());
+				// fflush(stdout); // printfのバッファを強制的に出力
+				// ft_putendl_fd("exit!", STDOUT_FILENO);
 				exit(status); // 最後のコマンドの終了ステータスで終了するのが望ましい
 			}
 			// exit(EXIT_SUCCESS); // シェルを終了
@@ -71,20 +71,24 @@ int	exec_interactive(t_exec_vars *e_vars)
 			ft_free(i_vars->input_line); // 空行のメモリを解放
 			continue ;                    // ループの先頭に戻り、新しいプロンプトを表示
 		}
-		if (check_quotation(i_vars->input_line) != 0)
+		i_vars->input_line = ft_strtrim_front(i_vars->input_line,
+				DEFAULT_BLANK);
+		if (is_quotation_error(i_vars->input_line) != 0)
 			exit(EXIT_FAILURE);
 		// 単語分割
 		i_vars->token_list = tokenize(i_vars->input_line);
 		// tokenize後の構文エラーを検知する
 		// printf("tokenize後\n");
 		// debug_put_token_list(i_vars->token_list);
-		if (check_syntax_error(i_vars->token_list) != 0)
+		if (is_syntax_error(i_vars->token_list))
 		{
 			ft_dprintf(STDERR_FILENO, "syntax_error\n");
 			exit(EXIT_SYNTAX_ERROR);
 		}
 		// パース
 		parse(i_vars);
+		// printf("quote_removal前\n");
+		// debug_put_token_list(i_vars->token_list);
 		quote_removal(i_vars->token_list);
 		// printf("exec前\n");
 		// debug_put_token_list(i_vars->token_list);
@@ -105,6 +109,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 		free_token_list(i_vars->token_list);
 		ft_free(i_vars->child_pids);
 		i_vars->child_pids = NULL;
+		if (status != 0)
+			exit(status);
 	}
 	return (0);
 }

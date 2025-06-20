@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 08:54:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:12:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	debug_put_token_list(t_token *token_list)
 	i = 0;
 	while (current_token)
 	{
-		printf("[%d] str:\"%s\", type:%d\n", i, current_token->str,
+		printf("[%2d] str:\"%s\", type:%d\n", i, current_token->str,
 			current_token->type);
 		current_token = current_token->next;
 		i++;
@@ -36,33 +36,43 @@ void	debug_put_token_list(t_token *token_list)
 int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 {
 	int		i;
-	int		is_not_all_equal;
-	int		is_different;
+	bool	is_not_all_equal;
+	bool	is_different;
 	t_token	*current_t;
 	t_token	*current_t_e;
 
 	if (t == NULL)
+	{
+		printf("(null)\n");
 		return (-1);
+	}
 	i = 0;
-	is_not_all_equal = 0;
+	is_not_all_equal = false;
 	current_t = t;
 	current_t_e = t_e;
 	while (current_t)
 	{
+		if (!current_t_e)
+		{
+			printf("current_t_e is null\n");
+			break ;
+		}
 		is_different = strncmp(current_t->str, current_t_e->str,
 				strlen(current_t_e->str) + 1);
-		if (is_different != 0)
-			is_not_all_equal = 1;
 		if (is_different)
-			printf("[%d] [❌] result:\"%s\", expected:\"%s\"\n", i,
+		{
+			is_not_all_equal = true;
+			printf("[%2d] [❌] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
+		}
 		else
-			printf("[%d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
+			printf("[%2d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
 				current_t->str, current_t_e->str);
 		current_t = current_t->next;
 		current_t_e = current_t_e->next;
+		i++;
 	}
-	if (is_not_all_equal == 0)
+	if (!is_not_all_equal)
 		printf("すべて同じ 💎\n");
 	else
 		printf("すべて同じではない 🔥\n");
@@ -166,29 +176,29 @@ char	**tokens_to_arr(t_token *token_list)
 	return (arr);
 }
 
-int	is_metacharacter(char *s)
+bool	is_metacharacter(char *s)
 {
 	int			i;
 	static char	*chars[] = {"|", "&", ";", "(", ")", "<", ">", " ", "\t", "\v"};
 	static int	len = sizeof(chars) / sizeof(chars[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-int	is_word(char *s)
+bool	is_word(char *s)
 {
 	return (*s && !is_metacharacter(s));
 }
 
-int	is_control_operator(char *s)
+bool	is_control_operator(char *s)
 {
 	int			i;
 	static char	*opes[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "|&",
@@ -196,17 +206,17 @@ int	is_control_operator(char *s)
 	static int	len = sizeof(opes) / sizeof(opes[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, opes[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-int	is_reserved_word(char *s)
+bool	is_reserved_word(char *s)
 {
 	int			i;
 	static char	*words[] = {"!", "case", "do", "done", "elif", "else", "esac",
@@ -215,37 +225,30 @@ int	is_reserved_word(char *s)
 	static int	len = sizeof(words) / sizeof(words[0]);
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (++i < len)
 	{
 		if (ft_strncmp(s, words[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
-// int	is_variable(char *s)
-// {
-// 	if (!s)
-// 		return (0);
-// 	return (s[0] == '$');
-// }
-
-int	is_redirection(char *s)
+bool	is_redirection(char *s)
 {
 	int			i;
 	static char	*chars[] = REDIRECTION_LIST;
 
 	if (!s)
-		return (0);
+		return (false);
 	i = -1;
 	while (chars[++i])
 	{
 		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
-			return (1);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
 void	tokenize_error(void)
@@ -329,12 +332,10 @@ t_token	*process_single_quote(t_token *token_list)
 	int		single_quote_count;
 	char	**tmp_arr;
 	char	*tmp_str;
-	int		i;
 
 	current_token = token_list;
 	single_quote_count = 0;
 	tmp = NULL;
-	i = 0;
 	while (current_token)
 	{
 		// 現在のcountが偶数、かつ現在の要素がダブルクォートなら、現在の要素と次の要素を結合
@@ -342,6 +343,8 @@ t_token	*process_single_quote(t_token *token_list)
 		{
 			if (single_quote_count % 2 == 0 && current_token->next)
 			{
+				if (ft_strncmp(current_token->next->str, "\'", 2) == 0)
+					single_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);
@@ -380,7 +383,6 @@ t_token	*process_single_quote(t_token *token_list)
 		}
 		else
 			current_token = current_token->next;
-		i++;
 	}
 	return (token_list);
 }
@@ -409,6 +411,8 @@ t_token	*process_double_quote(t_token *token_list)
 		{
 			if (double_quote_count % 2 == 0 && current_token->next)
 			{
+				if (ft_strncmp(current_token->next->str, "\"", 2) == 0)
+					double_quote_count++;
 				old = current_token;
 				old_next = current_token->next;
 				old_prev = get_prev_token(&token_list, old);
@@ -532,7 +536,8 @@ t_token	*tokenize(char *input_line)
 	w = ft_splitarr_by_word_leave_separator(w, "|");
 	// printf("w:\n");
 	// put_strarr(w);
-	// TODO NULLの場合の処理必要？
+  if (!w)
+    return (NULL);
 	i = -1;
 	while (w[++i])
 	{
@@ -569,7 +574,7 @@ t_token	*tokenize(char *input_line)
 		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
 				3) == 0)
 		{
-			if (current->next)
+			if (current->next && current->next->type == WORD)
 				current->next->type = DELIMITER;
 		}
 		current = current->next;
