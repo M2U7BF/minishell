@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:46:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:47:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,26 +182,26 @@ char	**trim_redirection(char ***argv)
 	int		i;
 	char	**new;
 	t_list	*tmp_lst;
-  int len;
+	int		len;
 
 	if (!argv || !(*argv))
 		return (NULL);
 	i = 0;
-  tmp_lst = NULL;
-  len = arrlen((*argv));
+	tmp_lst = NULL;
+	len = arrlen((*argv));
 	while (i < len)
 	{
 		if (is_redirection((*argv)[i]) && (*argv)[i + 1])
-    {
+		{
 			i += 2;
-      continue;
-    }
+			continue ;
+		}
 		ft_lstadd_back(&tmp_lst, ft_lstnew((void *)ft_strdup((*argv)[i])));
 		i++;
 	}
 	free_str_array((*argv));
 	new = lst_to_str_arr(tmp_lst);
-  ft_lstclear(&tmp_lst, del_content);
+	ft_lstclear(&tmp_lst, del_content);
 	return (new);
 }
 
@@ -277,12 +277,14 @@ void	handle_error(int *status, char *cmd_path)
 		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
 	else if (*status == ENOENT)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path, strerror(*status));
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path,
+			strerror(*status));
 		*status = EXIT_CMD_NOT_FOUND;
 	}
 	else if (*status == EACCES || *status == EISDIR)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path, strerror(*status));
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path,
+			strerror(*status));
 		*status = EXIT_PERMISSION_DENIED;
 	}
 	else
@@ -329,16 +331,16 @@ int	exec(t_i_mode_vars *i_vars)
 				close(current_proc->next->read_fd);
 			argv = tokens_to_arr(current_proc->args);
 			argv = trim_redirection(&argv);
-      // printf("argv:\n");
+			// printf("argv:\n");
 			// put_strarr(argv);
-      if (!argv)
-        exit(EXIT_SUCCESS);
+			if (!argv)
+				exit(EXIT_SUCCESS);
 			status = get_command_path(&argv[0]);
 			if (status != 0)
-      {
-        handle_error(&status, argv[0]);
+			{
+				handle_error(&status, argv[0]);
 				exit(status);
-      }
+			}
 			execve(argv[0], argv, __environ);
 			perror("execve");
 			return (EXIT_FAILURE);
