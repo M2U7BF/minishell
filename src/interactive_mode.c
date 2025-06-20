@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:54:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:59:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 			add_history(i_vars->input_line);
 		else
 		{
-			ft_free(i_vars->input_line); // 空行のメモリを解放
-			continue ;                    // ループの先頭に戻り、新しいプロンプトを表示
+			ft_free(i_vars->input_line);
+			continue ;
 		}
 		i_vars->input_line = ft_strtrim_front(i_vars->input_line,
 				DEFAULT_BLANK);
@@ -80,6 +80,11 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// tokenize後の構文エラーを検知する
 		// printf("tokenize後\n");
 		// debug_put_token_list(i_vars->token_list);
+    if (!i_vars->token_list)
+    {
+      ft_free(i_vars->input_line);
+			continue ;
+    }
 		if (is_syntax_error(i_vars->token_list))
 		{
 			ft_dprintf(STDERR_FILENO, "syntax_error\n");
