@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 17:25:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 07:49:34 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,8 @@ int	exec(t_i_mode_vars *i_vars)
 			get_command_path(&argv[0]);
 			execve(argv[0], argv, __environ);
 			perror("execve");
-			return (EXIT_FAILURE);
+			// return (EXIT_FAILURE);
+			exit (127);
 		}
 		else
 		{

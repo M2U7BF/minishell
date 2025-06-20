@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 14:17:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 08:26:02 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-extern volatile sig_atomic_t	g_recieve_signal;
+// extern volatile sig_atomic_t	g_recieve_signal;
 
 void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 {
@@ -36,9 +36,12 @@ int	exec_interactive(t_exec_vars *e_vars)
 	t_i_mode_vars	*i_vars;
 	int				status;
 
+	status = 0;
 	init_i_vars(&e_vars->i_vars);
 	i_vars = &e_vars->i_vars;
 	rl_outstream = stderr;
+	g_recieve_signal = 0;
+	handle_signal();
 	while (1)
 	{
 		g_recieve_signal = 0;
@@ -46,15 +49,20 @@ int	exec_interactive(t_exec_vars *e_vars)
 		/*Ctrl+D*/
 		if (!i_vars->input_line)
 		{
-			ft_putendl_fd("exit", STDOUT_FILENO);
-			exit(EXIT_SUCCESS);
-		}
-		/*Ctrl+C*/
-		if (g_recieve_signal == SIGINT)
-		{
-			status = 130;
-			ft_free(i_vars->input_line);
-			continue ;
+			{
+				// readlineがNULLを返したのが、Ctrl+Cによるものかチェック
+				if (g_recieve_signal == SIGINT)
+				{
+					status = 130; // BashはCtrl+Cで終了ステータスを130にする
+					continue;     // ループを継続して新しいプロンプトを表示
+				}
+				// ft_putendl_fd("Ctrl+Dが押されました", STDOUT_FILENO);
+                // printf("プロセスID %d がexit()を呼び出します。\n", getpid());
+                // fflush(stdout); // printfのバッファを強制的に出力
+				ft_putendl_fd("exit!", STDOUT_FILENO);
+				exit(status); // 最後のコマンドの終了ステータスで終了するのが望ましい
+			}
+			// exit(EXIT_SUCCESS); // シェルを終了
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
@@ -94,5 +102,9 @@ int	exec_interactive(t_exec_vars *e_vars)
 			/*TODO: ここでシェルの終了ステータスを131に更新*/
 		}
 		ft_free(i_vars->input_line);
+		free_token_list(i_vars->token_list);
+		ft_free(i_vars->child_pids);
+		i_vars->child_pids = NULL;
 	}
+	return (0);
 }

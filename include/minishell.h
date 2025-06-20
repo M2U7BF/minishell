@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 13:46:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 07:46:28 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
+
+extern volatile sig_atomic_t	g_recieve_signal;
 
 // 起動モード
 typedef enum e_mode
@@ -234,5 +236,7 @@ char						**ft_splitarr_leave_separator(char **arr,
 
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
+
+void	set_signal_handler(int signum, void (*handler)(int));
 
 #endif

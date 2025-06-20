@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/18 13:53:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 07:42:05 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t	g_recieve_signal = 0;
+// volatile sig_atomic_t	g_recieve_signal = 0;
 
 /*受け取ったシグナルの番号をグルーバル変数に入れる*/
-void	signal_hander(int signum)
+void	signal_handler(int signum)
 {
 	g_recieve_signal = signum;
 	ft_putstr_fd("\n", STDOUT_FILENO);
@@ -24,19 +24,20 @@ void	signal_hander(int signum)
 	rl_redisplay();
 }
 
-void	handle_signal(void)
+void	set_signal_handler(int signum, void (*handler)(int))
 {
-	struct sigaction	sa_int;
-	struct sigaction	sa_quit;
+	struct sigaction sa;
 
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = 0;
-	sa_int.sa_handler = signal_hander;
-	if (sigaction(SIGINT, &sa_int, NULL) < 0)
-		put_error_exit("sigaction", EXIT_FAILURE);
-	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_flags = 0;
-	sa_quit.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &sa_quit, NULL) < 0)
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = handler;
+	if (sigaction(signum, &sa, NULL) < 0)
 		put_error_exit("sigaction", EXIT_FAILURE);
 }
+
+void	handle_signal(void)
+{
+	set_signal_handler(SIGINT, signal_handler);
+	set_signal_handler(SIGQUIT, SIG_IGN);
+}
+
