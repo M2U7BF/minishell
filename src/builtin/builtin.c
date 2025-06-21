@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/20 16:38:49 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/21 19:54:31 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	exec_builtin(char **argv)
 {
 	if (ft_strncmp(argv[0], "echo", 4) == 0)
 		builtin_echo(argv);
-	// else if (ft_strncmp(argv[0], "cd", 2) == 0)
-	// 	builtin_cd(argv);
+	else if (ft_strncmp(argv[0], "cd", 2) == 0)
+		builtin_cd(argv);
 	else if (ft_strncmp(argv[0], "pwd", 3) == 0)
 		builtin_pwd();
 	// else if (ft_strncmp(argv[0], "export", 6) == 0)
