@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:47:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/21 22:20:55 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,25 @@ int	exec(t_i_mode_vars *i_vars)
 	int			status;
 
 	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
+	//------------------------------------------atashiro
+	if (!proc_list)
+		return (0);
+	argv = tokens_to_arr(proc_list->args);
+	// パイプがなく、コマンドが "cd" または "exit" の場合
+	if (proc_list->type == SIMPLE_CMD && argv != NULL && (ft_strncmp(argv[0], "cd", 3) == 0 || ft_strncmp(argv[0], "exit", 5) == 0))
+	{
+		redirect_fds = NULL;
+		redirect_fds = open_and_redirect_files(proc_list, redirect_fds);
+		char **trimmed_argv = trim_redirection(&argv); // argvはここで消費される
+		status = exec_builtin(trimmed_argv); // 親プロセスで実行
+		free_str_array(trimmed_argv);
+		reset_redirection(redirect_fds);
+		free_proc_list(proc_list);
+		// 注意: builtin_exitはプロセスを終了するので、ここに戻らない可能性がある
+		return (status);
+	}
+	free_str_array(argv);
+	// ------------------------------------------------------------------
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
@@ -335,6 +354,13 @@ int	exec(t_i_mode_vars *i_vars)
 			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
+			//atashiro-----------------------
+			if (is_builtin(argv[0]))
+			{
+				status = exec_builtin(argv);
+				exit(status);
+			}
+			//-------------
 			status = get_command_path(&argv[0]);
 			if (status != 0)
 			{
@@ -355,5 +381,4 @@ int	exec(t_i_mode_vars *i_vars)
 		}
 		current_proc = current_proc->next;
 	}
-	return (0);
 }

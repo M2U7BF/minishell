@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
+#    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/19 13:53:38 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/21 21:55:36 by atashiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_split_by_word_leave_separator.c util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_multi_split_by_word_leave_separator.c util/ft_multi_splitarr_by_word_leave_separator.c \
 						util/ft_splitarr_leave_separator.c util/remove_elem.c here_doc.c file.c \
-						util/ft_strtrim_front.c
+						util/ft_strtrim_front.c\
+						builtin/builtin.c builtin/cd.c builtin/echo.c builtin/env.c builtin/exit.c builtin/export.c builtin/pwd.c builtin/unset.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 CFLAG = -Wall -Werror -Wextra

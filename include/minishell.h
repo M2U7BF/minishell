@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:36:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/21 22:00:07 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,5 +241,15 @@ char						**ft_splitarr_leave_separator(char **arr,
 
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
+
+// builtin.c
+int							is_builtin(char *cmd);
+int							exec_builtin(char **argv);
+
+int	builtin_cd(char **argv);
+void	builtin_echo(char **argv);
+void	builtin_env(void);
+void	builtin_exit(void);
+void	builtin_pwd(void);
 
 #endif

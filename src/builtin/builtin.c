@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/21 19:54:31 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/21 22:00:38 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	exec_builtin(char **argv)
 	else if (ft_strncmp(argv[0], "env", 3) == 0)
 		builtin_env();
 	else if (ft_strncmp(argv[0], "exit", 4) == 0)
-		builtin_exit(argv);
+		builtin_exit();
 	else
 		return (0);
 	return (1);

@@ -6,21 +6,13 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/21 19:53:57 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/21 21:36:36 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // cd 土日にやらる
-
-#include "../../include/minishell.h"
-#include <unistd.h>      // chdir, getcwd
-#include <stdlib.h>      // getenv, setenv
-#include <stdio.h>       // perror
-#include <string.h>      // strerror
-#include <errno.h>       // errno
-#include <limits.h>      // PATH_MAX
 
 static int	update_env_vars(void);
 static int	change_dir_and_update_env(const char *path);
@@ -61,9 +53,6 @@ static int	change_dir_and_update_env(const char *path)
 	return (update_env_vars());
 }
 
-/*
-  コマンドの終了ステータス。成功で0、失敗で1。
- */
 int	builtin_cd(char **argv)
 {
 	char	*path;
