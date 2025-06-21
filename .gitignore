@@ -7,6 +7,7 @@ tmp*
 minishell_test/
 minishell_doc/
 some_dir/
+!*.c
 
 # Prerequisites
 *.d
