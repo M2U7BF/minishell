@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/21 22:00:07 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:09:23 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
+
+extern volatile sig_atomic_t	g_recieve_signal;
 
 // 起動モード
 typedef enum e_mode
@@ -117,8 +119,6 @@ typedef struct s_exec_vars
 }							t_exec_vars;
 
 // handle_keys.c
-void						ctrl_backslash(int signum);
-void						ctrl_c(int signum);
 void						handle_signal(void);
 
 // i_mode_vars.c
@@ -242,14 +242,16 @@ char						**ft_splitarr_leave_separator(char **arr,
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
-// builtin.c
+void	set_signal_handler(int signum, void (*handler)(int));
+
+
 int							is_builtin(char *cmd);
 int							exec_builtin(char **argv);
+int							builtin_cd(char **argv);
+void						builtin_echo(char **argv);
+void						builtin_env(void);
+int							builtin_exit(char **argv);
+void						builtin_pwd(void);
 
-int	builtin_cd(char **argv);
-void	builtin_echo(char **argv);
-void	builtin_env(void);
-void	builtin_exit(void);
-void	builtin_pwd(void);
 
 #endif

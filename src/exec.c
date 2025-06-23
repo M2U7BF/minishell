@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/21 22:20:55 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 13:03:46 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,6 +341,7 @@ int	exec(t_i_mode_vars *i_vars)
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
+			signal(SIGQUIT, SIG_DFL);
 			if (get_prev_proc(&proc_list, current_proc)
 				&& get_prev_proc(&proc_list,
 					current_proc)->write_fd != STDOUT_FILENO)
@@ -369,10 +370,11 @@ int	exec(t_i_mode_vars *i_vars)
 			}
 			execve(argv[0], argv, __environ);
 			perror("execve");
-			return (EXIT_FAILURE);
+			exit(EXIT_CMD_NOT_FOUND);
 		}
 		else
 		{
+			signal(SIGINT, SIG_IGN);
 			reset_redirection(redirect_fds);
 			if (current_proc->write_fd != STDOUT_FILENO)
 				close(current_proc->write_fd);
@@ -381,4 +383,5 @@ int	exec(t_i_mode_vars *i_vars)
 		}
 		current_proc = current_proc->next;
 	}
+	return (0);
 }
