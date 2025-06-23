@@ -1,29 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_echo.c                                     :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:45:02 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/21 16:30:33 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:31:26 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // echo オプションのパターンをどこまでやるか?　リダイレクトに対応すべき(exec側を修正？)
-void	builtin_echo(char **argv)
+void    builtin_echo(char **argv)
 {
-	int	n_option;
-	int	i;
+	int n_option;
+	int i;
+	int j;
 
 	n_option = 0;
 	i = 1;
-	if (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0) //本家と比較し、要改善
+
+	while (argv[i] && argv[i][0] == '-')
 	{
-		n_option = 1;
-		i++;
+		j = 1;
+
+		while (argv[i][j] == 'n')
+			j++;
+		if (j > 1 && argv[i][j] == '\0')
+		{
+			n_option = 1;
+			i++;
+		}
+		else
+		{
+			break;
+		}
 	}
 	while (argv[i])
 	{
@@ -35,4 +48,3 @@ void	builtin_echo(char **argv)
 	if (n_option == 0)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
-
