@@ -6,11 +6,16 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:50:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:51:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void sigquit_handler(int signo) {
+  (void)signo;
+  printf("子プロセス: SIGQUIT 受信\n");
+}
 
 static int	search_command_path(char **cmd_name, char **path_env)
 {
@@ -322,6 +327,7 @@ int	exec(t_i_mode_vars *i_vars)
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
+      signal(SIGQUIT, SIG_DFL);
 			if (get_prev_proc(&proc_list, current_proc)
 				&& get_prev_proc(&proc_list,
 					current_proc)->write_fd != STDOUT_FILENO)
@@ -343,11 +349,11 @@ int	exec(t_i_mode_vars *i_vars)
 			}
 			execve(argv[0], argv, __environ);
 			perror("execve");
-			// return (EXIT_FAILURE);
-			exit (127);
+			exit (EXIT_CMD_NOT_FOUND);
 		}
 		else
 		{
+      signal(SIGINT, SIG_IGN);
 			reset_redirection(redirect_fds);
 			if (current_proc->write_fd != STDOUT_FILENO)
 				close(current_proc->write_fd);

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:50:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:37:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,6 @@ typedef struct s_exec_vars
 }							t_exec_vars;
 
 // handle_keys.c
-void						ctrl_backslash(int signum);
-void						ctrl_c(int signum);
 void						handle_signal(void);
 
 // i_mode_vars.c

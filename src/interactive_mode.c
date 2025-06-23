@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 09:56:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:52:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 	}
 	if (WIFEXITED(status))
 		*exit_status = WEXITSTATUS(status);
+  else if (WIFSIGNALED(status))
+  {
+    if (WTERMSIG(status) == SIGQUIT)
+    {
+      ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+      *exit_status = 128 + SIGQUIT;
+    }
+    else if (WTERMSIG(status) == SIGINT)
+      *exit_status = 128 + SIGINT;
+  }
 	else
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
@@ -42,6 +52,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 	handle_signal();
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		g_recieve_signal = 0;
 		i_vars->input_line = readline(i_vars->prompt);
 		/*Ctrl+D*/
@@ -84,24 +95,15 @@ int	exec_interactive(t_exec_vars *e_vars)
 		quote_removal(i_vars->token_list);
 		// printf("exec前\n");
 		// debug_put_token_list(i_vars->token_list);
-		/*（要検討）実行中のコマンドのために親プロセスのを無視（要検討）*/
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);
 		handle_signal();
-		// Ctrl+\ (SIGQUIT) で子プロセスが終了したかチェック
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
-		{
-			ft_putendl_fd("Quit: 3", STDERR_FILENO);
-			/*TODO: ここでシェルの終了ステータスを131に更新*/
-		}
 		ft_free(i_vars->input_line);
 		free_token_list(i_vars->token_list);
 		ft_free(i_vars->child_pids);
 		i_vars->child_pids = NULL;
-		if (status != 0)
+		if (status != 0 && status != 128 + SIGINT)
 			exit(status);
 	}
 	return (0);
