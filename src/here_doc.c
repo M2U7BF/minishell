@@ -62,10 +62,9 @@ int	here_doc(char *delimiter)
 			ft_free(delimiter);
 			break ;
 		}
-		if (is_quoted)
+		if (!is_quoted)
+      line = expand_heredoc_line(line);
 			ft_dprintf(pipe_fds[1], "%s\n", line);
-		else
-			ft_dprintf(pipe_fds[1], "%s\n", expand_heredoc_line(line));
 		ft_free(line);
 	}
 	close(pipe_fds[1]);
