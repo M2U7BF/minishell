@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/05 17:40:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/20 00:34:56 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+volatile sig_atomic_t	g_recieve_signal = 0;
 
 int	main(int argc, char *argv[])
 {
