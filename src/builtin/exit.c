@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 16:19:34 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:16:24 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,4 @@ void	builtin_exit(char **argv)
 			"minishell: exit: %s: numeric argument required\n", argv[1]);
 		exit(2);
 	}
-	return (0);
 }
