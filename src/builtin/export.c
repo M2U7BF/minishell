@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 17:06:59 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:54:28 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_valid_identifier(const char *s)
 
 static void	print_sorted_env(void)
 {
-	extern char	**environ;
+	extern char	**environ;//////////////////
 	int			count;
 	char		**sorted_env;
 	int			i;
@@ -134,3 +134,67 @@ int	builtin_export(char **argv)
 	return (status);
 }
 
+//----------------------------------------------------------------------
+char **make_argv(const char *args[], int count)
+{
+	char **argv = malloc(sizeof(char *) * (count + 1));
+	int i = 0;
+
+	if (!argv)
+		return (NULL);
+	while (i < count)
+	{
+		argv[i] = strdup(args[i]);
+		i++;
+	}
+	argv[i] = NULL;
+	return argv;
+}
+
+void free_argv(char **argv)
+{
+	int i = 0;
+	while (argv[i])
+		free(argv[i++]);
+	free(argv);
+}
+
+int main(void)
+{
+	// テスト1: 引数なし（環境変数一覧表示）
+	printf("=== Test 1: No arguments (should print all envs) ===\n");
+	char *args1[] = { "export", NULL };
+	char **argv1 = make_argv(args1, 1);
+	builtin_export(argv1);
+	free_argv(argv1);
+
+	// テスト2: 有効な変数の追加
+	printf("\n=== Test 2: Valid variable ===\n");
+	char *args2[] = { "export", "MYVAR1=value1", NULL };
+	char **argv2 = make_argv(args2, 2);
+	builtin_export(argv2);
+	free_argv(argv2);
+
+	// テスト3: 無効な識別子
+	printf("\n=== Test 3: Invalid identifier ===\n");
+	char *args3[] = { "export", "1INVALID=value", NULL };
+	char **argv3 = make_argv(args3, 2);
+	builtin_export(argv3);
+	free_argv(argv3);
+
+	// テスト4: 複数の変数
+	printf("\n=== Test 4: Multiple variables ===\n");
+	char *args4[] = { "export", "VAR_A=123", "VAR_B=456", "_VALID=ok", NULL };
+	char **argv4 = make_argv(args4, 4);
+	builtin_export(argv4);
+	free_argv(argv4);
+
+	// 最後に確認：すべての環境変数
+	printf("\n=== Final Environment Variables ===\n");
+	char *args5[] = { "export", NULL };
+	char **argv5 = make_argv(args5, 1);
+	builtin_export(argv5);
+	free_argv(argv5);
+
+	return 0;
+}

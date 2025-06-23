@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 13:03:46 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:32:11 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,10 @@ int	exec(t_i_mode_vars *i_vars)
 		return (0);
 	argv = tokens_to_arr(proc_list->args);
 	// パイプがなく、コマンドが "cd" または "exit" の場合
-	if (proc_list->type == SIMPLE_CMD && argv != NULL && (ft_strncmp(argv[0], "cd", 3) == 0 || ft_strncmp(argv[0], "exit", 5) == 0))
+	if (proc_list->type == SIMPLE_CMD && argv != NULL &&
+		(ft_strncmp(argv[0], "cd", 3) == 0 ||
+		 ft_strncmp(argv[0], "exit", 5) == 0 ||
+		 ft_strncmp(argv[0], "export", 7) == 0))
 	{
 		redirect_fds = NULL;
 		redirect_fds = open_and_redirect_files(proc_list, redirect_fds);

@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 15:19:16 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:12:04 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	exec_builtin(char **argv)
 		builtin_cd(argv);
 	else if (ft_strncmp(argv[0], "pwd", 3) == 0)
 		builtin_pwd();
-	// else if (ft_strncmp(argv[0], "export", 6) == 0)
-	// 	builtin_export(argv);
+	else if (ft_strncmp(argv[0], "export", 6) == 0)
+		builtin_export(argv);
 	// else if (ft_strncmp(argv[0], "unset", 5) == 0)
 	// 	builtin_unset(argv);
 	else if (ft_strncmp(argv[0], "env", 3) == 0)
