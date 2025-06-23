@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 16:09:23 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:16:44 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,8 @@ int							exec_builtin(char **argv);
 int							builtin_cd(char **argv);
 void						builtin_echo(char **argv);
 void						builtin_env(void);
-int							builtin_exit(char **argv);
+void							builtin_exit(char **argv);
+int							builtin_export(char **argv);
 void						builtin_pwd(void);
 
 
