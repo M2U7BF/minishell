@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 09:52:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 09:56:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		if (!i_vars->input_line)
 		{
       if (g_recieve_signal == SIGINT)
-      {
         status = 130;
-        continue ;
-      }
       exit(status);
 		}
 		if (i_vars->input_line[0] != '\0')
