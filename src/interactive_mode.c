@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 11:52:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:56:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		free_token_list(i_vars->token_list);
 		ft_free(i_vars->child_pids);
 		i_vars->child_pids = NULL;
-		if (status != 0 && status != 128 + SIGINT)
-			exit(status);
 	}
 	return (0);
 }
