@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 07:42:05 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:46:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// volatile sig_atomic_t	g_recieve_signal = 0;
-
-/*受け取ったシグナルの番号をグルーバル変数に入れる*/
 void	signal_handler(int signum)
 {
 	g_recieve_signal = signum;

@@ -6,13 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 16:59:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 09:52:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// extern volatile sig_atomic_t	g_recieve_signal;
 
 void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 {
@@ -49,20 +47,12 @@ int	exec_interactive(t_exec_vars *e_vars)
 		/*Ctrl+D*/
 		if (!i_vars->input_line)
 		{
-			{
-				// readlineがNULLを返したのが、Ctrl+Cによるものかチェック
-				if (g_recieve_signal == SIGINT)
-				{
-					status = 130; // BashはCtrl+Cで終了ステータスを130にする
-					continue ;     // ループを継続して新しいプロンプトを表示
-				}
-				// ft_putendl_fd("Ctrl+Dが押されました", STDOUT_FILENO);
-				// printf("プロセスID %d がexit()を呼び出します。\n", getpid());
-				// fflush(stdout); // printfのバッファを強制的に出力
-				// ft_putendl_fd("exit!", STDOUT_FILENO);
-				exit(status); // 最後のコマンドの終了ステータスで終了するのが望ましい
-			}
-			// exit(EXIT_SUCCESS); // シェルを終了
+      if (g_recieve_signal == SIGINT)
+      {
+        status = 130;
+        continue ;
+      }
+      exit(status);
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
