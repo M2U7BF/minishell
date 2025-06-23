@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_keys.c                                      :+:      :+:    :+:   */
+/*   handle_keys_heredoc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 08:39:38 by kkamei           ###   ########.fr       */
+/*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
+/*   Updated: 2025/06/24 08:41:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ static void	signal_handler(int signum)
 	if (g_recieve_signal == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
-		rl_on_new_line();
+		// rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
+		// rl_redisplay();
+    rl_done = 1;
 	}
 }
 
@@ -35,7 +36,7 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 		put_error_exit("sigaction", EXIT_FAILURE);
 }
 
-void	handle_signal(void)
+void	handle_signal_heredoc(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
 }

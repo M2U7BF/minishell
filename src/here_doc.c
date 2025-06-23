@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 12:49:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 08:43:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	here_doc(char *delimiter)
 	char	**tmp_arr;
 	char	*tmp_str;
 
+  handle_signal_heredoc();
 	delimiter = ft_strdup(delimiter);
 	is_quoted = ft_strchr(delimiter, '\"') != NULL || ft_strchr(delimiter,
 			'\'') != NULL;
@@ -64,9 +65,10 @@ int	here_doc(char *delimiter)
 		}
 		if (!is_quoted)
       line = expand_heredoc_line(line);
-			ft_dprintf(pipe_fds[1], "%s\n", line);
+    ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free(line);
 	}
 	close(pipe_fds[1]);
+  signal(SIGINT, SIG_IGN);
 	return (pipe_fds[0]);
 }
