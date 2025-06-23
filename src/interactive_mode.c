@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 11:56:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/23 12:03:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 	}
 	if (WIFEXITED(status))
 		*exit_status = WEXITSTATUS(status);
-  else if (WIFSIGNALED(status))
-  {
-    if (WTERMSIG(status) == SIGQUIT)
-    {
-      ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-      *exit_status = 128 + SIGQUIT;
-    }
-    else if (WTERMSIG(status) == SIGINT)
-      *exit_status = 128 + SIGINT;
-  }
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+			*exit_status = 128 + SIGQUIT;
+		}
+		else if (WTERMSIG(status) == SIGINT)
+			*exit_status = 128 + SIGINT;
+	}
 	else
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
@@ -55,12 +55,12 @@ int	exec_interactive(t_exec_vars *e_vars)
 		signal(SIGQUIT, SIG_IGN);
 		g_recieve_signal = 0;
 		i_vars->input_line = readline(i_vars->prompt);
-		/*Ctrl+D*/
+		// Ctrl+Cのあとに、Ctrl+Dを打った場合
 		if (!i_vars->input_line)
 		{
-      if (g_recieve_signal == SIGINT)
-        status = 130;
-      exit(status);
+			if (g_recieve_signal == SIGINT)
+				status = 130;
+			exit(status);
 		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
@@ -78,11 +78,11 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// tokenize後の構文エラーを検知する
 		// printf("tokenize後\n");
 		// debug_put_token_list(i_vars->token_list);
-    if (!i_vars->token_list)
-    {
-      ft_free(i_vars->input_line);
+		if (!i_vars->token_list)
+		{
+			ft_free(i_vars->input_line);
 			continue ;
-    }
+		}
 		if (is_syntax_error(i_vars->token_list))
 		{
 			ft_dprintf(STDERR_FILENO, "syntax_error\n");
