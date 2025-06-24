@@ -6,11 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 12:03:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 15:42:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+volatile sig_atomic_t	g_recieve_signal = 0;
 
 void	wait_child_processes(int *child_pids, int pro_count, int *exit_status)
 {
