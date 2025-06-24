@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 13:12:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 10:51:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 			printf("current_t_e is null\n");
 			break ;
 		}
-		is_different = strncmp(current_t->str, current_t_e->str,
-				strlen(current_t_e->str) + 1);
+		is_different = ft_strncmp(current_t->str, current_t_e->str,
+				ft_strlen(current_t_e->str) + 1);
 		if (is_different)
 		{
 			is_not_all_equal = true;
