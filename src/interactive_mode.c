@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 12:03:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 17:41:47 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// debug_put_token_list(i_vars->token_list);
 		// コマンド実行
 		exec(i_vars);
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);
+		if (i_vars->child_pids != NULL)
+			wait_child_processes(i_vars->child_pids, i_vars->pro_count, &status);
 		handle_signal();
 		ft_free(i_vars->input_line);
 		free_token_list(i_vars->token_list);
