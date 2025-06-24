@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 11:37:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 08:50:20 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,9 @@ bool						is_syntax_error(t_token *token_list);
 // here_doc.c
 int							here_doc(char *delimiter);
 
+// handle_signal_heredoc.c
+void          	handle_signal_heredoc(void);
+
 // file.c
 bool						is_readable_file(char *pathname);
 int							open_additionalfile(char *filename, int *fd);
@@ -241,7 +244,5 @@ char						**ft_splitarr_leave_separator(char **arr,
 
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
-
-void	set_signal_handler(int signum, void (*handler)(int));
 
 #endif

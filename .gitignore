@@ -1,7 +1,8 @@
-tmp*
 *
 !*/
 !Makefile
+!*.c
+tmp*
 *.txt
 .vscode/
 minishell_test/
