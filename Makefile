@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/24 08:41:07 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/24 15:39:03 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_strtrim_front.c handle_keys_heredoc.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
+OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
 CFLAG = -Wall -Werror -Wextra
 CFLAG_DEBUG = -g
 NAME = minishell
@@ -86,7 +87,7 @@ doc:
 	@test -d $(NAME)_doc || git clone git@github.com:M2U7BF/$(NAME)_doc.git
 
 debug: CFLAG += $(CFLAG_DEBUG)
-debug: $(OBJS)
+debug: $(OBJS) $(OBJS_NO_MAIN)
 	make libft
 	make ft_dprintf
 	make libdebug
@@ -100,7 +101,7 @@ debug: $(OBJS)
 		-L$(LIBDEBUG_DIR) -ldebug \
 		-lreadline \
 		-o $(NAME)
-	ar rcs $(NAME).a $(OBJS)
+	ar rcs $(NAME).a $(OBJS_NO_MAIN)
 
 re_debug: fclean debug
 
