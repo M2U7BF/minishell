@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 11:59:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 15:25:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,18 @@ t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 int	stashfd(int fd)
 {
 	int	stashfd;
+  struct stat sb;
 
-	stashfd = fcntl(fd, F_DUPFD, 10);
-	if (stashfd < 0)
-		perror("fcntl");
+  if (fd == -1)
+    return (-1);
+  stashfd = 10;
+  while (1)
+  {
+    if (fstat(stashfd, &sb) == -1 && errno == EBADF)
+      break;
+    stashfd++;
+  }
+  dup2(fd, stashfd);
 	close(fd);
 	return (stashfd);
 }
