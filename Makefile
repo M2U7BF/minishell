@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/06/24 15:39:03 by kkamei           ###   ########.fr        #
+#    Updated: 2025/06/25 08:36:25 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ doc:
 
 debug: CFLAG += $(CFLAG_DEBUG)
 debug: $(OBJS) $(OBJS_NO_MAIN)
+	rm -f $(NAME).a
 	make libft
 	make ft_dprintf
 	make libdebug
