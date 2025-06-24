@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 08:41:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:29:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ static void	signal_handler(int signum)
 	g_recieve_signal = signum;
 	if (g_recieve_signal == SIGINT)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		// rl_on_new_line();
-		rl_replace_line("", 0);
-		// rl_redisplay();
+		write(STDERR_FILENO, "\n", 1);
+    rl_replace_line("", 0);
     rl_done = 1;
 	}
 }

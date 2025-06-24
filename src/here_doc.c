@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 08:43:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/24 10:01:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*expand_heredoc_line(char *line)
 	char	**tmp_arr;
 	char	*tmp_str;
 
+  if (line && line[0] == '\0')
+    return (line);
 	token = tokenize(line);
 	variable_expansion(&token);
 	quote_removal(token);
@@ -38,7 +40,7 @@ int	here_doc(char *delimiter)
 	char	**tmp_arr;
 	char	*tmp_str;
 
-  handle_signal_heredoc();
+	handle_signal_heredoc();
 	delimiter = ft_strdup(delimiter);
 	is_quoted = ft_strchr(delimiter, '\"') != NULL || ft_strchr(delimiter,
 			'\'') != NULL;
@@ -55,20 +57,16 @@ int	here_doc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-    if (!line)
-      line = ft_strdup("");
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
-		{
-			ft_free(line);
-			ft_free(delimiter);
+		if (g_recieve_signal == SIGINT || !line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 			break ;
-		}
 		if (!is_quoted)
-      line = expand_heredoc_line(line);
-    ft_dprintf(pipe_fds[1], "%s\n", line);
+			line = expand_heredoc_line(line);
+		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free(line);
 	}
+	ft_free(line);
+	ft_free(delimiter);
 	close(pipe_fds[1]);
-  signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	return (pipe_fds[0]);
 }
