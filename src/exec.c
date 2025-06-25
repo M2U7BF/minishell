@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 10:20:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 12:52:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,7 +319,7 @@ int	exec(t_i_mode_vars *i_vars)
 	i = -1;
 	current_proc = proc_list;
 	// dprintf(STDERR_FILENO, "pid:%d\n", getpid());
-	while (++i < i_vars->pro_count)
+	while (proc_list && ++i < i_vars->pro_count)
 	{
 		redirect_fds = NULL;
 		if (current_proc->next && current_proc->next->type == PIPE_LINE)

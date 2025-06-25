@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 10:51:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:04:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,15 @@ void	append_token(t_token **token_list, t_token *token)
 
 t_token	*token_dup(t_token *token)
 {
+  t_token *result;
+
 	if (!token)
 		return (NULL);
-	return (create_token(ft_strdup(token->str), token->type));
+  if (token->str)
+    result = create_token(ft_strdup(token->str), token->type);
+  else
+    result = create_token(NULL, token->type);
+	return (result);
 }
 
 int	token_list_len(t_token *token_list)
@@ -168,7 +174,10 @@ char	**tokens_to_arr(t_token *token_list)
 	i = 0;
 	while (i < len && current_token)
 	{
-		arr[i] = ft_strdup(current_token->str);
+    if (!current_token->str)
+      arr[i] = ft_strdup("");
+    else
+		  arr[i] = ft_strdup(current_token->str);
 		current_token = current_token->next;
 		i++;
 	}
