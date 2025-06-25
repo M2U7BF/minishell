@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:15:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:17:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ char	*expand_heredoc_line(char *line)
 	char	**tmp_arr;
 	char	*tmp_str;
 
-  if (line && line[0] == '\0')
-    return (line);
+	if (line && line[0] == '\0')
+		return (line);
 	token = tokenize(line);
 	variable_expansion(&token);
 	quote_removal(token);
-  null_to_empty(token);
+	null_to_empty(token);
 	tmp_arr = tokens_to_arr(token);
 	free_token_list(token);
 	tmp_str = ft_strjoin_all(tmp_arr);
@@ -55,10 +55,12 @@ int	here_doc(char *delimiter)
 		delimiter = tmp_str;
 	}
 	pipe(pipe_fds);
+	g_runtime_data.signal = 0;
 	while (1)
 	{
 		line = readline("> ");
-		if (g_runtime_data.signal == SIGINT || !line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+		if (g_runtime_data.signal == SIGINT || !line || ft_strncmp(line,
+				delimiter, ft_strlen(delimiter) + 1) == 0)
 			break ;
 		if (!is_quoted)
 			line = expand_heredoc_line(line);
