@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/23 11:59:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 09:29:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ static int	search_command_path(char **cmd_name, char **path_env)
 		}
 		free(*cmd_name);
 		*cmd_name = path;
-		if (access(*cmd_name, R_OK) != 0)
-			return (EACCES);
-		if (!is_readable_file(*cmd_name))
-			return (EISDIR);
+    if (access(*cmd_name, R_OK) != 0)
+			return (errno);
 		return (0);
 	}
 	return (EXIT_CMD_NOT_FOUND);
@@ -52,11 +50,9 @@ int	get_command_path(char **cmd_name)
 		status = EXIT_CMD_NOT_FOUND;
 	else if ((*cmd_name)[0] == '/')
 	{
-		if (access(*cmd_name, F_OK) != 0)
-			status = ENOENT;
-		else if (access(*cmd_name, R_OK) != 0)
-			status = EACCES;
-		else if (!is_readable_file(*cmd_name))
+    if (access(*cmd_name, X_OK) != 0)
+      status = errno;
+    else if (!is_readable_file(*cmd_name))
 			status = EISDIR;
 	}
 	else if (ft_strncmp(*cmd_name, ".", 2) == 0)
