@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:34:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 16:28:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -535,6 +535,49 @@ void	remove_blank(t_token *token_list)
 	}
 }
 
+void	process_blank(t_token *token_list)
+{
+	t_token		*current_token;
+	char		*current_quote;
+	static char	*quote[] = {"\"", "\'", NULL};
+	char		**tmp;
+	int			i;
+
+	current_quote = NULL;
+	current_token = token_list;
+	while (current_token)
+	{
+		if (current_token->type == BLANK && current_quote)
+		{
+			current_token->type = WORD;
+		}
+		else if (current_token->type == WORD)
+		{
+			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
+					quote);
+			i = -1;
+			while (tmp[++i])
+			{
+				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
+							|| ft_strncmp("\'", tmp[i], 2) == 0))
+				{
+					current_quote = tmp[i];
+					continue ;
+				}
+				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
+				{
+					current_quote = NULL;
+					continue ;
+				}
+			}
+			free_str_array(tmp);
+			current_token = current_token->next;
+		}
+		else
+			current_token = current_token->next;
+	}
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
@@ -586,7 +629,15 @@ t_token	*tokenize(char *input_line)
 	token_list = process_single_quote(token_list);
 	token_list = process_double_quote(token_list);
 	token_list = join_tokens(token_list);
+	// printf("remove_blank前：\n");
+	// debug_put_token_list(token_list);
+	process_blank(token_list);
+	token_list = join_tokens(token_list);
+	// printf("join_tokens後：\n");
+	// debug_put_token_list(token_list);
 	remove_blank(token_list);
+	// printf("remove_blank後：\n");
+	// debug_put_token_list(token_list);
 	current = token_list;
 	while (current)
 	{
