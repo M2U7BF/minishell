@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 09:29:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 10:20:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	search_command_path(char **cmd_name, char **path_env)
 		}
 		free(*cmd_name);
 		*cmd_name = path;
-    if (access(*cmd_name, R_OK) != 0)
+		if (access(*cmd_name, R_OK) != 0)
 			return (errno);
 		return (0);
 	}
@@ -50,9 +50,9 @@ int	get_command_path(char **cmd_name)
 		status = EXIT_CMD_NOT_FOUND;
 	else if ((*cmd_name)[0] == '/')
 	{
-    if (access(*cmd_name, X_OK) != 0)
-      status = errno;
-    else if (!is_readable_file(*cmd_name))
+		if (access(*cmd_name, X_OK) != 0)
+			status = errno;
+		else if (!is_readable_file(*cmd_name))
 			status = EISDIR;
 	}
 	else if (ft_strncmp(*cmd_name, ".", 2) == 0)
@@ -106,25 +106,34 @@ t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 
 int	stashfd(int fd)
 {
-	int	stashfd;
+	int			stashfd;
+	struct stat	sb;
 
-	stashfd = fcntl(fd, F_DUPFD, 10);
-	if (stashfd < 0)
-		perror("fcntl");
+	if (fd == -1)
+		return (-1);
+	stashfd = 10;
+	while (1)
+	{
+		if (fstat(stashfd, &sb) == -1 && errno == EBADF)
+			break ;
+		stashfd++;
+	}
+	dup2(fd, stashfd);
 	close(fd);
 	return (stashfd);
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-t_list	*open_and_redirect_files(t_proc_unit *current_proc,
-		t_list *redirect_fds)
+int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
 	int		*fd;
 	int		target_fd;
 	int		stashed_target_fd;
 	t_token	*current;
 	int		*content;
+	int		status;
 
+	status = 0;
 	current = current_proc->args;
 	while (current && current->next)
 	{
@@ -135,19 +144,25 @@ t_list	*open_and_redirect_files(t_proc_unit *current_proc,
 			content = malloc(sizeof(int) * 2);
 			if (ft_strncmp(current->str, ">", 2) == 0)
 			{
-				open_outfile(current->next->str, fd);
+				status = open_outfile(current->next->str, fd);
+				if (status != 0)
+					return (status);
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<", 2) == 0)
 			{
-				open_infile(current->next->str, fd);
+				status = open_infile(current->next->str, fd);
+				if (status != 0)
+					return (status);
 				*fd = stashfd(*fd);
 				target_fd = STDIN_FILENO;
 			}
 			else if (ft_strncmp(current->str, ">>", 3) == 0)
 			{
-				open_additionalfile(current->next->str, fd);
+				status = open_additionalfile(current->next->str, fd);
+				if (status != 0)
+					return (status);
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
@@ -165,12 +180,12 @@ t_list	*open_and_redirect_files(t_proc_unit *current_proc,
 			}
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
-			ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 			current = current->next;
 		}
 		current = current->next;
 	}
-	return (redirect_fds);
+	return (status);
 }
 
 char	**trim_redirection(char ***argv)
@@ -314,10 +329,12 @@ int	exec(t_i_mode_vars *i_vars)
 			current_proc->next->read_fd = pipe_fds[0];
 		}
 		redirect_fds = pipe_redirect(current_proc, redirect_fds);
-		redirect_fds = open_and_redirect_files(current_proc, redirect_fds);
+		status = open_and_redirect_files(current_proc, &redirect_fds);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
+			if (status != 0)
+				exit(EXIT_FAILURE);
 			signal(SIGQUIT, SIG_DFL);
 			if (get_prev_proc(&proc_list, current_proc)
 				&& get_prev_proc(&proc_list,
