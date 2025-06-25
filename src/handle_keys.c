@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 08:39:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:15:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	signal_handler(int signum)
 {
-	g_recieve_signal = signum;
-	if (g_recieve_signal == SIGINT)
+	g_runtime_data.signal = signum;
+	if (g_runtime_data.signal == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_on_new_line();

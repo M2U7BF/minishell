@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:45:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:22:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,7 @@ void	variable_expansion(t_token **token_list)
 					tmp = ft_split_by_word_leave_separator(splited_words[j],
 							"$?");
 					ft_free(tmp[0]);
-					// TODO: 直前のプロセスの最終ステータスを取得する
-					tmp[0] = ft_itoa(0);
+					tmp[0] = ft_itoa(g_runtime_data.exit_status);
 					ft_free(splited_words[j]);
 					splited_words[j] = ft_strjoin_all(tmp);
 					free_str_array(tmp);

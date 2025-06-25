@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:42:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:15:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	here_doc(char *delimiter)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_recieve_signal == SIGINT || !line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+		if (g_runtime_data.signal == SIGINT || !line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 			break ;
 		if (!is_quoted)
 			line = expand_heredoc_line(line);
