@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:15:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:08:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 void	handle_signal(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

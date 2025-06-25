@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:21:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:08:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_runtime_data		g_runtime_data = {};
+t_runtime_data	g_runtime_data = {};
 
 void	wait_child_processes(int *child_pids, int pro_count)
 {
@@ -26,7 +26,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 		i++;
 	}
 	if (WIFEXITED(status))
-    g_runtime_data.exit_status = WEXITSTATUS(status);
+		g_runtime_data.exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGQUIT)
@@ -49,11 +49,10 @@ int	exec_interactive(t_exec_vars *e_vars)
 	i_vars = &e_vars->i_vars;
 	rl_outstream = stderr;
 	g_runtime_data.signal = 0;
-  g_runtime_data.exit_status = EXIT_SUCCESS;
-	handle_signal();
+	g_runtime_data.exit_status = EXIT_SUCCESS;
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
+		handle_signal();
 		g_runtime_data.signal = 0;
 		i_vars->input_line = readline(i_vars->prompt);
 		// Ctrl+Cのあとに、Ctrl+Dを打った場合
@@ -99,7 +98,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-		handle_signal();
 		ft_free(i_vars->input_line);
 		free_token_list(i_vars->token_list);
 		ft_free(i_vars->child_pids);
