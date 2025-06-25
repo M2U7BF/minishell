@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:51:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:53:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	search_command_path(char **cmd_name, char **path_env)
 			return (errno);
 		return (0);
 	}
-	if (access(*cmd_name, F_OK) == 0 && access(*cmd_name, X_OK) != 0)
+	if (access(*cmd_name, F_OK) == 0 && access(*cmd_name, R_OK) != 0)
 		return (errno);
 	return (EXIT_CMD_NOT_FOUND);
 }
