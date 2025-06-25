@@ -6,11 +6,13 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/24 17:23:28 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:06:25 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+extern char	**environ;//////////////////
 
 static int	is_valid_identifier(const char *s)
 {
@@ -28,7 +30,6 @@ static int	is_valid_identifier(const char *s)
 
 static void	print_sorted_env(void)
 {
-	extern char	**environ;//////////////////
 	int			count;
 	char		**sorted_env;
 	int			i;
@@ -71,7 +72,7 @@ static void	print_sorted_env(void)
 	i = -1;
 	while (++i < count)
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		// ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		char *eq_ptr = ft_strchr(sorted_env[i], '=');
 		if (eq_ptr)
 		{
@@ -86,49 +87,89 @@ static void	print_sorted_env(void)
 	free_str_array(sorted_env);
 }
 
-int	builtin_export(char **argv)
+static int find_env_var_index(const char *key)
 {
 	int		i;
-	int		status;
-	char	*key;
-	char	*eq_ptr;
+	size_t	key_len;
 
-	i = 1;
-	status = 0;
+	key_len = ft_strlen(key);
+	i = 0;
+	while (environ[i])
+	{
+		if (ft_strncmp(environ[i], key, key_len) == 0 && environ[i][key_len] == '=')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+// 新しい環境変数を追加する
+static int add_new_env_var(char *new_entry)
+{
+	int		count;
+	char	**new_environ;
+
+	count = 0;
+	while (environ[count])
+		count++;
+	new_environ = ft_calloc(count + 2, sizeof(char *));
+	if (!new_environ)
+		return (1); // Malloc Error
+	count = 0;
+	while (environ[count])
+	{
+		new_environ[count] = environ[count];
+		count++;
+	}
+	new_environ[count] = new_entry;
+	free(environ);
+	environ = new_environ;
+	return (0);
+}
+
+int builtin_export(char **argv)
+{
+	int i = 1;
+	int status = 0;
+	char *key;
+	char *value;
+	char *eq_ptr;
+
 	if (argv[1] == NULL)
 	{
 		print_sorted_env();
 		return (0);
 	}
-	while (argv[i])
+	while(argv[i])
 	{
-		if (!is_valid_identifier(argv[i]))
+		eq_ptr = ft_strchr(argv[i], '=');
+		if (eq_ptr) // "key=value" 形式
 		{
-			ft_dprintf(STDERR_FILENO, \
-				"minishell: export: `%s': not a valid identifier\n", argv[i]);
-			status = 1;
-		}
-		else
-		{
-			eq_ptr = ft_strchr(argv[i], '=');
-			if (eq_ptr)
+			key = ft_substr(argv[i], 0, eq_ptr - argv[i]);
+			value = eq_ptr + 1;
+			if (!is_valid_identifier(key))
 			{
-				key = ft_substr(argv[i], 0, eq_ptr - argv[i]);
-				if (!key)
-				{
-					perror("minishell: export");
-					status = 1;
-					i++;
-					continue ;
-				}
-				if (setenv(key, eq_ptr + 1, 1) != 0)
-				{
-					perror("minishell: export");
-					status = 1;
-				}
-				free(key);
+				ft_dprintf(STDERR_FILENO, "minishell: export: `%s': not a valid identifier\n", argv[i]);
+				status = 1;
 			}
+			else
+			{
+				char *new_entry = ft_strdup(argv[i]);
+				int index = find_env_var_index(key);
+				if (index != -1) // 変数が存在すれば更新
+				{
+					free(environ[index]);
+					environ[index] = new_entry;
+				}
+				else // 存在しなければ追加
+				{
+					if (add_new_env_var(new_entry) != 0)
+						status = 1;
+				}
+			}
+			free(key);
 		}
+		// ... "key"のみの形式の処理 (課題の要件に応じて) ...
 		i++;
 	}
 	return (status);
