@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:03:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 13:45:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	quote_removal(t_token *token)
 	double_quote_count = 0;
 	while (current_token && current_token->str)
 	{
-    str_len = ft_strlen(current_token->str);
+		str_len = ft_strlen(current_token->str);
 		if (current_token->type == DELIMITER)
 		{
 			current_token = current_token->next;
@@ -109,6 +109,19 @@ void	quote_removal(t_token *token)
 			free_str_array(tmp_strarr);
 			free(old);
 		}
+		current_token = current_token->next;
+	}
+}
+
+void	null_to_empty(t_token *token)
+{
+	t_token	*current_token;
+
+	current_token = token;
+	while (current_token)
+	{
+		if (!current_token->str)
+			current_token->str = ft_strdup("");
 		current_token = current_token->next;
 	}
 }
