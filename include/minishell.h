@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:15:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:42:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void						variable_expansion(t_token **token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
-void						handle_error(int *status, char *cmd_path);
+void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);

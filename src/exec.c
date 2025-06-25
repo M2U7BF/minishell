@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:35:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:51:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ static int	search_command_path(char **cmd_name, char **path_env)
 		}
 		free(*cmd_name);
 		*cmd_name = path;
-		if (access(*cmd_name, R_OK) != 0)
+		if (access(*cmd_name, X_OK) != 0)
 			return (errno);
 		return (0);
 	}
+	if (access(*cmd_name, F_OK) == 0 && access(*cmd_name, X_OK) != 0)
+		return (errno);
 	return (EXIT_CMD_NOT_FOUND);
 }
 
@@ -282,21 +284,21 @@ void	close_pipe(t_proc_unit *proc)
 		close(proc->write_fd);
 }
 
-void	handle_error(int *status, char *cmd_path)
+void	handle_error(int status, char *cmd_path)
 {
-	if (*status == EXIT_CMD_NOT_FOUND)
+	if (status == EXIT_CMD_NOT_FOUND)
 		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
-	else if (*status == ENOENT)
+	else if (status == ENOENT)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path,
-			strerror(*status));
-		*status = EXIT_CMD_NOT_FOUND;
+			strerror(status));
+		g_runtime_data.exit_status = EXIT_CMD_NOT_FOUND;
 	}
-	else if (*status == EACCES || *status == EISDIR)
+	else if (status == EACCES || status == EISDIR)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path,
-			strerror(*status));
-		*status = EXIT_PERMISSION_DENIED;
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
+			strerror(status));
+		g_runtime_data.exit_status = EXIT_PERMISSION_DENIED;
 	}
 	else
 		perror("minishell");
@@ -344,18 +346,18 @@ int	exec(t_i_mode_vars *i_vars)
 				&& current_proc->next->read_fd != STDIN_FILENO)
 				close(current_proc->next->read_fd);
 			argv = tokens_to_arr(current_proc->args);
-      // printf("argv1:\n");
+			// printf("argv1:\n");
 			// put_strarr(argv);
 			argv = trim_redirection(&argv);
 			// printf("argv2:\n");
 			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
-			status = get_command_path(&argv[0]);
-			if (status != 0)
+			g_runtime_data.exit_status = get_command_path(&argv[0]);
+			if (g_runtime_data.exit_status != 0)
 			{
-				handle_error(&status, argv[0]);
-				exit(status);
+				handle_error(g_runtime_data.exit_status, argv[0]);
+				exit(g_runtime_data.exit_status);
 			}
 			execve(argv[0], argv, __environ);
 			perror("execve");
