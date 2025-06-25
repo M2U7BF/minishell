@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:53:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:10:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	get_command_path(char **cmd_name)
 	status = 0;
 	if ((*cmd_name)[0] == '\0')
 		status = EXIT_CMD_NOT_FOUND;
-	else if ((*cmd_name)[0] == '/')
+	else if (ft_strchr((*cmd_name), '/'))
 	{
 		if (access(*cmd_name, X_OK) != 0)
 			status = errno;
@@ -290,7 +290,7 @@ void	handle_error(int status, char *cmd_path)
 		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
 	else if (status == ENOENT)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: %s: %s", cmd_path,
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
 			strerror(status));
 		g_runtime_data.exit_status = EXIT_CMD_NOT_FOUND;
 	}
