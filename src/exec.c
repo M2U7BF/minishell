@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 15:10:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:25:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			{
 				status = open_outfile(current->next->str, fd);
 				if (status != 0)
+        {
+          handle_error(status, current->next->str);
 					return (status);
+        }
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
@@ -156,7 +159,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			{
 				status = open_infile(current->next->str, fd);
 				if (status != 0)
+        {
+          handle_error(status, current->next->str);
 					return (status);
+        }
 				*fd = stashfd(*fd);
 				target_fd = STDIN_FILENO;
 			}
@@ -164,7 +170,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			{
 				status = open_additionalfile(current->next->str, fd);
 				if (status != 0)
+        {
+          handle_error(status, current->next->str);
 					return (status);
+        }
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
