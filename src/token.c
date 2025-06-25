@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 10:51:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 16:28:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,6 @@ t_token	*create_token(char *str, t_token_type type)
 {
 	t_token	*token;
 
-	if (!str)
-		return (NULL);
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
@@ -131,9 +129,15 @@ void	append_token(t_token **token_list, t_token *token)
 
 t_token	*token_dup(t_token *token)
 {
+	t_token	*result;
+
 	if (!token)
 		return (NULL);
-	return (create_token(ft_strdup(token->str), token->type));
+	if (token->str)
+		result = create_token(ft_strdup(token->str), token->type);
+	else
+		result = create_token(NULL, token->type);
+	return (result);
 }
 
 int	token_list_len(t_token *token_list)
@@ -156,19 +160,34 @@ int	token_list_len(t_token *token_list)
 char	**tokens_to_arr(t_token *token_list)
 {
 	int		i;
+	int		null_count;
 	int		len;
 	char	**arr;
 	t_token	*current_token;
 
+	null_count = 0;
 	if (!token_list)
 		return (0);
 	len = token_list_len(token_list);
-	arr = malloc(sizeof(char *) * (len + 1));
 	current_token = token_list;
-	i = 0;
-	while (i < len && current_token)
+	while (current_token)
 	{
-		arr[i] = ft_strdup(current_token->str);
+		if (!current_token->str)
+			null_count++;
+		current_token = current_token->next;
+	}
+	arr = malloc(sizeof(char *) * (len + 1 - null_count));
+	i = 0;
+	current_token = token_list;
+	while (current_token)
+	{
+		if (!current_token->str)
+		{
+			current_token = current_token->next;
+			continue ;
+		}
+		else
+			arr[i] = ft_strdup(current_token->str);
 		current_token = current_token->next;
 		i++;
 	}
@@ -516,6 +535,49 @@ void	remove_blank(t_token *token_list)
 	}
 }
 
+void	process_blank(t_token *token_list)
+{
+	t_token		*current_token;
+	char		*current_quote;
+	static char	*quote[] = {"\"", "\'", NULL};
+	char		**tmp;
+	int			i;
+
+	current_quote = NULL;
+	current_token = token_list;
+	while (current_token)
+	{
+		if (current_token->type == BLANK && current_quote)
+		{
+			current_token->type = WORD;
+		}
+		else if (current_token->type == WORD)
+		{
+			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
+					quote);
+			i = -1;
+			while (tmp[++i])
+			{
+				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
+							|| ft_strncmp("\'", tmp[i], 2) == 0))
+				{
+					current_quote = tmp[i];
+					continue ;
+				}
+				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
+				{
+					current_quote = NULL;
+					continue ;
+				}
+			}
+			free_str_array(tmp);
+			current_token = current_token->next;
+		}
+		else
+			current_token = current_token->next;
+	}
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
@@ -536,8 +598,8 @@ t_token	*tokenize(char *input_line)
 	w = ft_splitarr_by_word_leave_separator(w, "|");
 	// printf("w:\n");
 	// put_strarr(w);
-  if (!w)
-    return (NULL);
+	if (!w)
+		return (NULL);
 	i = -1;
 	while (w[++i])
 	{
@@ -567,7 +629,15 @@ t_token	*tokenize(char *input_line)
 	token_list = process_single_quote(token_list);
 	token_list = process_double_quote(token_list);
 	token_list = join_tokens(token_list);
+	// printf("remove_blank前：\n");
+	// debug_put_token_list(token_list);
+	process_blank(token_list);
+	token_list = join_tokens(token_list);
+	// printf("join_tokens後：\n");
+	// debug_put_token_list(token_list);
 	remove_blank(token_list);
+	// printf("remove_blank後：\n");
+	// debug_put_token_list(token_list);
 	current = token_list;
 	while (current)
 	{

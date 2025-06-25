@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 08:50:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 14:42:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
-
-extern volatile sig_atomic_t	g_recieve_signal;
 
 // 起動モード
 typedef enum e_mode
@@ -118,6 +116,17 @@ typedef struct s_exec_vars
 	char					*script;
 }							t_exec_vars;
 
+// グローバル変数を保持する構造体
+typedef struct s_runtime_data
+{
+	int						exit_status;
+	volatile sig_atomic_t	signal;
+}							t_runtime_data;
+
+extern t_runtime_data		g_runtime_data;
+
+// src ============================================================
+
 // handle_keys.c
 void						handle_signal(void);
 
@@ -157,6 +166,7 @@ t_token						*process_double_quote(t_token *token_list);
 // parse.c
 bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
+void						null_to_empty(t_token *token);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
@@ -164,7 +174,7 @@ void						variable_expansion(t_token **token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
-void						handle_error(int *status, char *cmd_path);
+void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
@@ -186,7 +196,7 @@ bool						is_syntax_error(t_token *token_list);
 int							here_doc(char *delimiter);
 
 // handle_signal_heredoc.c
-void          	handle_signal_heredoc(void);
+void						handle_signal_heredoc(void);
 
 // file.c
 bool						is_readable_file(char *pathname);
@@ -194,7 +204,7 @@ int							open_additionalfile(char *filename, int *fd);
 int							open_outfile(char *filename, int *fd);
 int							open_infile(char *filename, int *fd);
 
-// util ============================================================
+// src/util ============================================================
 
 // util.c
 void						ft_free(void *p);
