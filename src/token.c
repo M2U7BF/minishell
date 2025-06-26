@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 14:02:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:50:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -563,11 +563,12 @@ void	process_blank(t_token *token_list)
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 							|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
-					current_quote = tmp[i];
+					current_quote = ft_strdup(tmp[i]);
 					continue ;
 				}
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					continue ;
 				}

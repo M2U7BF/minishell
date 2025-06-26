@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:04:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:52:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,13 @@ void	quote_removal(t_token *token)
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 							|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
-					current_quote = tmp[i];
+					current_quote = ft_strdup(tmp[i]);
 					continue ;
 				}
 				// xクォートと一致したら、そこまでの要素を結合する
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					tmp_strarr = lst_to_str_arr(tmp_list);
 					tmp_str = ft_strjoin_all(tmp_strarr);
@@ -162,13 +163,14 @@ void	variable_expansion(t_token **token_list)
 				if (current_quote && ft_strchr(splited_words[j],
 						current_quote[0]))
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					is_expand = true;
 				}
 				else if (!current_quote && (ft_strchr(splited_words[j], '"')
 						|| ft_strchr(splited_words[j], '\'')))
 				{
-					current_quote = splited_words[j];
+					current_quote = ft_strdup(splited_words[j]);
 					if (ft_strncmp(current_quote, "\'", 2) == 0)
 						is_expand = false;
 				}
