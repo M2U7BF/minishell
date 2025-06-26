@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:59:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:34:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,7 +376,7 @@ int	exec(t_i_mode_vars *i_vars)
 	if (!i_vars->child_pids)
 	{
 		free_proc_list(proc_list);
-    libc_error();
+		libc_error();
 	}
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
@@ -399,7 +399,11 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			if (status != 0)
+			{
+				destroy_i_vars(i_vars);
+				free_proc_list(proc_list);
 				exit(EXIT_FAILURE);
+			}
 			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
 				libc_error();
 			if (current_proc->next
