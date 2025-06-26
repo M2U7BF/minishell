@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:14:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 13:27:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,7 @@ int	stashfd(int fd)
 	if (dup2(fd, stashfd) == -1)
 		libc_error();
 	if (close(fd) == -1)
-		perror("close1");
-	// libc_error();
+		libc_error();
 	return (stashfd);
 }
 
@@ -213,8 +212,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				if (dup2(*fd, target_fd) == -1)
 					libc_error();
 				if (close(*fd) == -1)
-					perror("close2");
-				// libc_error();
+					libc_error();
 			}
 			ft_free(fd);
 			content[0] = stashed_target_fd;
@@ -273,8 +271,7 @@ static void	reset_redirection(t_list *redirect_fds)
 		if (current == redirect_fds)
 			break ;
 		if (close(content[0]) == -1)
-			perror("close3");
-		// libc_error();
+			libc_error();
 		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&redirect_fds, del_content);
@@ -303,8 +300,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (dup2(proc->read_fd, target_fd) == -1)
 			libc_error();
 		if (close(proc->read_fd) == -1)
-			perror("close4");
-		// libc_error();
+			libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -323,8 +319,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (dup2(proc->write_fd, target_fd) == -1)
 			libc_error();
 		if (close(proc->write_fd) == -1)
-			perror("close5");
-		// libc_error();
+			libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -337,14 +332,12 @@ void	close_pipe(t_proc_unit *proc)
 	if (proc->read_fd != STDIN_FILENO)
 	{
 		if (close(proc->read_fd) == -1)
-			perror("close6");
-		// libc_error();
+			libc_error();
 	}
 	if (proc->write_fd != STDOUT_FILENO)
 	{
 		if (close(proc->write_fd) == -1)
-			perror("close7");
-		// libc_error();
+			libc_error();
 	}
 }
 
@@ -413,8 +406,7 @@ int	exec(t_i_mode_vars *i_vars)
 				&& current_proc->next->read_fd != STDIN_FILENO)
 			{
 				if (close(current_proc->next->read_fd) == -1)
-					perror("close9");
-				// libc_error();
+					libc_error();
 			}
 			argv = tokens_to_arr(current_proc->args);
 			// printf("argv1:\n");
