@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:16:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 13:14:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 	while (i < pro_count)
 	{
 		if (waitpid(child_pids[i], &status, 0) == -1)
-      perror("waitpid");
+			perror("waitpid");
 		i++;
 	}
 	if (WIFEXITED(status))
@@ -104,5 +104,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		ft_free(i_vars->child_pids);
 		i_vars->child_pids = NULL;
 	}
+	clear_history();
 	return (0);
 }

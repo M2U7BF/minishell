@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:56:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 13:14:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_outfile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -178,6 +180,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_infile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -189,6 +193,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_additionalfile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -210,6 +216,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 					perror("close2");
 				// libc_error();
 			}
+			ft_free(fd);
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
@@ -437,5 +444,6 @@ int	exec(t_i_mode_vars *i_vars)
 		}
 		current_proc = current_proc->next;
 	}
+	free_proc_list(proc_list);
 	return (0);
 }
