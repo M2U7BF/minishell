@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:27:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 13:59:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (!content)
 		{
 			ft_lstclear(&redirect_fds, del_content);
-			return (NULL);
+			libc_error();
 		}
 		proc->write_fd = stashfd(proc->write_fd);
 		target_fd = STDOUT_FILENO;
@@ -376,7 +376,7 @@ int	exec(t_i_mode_vars *i_vars)
 	if (!i_vars->child_pids)
 	{
 		free_proc_list(proc_list);
-		return (EXIT_FAILURE);
+    libc_error();
 	}
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);

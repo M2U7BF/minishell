@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:14:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:02:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -558,7 +558,7 @@ void	process_blank(t_token *token_list)
 			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
 					quote);
 			i = -1;
-			while (tmp[++i])
+			while (tmp && tmp[++i])
 			{
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 							|| ft_strncmp("\'", tmp[i], 2) == 0))
