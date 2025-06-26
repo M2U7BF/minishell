@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 17:17:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:19:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	here_doc(char *delimiter)
 		tmp_str = ft_strjoin_all(tmp_arr);
 		delimiter = tmp_str;
 	}
-	pipe(pipe_fds);
+	if (pipe(pipe_fds) == -1)
+    libc_error();
 	g_runtime_data.signal = 0;
 	while (1)
 	{
@@ -69,7 +70,9 @@ int	here_doc(char *delimiter)
 	}
 	ft_free(line);
 	ft_free(delimiter);
-	close(pipe_fds[1]);
-	signal(SIGINT, SIG_IGN);
+	if (close(pipe_fds[1]) == -1)
+    libc_error();
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+    libc_error();
 	return (pipe_fds[0]);
 }

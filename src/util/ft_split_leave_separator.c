@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/04 12:49:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:04:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ static char	**free_all(char **arr, int i)
 {
 	while (i >= 0)
 	{
-		free(arr[i]);
+		ft_free(arr[i]);
 		i--;
 	}
-	free(arr);
+	ft_free(arr);
 	return (NULL);
 }
 

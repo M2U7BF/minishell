@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/17 09:40:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:04:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	free_proc_list(t_proc_unit *proc_list)
 	{
 		tmp = current_proc;
 		current_proc = current_proc->next;
-		free(tmp->args);
-		free(tmp);
+		ft_free(tmp->args);
+		ft_free(tmp);
 	}
 }
 

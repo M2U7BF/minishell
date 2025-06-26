@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 16:28:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:04:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ void	free_token_list(t_token *token_list)
 	{
 		tmp = current_token;
 		current_token = current_token->next;
-		free(tmp->str);
-		free(tmp);
+		ft_free(tmp->str);
+		ft_free(tmp);
 	}
 }
 
@@ -177,6 +177,8 @@ char	**tokens_to_arr(t_token *token_list)
 		current_token = current_token->next;
 	}
 	arr = malloc(sizeof(char *) * (len + 1 - null_count));
+	if (!arr)
+		return (NULL);
 	i = 0;
 	current_token = token_list;
 	while (current_token)
@@ -297,7 +299,7 @@ void	del_token(t_token **token_list, t_token *token)
 			prev->next = token->next;
 	}
 	ft_free(token->str);
-	free(token);
+	ft_free(token);
 }
 
 // tokenの次の要素にaddを挿入する。

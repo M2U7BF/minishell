@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 14:42:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/25 17:26:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
+void          	libc_error(void);
 
 // proc_unit.c
 void						debug_put_proc_list(t_proc_unit *proc_list);
