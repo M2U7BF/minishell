@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/20 15:49:00 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:55:24 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 // #include <limits.h>　//PATH_MAX
 
 // pwd 完成？
-void	builtin_pwd(void)
+int	builtin_pwd(void)
 {
-	char	cwd[1000]; //PATH_MAXを検討(もしくはgetenvPWD?())
+	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
@@ -25,6 +25,8 @@ void	builtin_pwd(void)
 	}
 	else
 	{
-		perror("pwd");
+		perror("minishell: pwd");
+		return (1);
 	}
+	return (0);
 }

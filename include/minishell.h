@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 13:49:32 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:04:26 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,11 +248,11 @@ void	set_signal_handler(int signum, void (*handler)(int));
 int							is_builtin(char *cmd);
 int							exec_builtin(char **argv);
 int							builtin_cd(char **argv);
-void						builtin_echo(char **argv);
-void						builtin_env(void);
-void						builtin_exit(char **argv);
+int							builtin_echo(char **argv);
+int							builtin_env(void);
+int							builtin_exit(char **argv);
 int							builtin_export(char **argv);
-void						builtin_pwd(void);
+int							builtin_pwd(void);
 int							builtin_unset(char **argv);
 
 #endif

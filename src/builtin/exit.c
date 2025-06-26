@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 17:16:24 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:05:07 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,32 +57,28 @@ static int	is_numeric_argument(const char *s)
 	return (1);
 }
 
-void	builtin_exit(char **argv)
+int	builtin_exit(char **argv)
 {
 	int			argc;
 	long long	status;
 
 	argc = arrlen(argv);
 	ft_putendl_fd("exit", STDERR_FILENO);
-	if (argc > 2)
-	{
-		if (is_numeric_argument(argv[1]))
-		{
-			ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
-			exit (1);
-		}
-	}
 	if (argc == 1)
-		exit(0);
-	if (is_numeric_argument(argv[1]))
 	{
-		status = ft_atoi(argv[1]);
-		exit((unsigned char)status);
+		exit(0);
 	}
-	else
+	if (!is_numeric_argument(argv[1]))
 	{
 		ft_dprintf(STDERR_FILENO, \
 			"minishell: exit: %s: numeric argument required\n", argv[1]);
 		exit(2);
 	}
+	if (argc > 2)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
+		return (1);
+	}
+	status = ft_atoi(argv[1]);
+	exit((unsigned char)status);
 }

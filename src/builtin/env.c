@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 15:16:26 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:56:06 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 // env 仮実装
 // getenv()？　mainのきれいな修正案を思いつかないので一旦これ
-void	builtin_env(void)
+int	builtin_env(void)
 {
-	extern	char	**environ; //グローバル変数(2つ目)（要修正）
+	extern	char	**environ;
 	int			i;
 
 	i = 0;
@@ -26,4 +26,5 @@ void	builtin_env(void)
 		i++;
 	}
 	ft_putendl_fd("ビルトインです", STDOUT_FILENO);
+	return (0);
 }

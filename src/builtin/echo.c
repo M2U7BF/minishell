@@ -6,14 +6,14 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:45:02 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 12:31:26 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:54:15 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // echo オプションのパターンをどこまでやるか?　リダイレクトに対応すべき(exec側を修正？)
-void    builtin_echo(char **argv)
+int	builtin_echo(char **argv)
 {
 	int n_option;
 	int i;
@@ -47,4 +47,5 @@ void    builtin_echo(char **argv)
 	}
 	if (n_option == 0)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	return (0);
 }

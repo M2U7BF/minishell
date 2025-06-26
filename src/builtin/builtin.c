@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 13:53:45 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:04:44 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,19 @@ int	is_builtin(char *cmd)
 int	exec_builtin(char **argv)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
-		builtin_echo(argv);
+		return (builtin_echo(argv));
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		builtin_cd(argv);
+		return (builtin_cd(argv));
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		builtin_pwd();
+		return (builtin_pwd());
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
-		builtin_export(argv);
+		return (builtin_export(argv));
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-		builtin_unset(argv);
+		return (builtin_unset(argv));
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
-		builtin_env();
+		return (builtin_env());
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		builtin_exit(argv);
-	else
-		return (0);
-	return (1);
+		return (builtin_exit(argv));
+	return (127);
 }
 
