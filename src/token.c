@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:04:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:50:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -558,16 +558,17 @@ void	process_blank(t_token *token_list)
 			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
 					quote);
 			i = -1;
-			while (tmp[++i])
+			while (tmp && tmp[++i])
 			{
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 							|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
-					current_quote = tmp[i];
+					current_quote = ft_strdup(tmp[i]);
 					continue ;
 				}
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					continue ;
 				}
@@ -583,6 +584,7 @@ void	process_blank(t_token *token_list)
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
+	char			**old_w;
 	int				i;
 	t_token			*token_list;
 	t_token			*current;
@@ -594,10 +596,18 @@ t_token	*tokenize(char *input_line)
 	if (!input_line)
 		return (NULL);
 	w = ft_multi_split_leave_separator(input_line, DEFAULT_BLANK);
+	old_w = w;
 	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
+	free_str_array(old_w);
+	old_w = w;
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
+	free_str_array(old_w);
+	old_w = w;
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
+	free_str_array(old_w);
+	old_w = w;
 	w = ft_splitarr_by_word_leave_separator(w, "|");
+	free_str_array(old_w);
 	// printf("w:\n");
 	// put_strarr(w);
 	if (!w)

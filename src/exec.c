@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:56:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:34:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,7 @@ int	stashfd(int fd)
 	if (dup2(fd, stashfd) == -1)
 		libc_error();
 	if (close(fd) == -1)
-		perror("close1");
-	// libc_error();
+		libc_error();
 	return (stashfd);
 }
 
@@ -167,6 +166,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_outfile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -178,6 +179,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_infile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -189,6 +192,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_additionalfile(current->next->str, fd);
 				if (status != 0)
 				{
+					ft_free(fd);
+					ft_free(content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -207,9 +212,9 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				if (dup2(*fd, target_fd) == -1)
 					libc_error();
 				if (close(*fd) == -1)
-					perror("close2");
-				// libc_error();
+					libc_error();
 			}
+			ft_free(fd);
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
@@ -266,8 +271,7 @@ static void	reset_redirection(t_list *redirect_fds)
 		if (current == redirect_fds)
 			break ;
 		if (close(content[0]) == -1)
-			perror("close3");
-		// libc_error();
+			libc_error();
 		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&redirect_fds, del_content);
@@ -296,8 +300,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (dup2(proc->read_fd, target_fd) == -1)
 			libc_error();
 		if (close(proc->read_fd) == -1)
-			perror("close4");
-		// libc_error();
+			libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -308,7 +311,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (!content)
 		{
 			ft_lstclear(&redirect_fds, del_content);
-			return (NULL);
+			libc_error();
 		}
 		proc->write_fd = stashfd(proc->write_fd);
 		target_fd = STDOUT_FILENO;
@@ -316,8 +319,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 		if (dup2(proc->write_fd, target_fd) == -1)
 			libc_error();
 		if (close(proc->write_fd) == -1)
-			perror("close5");
-		// libc_error();
+			libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -330,14 +332,12 @@ void	close_pipe(t_proc_unit *proc)
 	if (proc->read_fd != STDIN_FILENO)
 	{
 		if (close(proc->read_fd) == -1)
-			perror("close6");
-		// libc_error();
+			libc_error();
 	}
 	if (proc->write_fd != STDOUT_FILENO)
 	{
 		if (close(proc->write_fd) == -1)
-			perror("close7");
-		// libc_error();
+			libc_error();
 	}
 }
 
@@ -376,7 +376,7 @@ int	exec(t_i_mode_vars *i_vars)
 	if (!i_vars->child_pids)
 	{
 		free_proc_list(proc_list);
-		return (EXIT_FAILURE);
+		libc_error();
 	}
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
@@ -399,15 +399,18 @@ int	exec(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids[i] == 0)
 		{
 			if (status != 0)
+			{
+				destroy_i_vars(i_vars);
+				free_proc_list(proc_list);
 				exit(EXIT_FAILURE);
+			}
 			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
 				libc_error();
 			if (current_proc->next
 				&& current_proc->next->read_fd != STDIN_FILENO)
 			{
 				if (close(current_proc->next->read_fd) == -1)
-					perror("close9");
-				// libc_error();
+					libc_error();
 			}
 			argv = tokens_to_arr(current_proc->args);
 			// printf("argv1:\n");
@@ -437,5 +440,6 @@ int	exec(t_i_mode_vars *i_vars)
 		}
 		current_proc = current_proc->next;
 	}
+	free_proc_list(proc_list);
 	return (0);
 }

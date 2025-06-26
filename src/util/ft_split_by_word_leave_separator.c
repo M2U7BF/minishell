@@ -6,11 +6,24 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:48:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 08:53:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:24:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	free_all(char **result, int result_len)
+{
+	int	i;
+
+	i = 0;
+	while (result && i <= result_len && result[i])
+	{
+		ft_free(result[i]);
+		i++;
+	}
+	ft_free(result);
+}
 
 char	**ft_split_by_word_leave_separator(char *str, char *word)
 {
@@ -60,7 +73,10 @@ char	**ft_split_by_word_leave_separator(char *str, char *word)
 			{
 				result_str = malloc(word_position - str + 1);
         if (!result_str)
-          return (NULL);
+				{
+					free_all(result, j - 1);
+					return (NULL);
+				}
 				ft_strlcpy(result_str, str + i, word_position - (str + i) + 1);
 				result[j] = result_str;
 				j++;
@@ -74,7 +90,10 @@ char	**ft_split_by_word_leave_separator(char *str, char *word)
 		{
 			result_str = malloc(str_len - i + 2);
       if (!result_str)
+      {
+        free_all(result, j - 1);
         return (NULL);
+      }
 			ft_strlcpy(result_str, str + i, str_len - i + 2);
 			result[j] = result_str;
 			j++;

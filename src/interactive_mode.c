@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:16:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 17:29:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 	while (i < pro_count)
 	{
 		if (waitpid(child_pids[i], &status, 0) == -1)
-      perror("waitpid");
+			perror("waitpid");
 		i++;
 	}
 	if (WIFEXITED(status))
@@ -87,6 +87,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		if (is_syntax_error(i_vars->token_list))
 		{
 			ft_dprintf(STDERR_FILENO, "syntax_error\n");
+			destroy_i_vars(i_vars);
 			exit(EXIT_SYNTAX_ERROR);
 		}
 		// パース
@@ -99,10 +100,9 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-		ft_free(i_vars->input_line);
-		free_token_list(i_vars->token_list);
-		ft_free(i_vars->child_pids);
+		destroy_i_vars(i_vars);
 		i_vars->child_pids = NULL;
 	}
+	clear_history();
 	return (0);
 }
