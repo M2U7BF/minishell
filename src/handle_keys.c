@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 17:08:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:20:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;
 
-	sigemptyset(&sa.sa_mask);
+	if (sigemptyset(&sa.sa_mask) == -1)
+    libc_error();
 	sa.sa_flags = 0;
 	sa.sa_handler = handler;
 	if (sigaction(signum, &sa, NULL) < 0)
@@ -38,5 +39,6 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 void	handle_signal(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+    libc_error();
 }

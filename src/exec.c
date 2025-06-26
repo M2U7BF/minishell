@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 15:25:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:56:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static int	search_command_path(char **cmd_name, char **path_env)
 	{
 		tmp = ft_strjoin(path_env[i], "/");
 		path = ft_strjoin(tmp, *cmd_name);
-		free(tmp);
+		ft_free(tmp);
 		if (access(path, F_OK) != 0)
 		{
-			free(path);
+			ft_free(path);
 			i++;
 			continue ;
 		}
-		free(*cmd_name);
+		ft_free(*cmd_name);
 		*cmd_name = path;
 		if (access(*cmd_name, X_OK) != 0)
 			return (errno);
@@ -106,22 +106,33 @@ t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 	return (result);
 }
 
+bool	is_invalid_fd(int fd)
+{
+	struct stat	sb;
+
+	if (fstat(fd, &sb) == -1 && errno == EBADF)
+		return (true);
+	return (false);
+}
+
 int	stashfd(int fd)
 {
-	int			stashfd;
-	struct stat	sb;
+	int	stashfd;
 
 	if (fd == -1)
 		return (-1);
 	stashfd = 10;
 	while (1)
 	{
-		if (fstat(stashfd, &sb) == -1 && errno == EBADF)
+		if (is_invalid_fd(stashfd))
 			break ;
 		stashfd++;
 	}
-	dup2(fd, stashfd);
-	close(fd);
+	if (dup2(fd, stashfd) == -1)
+		libc_error();
+	if (close(fd) == -1)
+		perror("close1");
+	// libc_error();
 	return (stashfd);
 }
 
@@ -143,15 +154,22 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				|| current->next->type == DELIMITER))
 		{
 			fd = malloc(sizeof(int));
+			if (!fd)
+				return (EXIT_FAILURE);
 			content = malloc(sizeof(int) * 2);
+			if (!content)
+			{
+				ft_free(fd);
+				return (EXIT_FAILURE);
+			}
 			if (ft_strncmp(current->str, ">", 2) == 0)
 			{
 				status = open_outfile(current->next->str, fd);
 				if (status != 0)
-        {
-          handle_error(status, current->next->str);
+				{
+					handle_error(status, current->next->str);
 					return (status);
-        }
+				}
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
@@ -159,10 +177,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			{
 				status = open_infile(current->next->str, fd);
 				if (status != 0)
-        {
-          handle_error(status, current->next->str);
+				{
+					handle_error(status, current->next->str);
 					return (status);
-        }
+				}
 				*fd = stashfd(*fd);
 				target_fd = STDIN_FILENO;
 			}
@@ -170,10 +188,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			{
 				status = open_additionalfile(current->next->str, fd);
 				if (status != 0)
-        {
-          handle_error(status, current->next->str);
+				{
+					handle_error(status, current->next->str);
 					return (status);
-        }
+				}
 				*fd = stashfd(*fd);
 				target_fd = STDOUT_FILENO;
 			}
@@ -186,8 +204,11 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			stashed_target_fd = stashfd(target_fd);
 			if (*fd != target_fd)
 			{
-				dup2(*fd, target_fd);
-				close(*fd);
+				if (dup2(*fd, target_fd) == -1)
+					libc_error();
+				if (close(*fd) == -1)
+					perror("close2");
+				// libc_error();
 			}
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
@@ -240,10 +261,13 @@ static void	reset_redirection(t_list *redirect_fds)
 	while (1)
 	{
 		content = (int *)current->content;
-		dup2(content[0], content[1]);
+		if (dup2(content[0], content[1]) == -1)
+			libc_error();
 		if (current == redirect_fds)
 			break ;
-		close(content[0]);
+		if (close(content[0]) == -1)
+			perror("close3");
+		// libc_error();
 		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&redirect_fds, del_content);
@@ -261,11 +285,19 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 	if (proc->read_fd != STDIN_FILENO)
 	{
 		content = malloc(sizeof(int) * 2);
+		if (!content)
+		{
+			ft_lstclear(&redirect_fds, del_content);
+			return (NULL);
+		}
 		proc->read_fd = stashfd(proc->read_fd);
 		target_fd = STDIN_FILENO;
 		stashed_target_fd = stashfd(target_fd);
-		dup2(proc->read_fd, target_fd);
-		close(proc->read_fd);
+		if (dup2(proc->read_fd, target_fd) == -1)
+			libc_error();
+		if (close(proc->read_fd) == -1)
+			perror("close4");
+		// libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -273,11 +305,19 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 	if (proc->write_fd != STDOUT_FILENO)
 	{
 		content = malloc(sizeof(int) * 2);
+		if (!content)
+		{
+			ft_lstclear(&redirect_fds, del_content);
+			return (NULL);
+		}
 		proc->write_fd = stashfd(proc->write_fd);
 		target_fd = STDOUT_FILENO;
 		stashed_target_fd = stashfd(target_fd);
-		dup2(proc->write_fd, target_fd);
-		close(proc->write_fd);
+		if (dup2(proc->write_fd, target_fd) == -1)
+			libc_error();
+		if (close(proc->write_fd) == -1)
+			perror("close5");
+		// libc_error();
 		content[0] = stashed_target_fd;
 		content[1] = target_fd;
 		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
@@ -288,9 +328,17 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 void	close_pipe(t_proc_unit *proc)
 {
 	if (proc->read_fd != STDIN_FILENO)
-		close(proc->read_fd);
+	{
+		if (close(proc->read_fd) == -1)
+			perror("close6");
+		// libc_error();
+	}
 	if (proc->write_fd != STDOUT_FILENO)
-		close(proc->write_fd);
+	{
+		if (close(proc->write_fd) == -1)
+			perror("close7");
+		// libc_error();
+	}
 }
 
 void	handle_error(int status, char *cmd_path)
@@ -325,6 +373,11 @@ int	exec(t_i_mode_vars *i_vars)
 
 	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
+	if (!i_vars->child_pids)
+	{
+		free_proc_list(proc_list);
+		return (EXIT_FAILURE);
+	}
 	// printf("process_divisionの後\n");
 	// debug_put_proc_list(proc_list);
 	i = -1;
@@ -335,7 +388,8 @@ int	exec(t_i_mode_vars *i_vars)
 		redirect_fds = NULL;
 		if (current_proc->next && current_proc->next->type == PIPE_LINE)
 		{
-			pipe(pipe_fds);
+			if (pipe(pipe_fds) == -1)
+				libc_error();
 			current_proc->write_fd = pipe_fds[1];
 			current_proc->next->read_fd = pipe_fds[0];
 		}
@@ -346,14 +400,15 @@ int	exec(t_i_mode_vars *i_vars)
 		{
 			if (status != 0)
 				exit(EXIT_FAILURE);
-			signal(SIGQUIT, SIG_DFL);
-			if (get_prev_proc(&proc_list, current_proc)
-				&& get_prev_proc(&proc_list,
-					current_proc)->write_fd != STDOUT_FILENO)
-				close(get_prev_proc(&proc_list, current_proc)->write_fd);
+			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+				libc_error();
 			if (current_proc->next
 				&& current_proc->next->read_fd != STDIN_FILENO)
-				close(current_proc->next->read_fd);
+			{
+				if (close(current_proc->next->read_fd) == -1)
+					perror("close9");
+				// libc_error();
+			}
 			argv = tokens_to_arr(current_proc->args);
 			// printf("argv1:\n");
 			// put_strarr(argv);
@@ -372,14 +427,13 @@ int	exec(t_i_mode_vars *i_vars)
 			perror("execve");
 			exit(EXIT_CMD_NOT_FOUND);
 		}
+		else if (i_vars->child_pids[i] == -1)
+			libc_error();
 		else
 		{
-			signal(SIGINT, SIG_IGN);
+			if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+				libc_error();
 			reset_redirection(redirect_fds);
-			if (current_proc->write_fd != STDOUT_FILENO)
-				close(current_proc->write_fd);
-			if (current_proc->read_fd != STDIN_FILENO)
-				close(current_proc->read_fd);
 		}
 		current_proc = current_proc->next;
 	}

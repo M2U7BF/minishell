@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:32:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:04:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ft_strjoin_all(char **words)
 	{
 		old = result;
 		result = ft_strjoin(result, words[i]);
-		free(old);
+		ft_free(old);
 	}
 	return (result);
 }
@@ -93,6 +93,8 @@ char	**lst_to_str_arr(t_list *lst)
 		return (NULL);
 	i = 0;
 	new = malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
+  if (!new)
+    return (NULL);
 	new[ft_lstsize(lst)] = NULL;
 	current_lst = lst;
 	while (current_lst)
@@ -124,7 +126,7 @@ void	debug_put_lst(t_list *lst)
 
 void	del_content(void *content)
 {
-	free(content);
+	ft_free(content);
 }
 
 bool	is_include(char *s, char **words)

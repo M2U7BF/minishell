@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 15:18:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:04:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	quote_removal(t_token *token)
 			free_str_array(tmp);
 			ft_lstclear(&tmp2, del_content);
 			free_str_array(tmp_strarr);
-			free(old);
+			ft_free(old);
 		}
 		current_token = current_token->next;
 	}

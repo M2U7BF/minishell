@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:48:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:31:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 08:52:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 		}
 	}
 	result = malloc(sizeof(char *) * (count + 1));
+  if (!result)
+    return (NULL);
 	i = 0;
 	j = 0;
 	while (i < str_len)
@@ -92,6 +94,8 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 			if (str + i != word_position)
 			{
 				result_str = malloc(word_position - str + 1);
+        if (!result_str)
+          return (NULL);
 				ft_strlcpy(result_str, str + i, word_position - (str + i) + 1);
 				result[j] = result_str;
 				j++;
@@ -119,6 +123,8 @@ char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
 				l++;
 			}
 			result_str = malloc(l + 1);
+      if (!result_str)
+        return (NULL);
 			ft_strlcpy(result_str, str + i, l + 1);
 			result[j] = result_str;
 			j++;
