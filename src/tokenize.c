@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:52:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 15:20:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,12 @@ static void	tokenize_error(void)
 	ft_dprintf(STDERR_FILENO, "token error\n");
 }
 
-t_token	*tokenize(char *input_line)
+char	**split_line(char *input_line)
 {
-	char			**w;
-	int				i;
-	t_token			*token_list;
-	t_token			*current;
-	t_token_type	type;
-	static char		*redirection_list[] = REDIRECTION_LIST;
-	static char		*blank_list[] = BLANK_LIST;
-	static char		*quotation_list[] = QUOTATION_LIST;
+	char		**w;
+	static char	*redirection_list[] = REDIRECTION_LIST;
+	static char	*blank_list[] = BLANK_LIST;
+	static char	*quotation_list[] = QUOTATION_LIST;
 
 	if (!input_line)
 		return (NULL);
@@ -35,6 +31,18 @@ t_token	*tokenize(char *input_line)
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);
 	w = ft_splitarr_by_word_leave_separator(w, "|");
+	return (w);
+}
+
+t_token	*tokenize(char *input_line)
+{
+	char			**w;
+	int				i;
+	t_token			*token_list;
+	t_token			*current;
+	t_token_type	type;
+
+	w = split_line(input_line);
 	if (!w)
 		return (NULL);
 	i = -1;
@@ -50,7 +58,7 @@ t_token	*tokenize(char *input_line)
 			type = REDIRECTION;
 		else if (is_word(w[i]))
 			type = WORD;
-		else if (is_include(w[i], blank_list))
+		else if (is_blank(w[i]))
 			type = BLANK;
 		else
 		{

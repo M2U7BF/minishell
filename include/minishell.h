@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:30:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 15:19:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,9 @@ bool						is_word(char *s);
 bool						is_control_operator(char *s);
 bool						is_reserved_word(char *s);
 bool						is_redirection(char *s);
+
+// tokenize_3.c
+bool						is_blank(char *s);
 
 // quote.c
 t_token						*process_single_quote(t_token *token_list);
