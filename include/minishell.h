@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 12:50:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:23:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@ void						append_token(t_token **token_list, t_token *token);
 void						del_token(t_token **token_list, t_token *token);
 void						free_token_list(t_token *token_list);
 t_token						*token_dup(t_token *token);
+
+// token_2.c
 void						insert_token(t_token **first_token, t_token *token,
 								t_token *add);
 t_token						*get_prev_token(t_token **token_list,

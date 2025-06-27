@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 12:51:21 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:24:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,46 +79,6 @@ void	del_token(t_token **token_list, t_token *token)
 	}
 	ft_free(token->str);
 	ft_free(token);
-}
-
-// tokenの次の要素にaddを挿入する。
-// tokenがNULLなら、addが先頭になる。
-void	insert_token(t_token **first_token, t_token *token, t_token *add)
-{
-	t_token	*next_token;
-
-	if (!add)
-		return ;
-	if (!token)
-	{
-		add->next = *first_token;
-		*first_token = add;
-	}
-	else
-	{
-		next_token = token->next;
-		token->next = add;
-		add->next = next_token;
-	}
-}
-
-t_token	*get_prev_token(t_token **token_list, t_token *token)
-{
-	t_token	*current_token;
-	t_token	*prev;
-
-	if (*token_list == token)
-		return (NULL);
-	current_token = *token_list;
-	prev = NULL;
-	while (current_token)
-	{
-		if (current_token == token)
-			return (prev);
-		prev = current_token;
-		current_token = current_token->next;
-	}
-	return (NULL);
 }
 
 void	free_token_list(t_token *token_list)
