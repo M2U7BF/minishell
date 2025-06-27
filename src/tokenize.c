@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:27:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 15:50:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,28 @@ char	**split_line(char *input_line)
 	return (w);
 }
 
+int	determine_token_type(char *s)
+{
+	t_token_type	type;
+
+	type = ERROR;
+	if (ft_strncmp(s, "|", 2) == 0)
+		type = PIPE;
+	else if (is_control_operator(s))
+		type = CONTROL_OPERATOR;
+	else if (is_reserved_word(s))
+		type = RESERVED_WORD;
+	else if (is_redirection(s))
+		type = REDIRECTION;
+	else if (is_word(s))
+		type = WORD;
+	else if (is_blank(s))
+		type = BLANK;
+	else
+		tokenize_error();
+	return (type);
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
@@ -46,24 +68,11 @@ t_token	*tokenize(char *input_line)
 	if (!w)
 		return (NULL);
 	i = -1;
-  token_list = NULL;
+	token_list = NULL;
 	while (w[++i])
 	{
-		if (ft_strncmp(w[i], "|", 2) == 0)
-			type = PIPE;
-		else if (is_control_operator(w[i]))
-			type = CONTROL_OPERATOR;
-		else if (is_reserved_word(w[i]))
-			type = RESERVED_WORD;
-		else if (is_redirection(w[i]))
-			type = REDIRECTION;
-		else if (is_word(w[i]))
-			type = WORD;
-		else if (is_blank(w[i]))
-			type = BLANK;
-		else
-			tokenize_error();
-    append_token(&token_list, create_token(w[i], type));
+		type = determine_token_type(w[i]);
+		append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
 	token_list = process_single_quote(token_list);
