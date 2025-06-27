@@ -6,11 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/25 18:04:26 by atashiro         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/27 09:30:51 by kkamei           ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/06/27 16:14:33 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +258,7 @@ char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
-<<<<<<< HEAD
-void	set_signal_handler(int signum, void (*handler)(int));
+// void	set_signal_handler(int signum, void (*handler)(int));
 
 
 int							is_builtin(char *cmd);
@@ -276,6 +271,4 @@ int							builtin_export(char **argv);
 int							builtin_pwd(void);
 int							builtin_unset(char **argv);
 
-=======
->>>>>>> origin/main
 #endif

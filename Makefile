@@ -6,11 +6,7 @@
 #    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2025/06/21 21:55:36 by atashiro         ###   ########.fr        #
-=======
-#    Updated: 2025/06/26 13:31:54 by kkamei           ###   ########.fr        #
->>>>>>> origin/main
+#    Updated: 2025/06/27 16:35:18 by atashiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,13 +16,8 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c \
 						util/ft_split_by_word_leave_separator.c util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_multi_split_by_word_leave_separator.c util/ft_multi_splitarr_by_word_leave_separator.c \
-<<<<<<< HEAD
-						util/ft_splitarr_leave_separator.c util/remove_elem.c here_doc.c file.c \
-						util/ft_strtrim_front.c\
+						util/remove_elem.c here_doc.c file.c util/ft_strtrim_front.c handle_keys_heredoc.c \
 						builtin/builtin.c builtin/cd.c builtin/echo.c builtin/env.c builtin/exit.c builtin/export.c builtin/pwd.c builtin/unset.c
-=======
-						util/remove_elem.c here_doc.c file.c util/ft_strtrim_front.c handle_keys_heredoc.c
->>>>>>> origin/main
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))

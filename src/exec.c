@@ -6,11 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/25 18:03:35 by atashiro         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/27 10:48:40 by kkamei           ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/06/27 16:30:54 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,7 +389,7 @@ int	exec(t_i_mode_vars *i_vars)
 		 ft_strncmp(argv[0], "unset", 6) == 0))
 	{
 		redirect_fds = NULL;
-		redirect_fds = open_and_redirect_files(proc_list, redirect_fds);
+		// redirect_fds = open_and_redirect_files(proc_list, redirect_fds);------mergeしたら型が変わっていて迷子
 		char **trimmed_argv = trim_redirection(&argv); // argvはここで消費される
 		status = exec_builtin(trimmed_argv); // 親プロセスで実行
 		free_str_array(trimmed_argv);
@@ -452,7 +448,6 @@ int	exec(t_i_mode_vars *i_vars)
 			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
-<<<<<<< HEAD
 			//atashiro-----------------------
 			if (is_builtin(argv[0]))
 			{
@@ -460,12 +455,8 @@ int	exec(t_i_mode_vars *i_vars)
 				exit(status);
 			}
 			//-------------
-			status = get_command_path(&argv[0]);
-			if (status != 0)
-=======
 			g_runtime_data.exit_status = get_command_path(&argv[0]);
 			if (g_runtime_data.exit_status != 0)
->>>>>>> origin/main
 			{
 				handle_error(g_runtime_data.exit_status, argv[0]);
 				exit(g_runtime_data.exit_status);

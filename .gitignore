@@ -8,11 +8,8 @@ tmp*
 minishell_test/
 minishell_doc/
 some_dir/
-<<<<<<< HEAD
 !*.c
-=======
 minishell_tester/
->>>>>>> origin/main
 
 # Prerequisites
 *.d
