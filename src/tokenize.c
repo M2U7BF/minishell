@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:20:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 15:27:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_token	*tokenize(char *input_line)
 	if (!w)
 		return (NULL);
 	i = -1;
+  token_list = NULL;
 	while (w[++i])
 	{
 		if (ft_strncmp(w[i], "|", 2) == 0)
@@ -61,14 +62,8 @@ t_token	*tokenize(char *input_line)
 		else if (is_blank(w[i]))
 			type = BLANK;
 		else
-		{
-			printf("w[i]: %s\n", w[i]);
 			tokenize_error();
-		}
-		if (i == 0)
-			token_list = create_token(w[i], type);
-		else
-			append_token(&token_list, create_token(w[i], type));
+    append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
 	token_list = process_single_quote(token_list);

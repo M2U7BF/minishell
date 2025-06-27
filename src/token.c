@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:24:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 15:30:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,19 @@ t_token	*create_token(char *str, t_token_type type)
 	return (token);
 }
 
+// トークンのリストにトークンを追加する。
+// リストがNULLの場合は、与えられたトークンが先頭になる。
 void	append_token(t_token **token_list, t_token *token)
 {
 	t_token	*current_token;
 
-	if (!token_list || !(*token_list) || !token)
+	if (!token)
 		return ;
+  if (!token_list || !(*token_list))
+	{
+		(*token_list) = token;
+		return ;
+	}
 	current_token = (*token_list);
 	while (current_token)
 	{
