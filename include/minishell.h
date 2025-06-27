@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 09:30:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 12:50:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,21 +145,34 @@ int							exec_interactive(t_exec_vars *e_vars);
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);
 
-// token.c
+// debug.c
 void						debug_put_token_list(t_token *token_list);
 int							debug_put_token_list_compare(t_token *t,
 								t_token *t_e);
-void						append_token(t_token **token_list, t_token *token);
+
+// token.c
 t_token						*create_token(char *str, t_token_type type);
-t_token						*tokenize(char *input_line);
+void						append_token(t_token **token_list, t_token *token);
+void						del_token(t_token **token_list, t_token *token);
 void						free_token_list(t_token *token_list);
+t_token						*token_dup(t_token *token);
+void						insert_token(t_token **first_token, t_token *token,
+								t_token *add);
+t_token						*get_prev_token(t_token **token_list,
+								t_token *token);
+
+// token_util.c
+char						**tokens_to_arr(t_token *token_list);
+t_token						*join_tokens(t_token *token_list);
+
+// tokenize.c
+t_token						*tokenize(char *input_line);
 bool						is_word(char *s);
 bool						is_control_operator(char *s);
 bool						is_reserved_word(char *s);
 bool						is_redirection(char *s);
-char						**tokens_to_arr(t_token *token_list);
-t_token						*token_dup(t_token *token);
-t_token						*join_tokens(t_token *token_list);
+
+// quote.c
 t_token						*process_single_quote(t_token *token_list);
 t_token						*process_double_quote(t_token *token_list);
 
@@ -211,6 +224,10 @@ bool						is_readable_file(char *pathname);
 int							open_additionalfile(char *filename, int *fd);
 int							open_outfile(char *filename, int *fd);
 int							open_infile(char *filename, int *fd);
+
+// blank.c
+void						remove_blank(t_token *token_list);
+void						process_blank(t_token *token_list);
 
 // src/util ============================================================
 
