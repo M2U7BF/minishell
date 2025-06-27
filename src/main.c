@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/24 15:42:33 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:10:33 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,5 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	if (e_vars.mode == INTERACTIVE)
 		exec_interactive(&e_vars);
-	// else
-	// 	exec_non_interactive(&e_vars);
 	return (EXIT_SUCCESS);
 }
