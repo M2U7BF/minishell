@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 17:34:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 09:31:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ char	**trim_redirection(char ***argv)
 	return (new);
 }
 
-static void	reset_redirection(t_list *redirect_fds)
+void	reset_redirection(t_list *redirect_fds)
 {
 	t_list	*current;
 	int		*content;
@@ -268,10 +268,10 @@ static void	reset_redirection(t_list *redirect_fds)
 		content = (int *)current->content;
 		if (dup2(content[0], content[1]) == -1)
 			libc_error();
-		if (current == redirect_fds)
-			break ;
 		if (close(content[0]) == -1)
 			libc_error();
+		if (current == redirect_fds)
+			break ;
 		current = get_prev_lst(&redirect_fds, current);
 	}
 	ft_lstclear(&redirect_fds, del_content);

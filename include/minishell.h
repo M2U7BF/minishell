@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:31:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 09:30:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,13 @@ void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
+void						reset_redirection(t_list *redirect_fds);
+int							open_and_redirect_files(t_proc_unit *current_proc,
+								t_list **redirect_fds);
+t_list						*pipe_redirect(t_proc_unit *proc,
+								t_list *redirect_fds);
+t_proc_unit					*process_division(t_token *token_list,
+								int *pro_count);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
@@ -178,7 +185,7 @@ void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
-void          	libc_error(void);
+void						libc_error(void);
 
 // proc_unit.c
 void						debug_put_proc_list(t_proc_unit *proc_list);
