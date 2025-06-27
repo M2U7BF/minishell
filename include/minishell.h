@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 09:30:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 09:38:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,5 +257,15 @@ char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
 
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
+
+int							is_builtin(char *cmd);
+int							exec_builtin(char **argv);
+int							builtin_cd(char **argv);
+int							builtin_echo(char **argv);
+int							builtin_env(void);
+int							builtin_exit(char **argv);
+int							builtin_export(char **argv);
+int							builtin_pwd(void);
+int							builtin_unset(char **argv);
 
 #endif

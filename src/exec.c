@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 09:31:00 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 09:39:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,29 @@ int	exec(t_i_mode_vars *i_vars)
 	int			status;
 
 	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
+	//------------------------------------------atashiro
+	if (!proc_list)
+		return (0);
+	argv = tokens_to_arr(proc_list->args);
+	// パイプがなく、コマンドが "cd" または "exit" の場合
+	if (proc_list->type == SIMPLE_CMD && argv != NULL &&
+		(ft_strncmp(argv[0], "cd", 3) == 0 ||
+		 ft_strncmp(argv[0], "exit", 5) == 0 ||
+		 ft_strncmp(argv[0], "export", 7) == 0 ||
+		 ft_strncmp(argv[0], "unset", 6) == 0))
+	{
+		redirect_fds = NULL;
+		redirect_fds = open_and_redirect_files(proc_list, redirect_fds);
+		char **trimmed_argv = trim_redirection(&argv); // argvはここで消費される
+		status = exec_builtin(trimmed_argv); // 親プロセスで実行
+		free_str_array(trimmed_argv);
+		reset_redirection(redirect_fds);
+		free_proc_list(proc_list);
+		// 注意: builtin_exitはプロセスを終了するので、ここに戻らない可能性がある
+		return (status);
+	}
+	free_str_array(argv);
+	// ------------------------------------------------------------------
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
 	if (!i_vars->child_pids)
 	{
@@ -420,6 +443,13 @@ int	exec(t_i_mode_vars *i_vars)
 			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
+			//atashiro-----------------------
+			if (is_builtin(argv[0]))
+			{
+				status = exec_builtin(argv);
+				exit(status);
+			}
+			//-------------
 			g_runtime_data.exit_status = get_command_path(&argv[0]);
 			if (g_runtime_data.exit_status != 0)
 			{

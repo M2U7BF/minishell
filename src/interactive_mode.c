@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 17:29:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 09:40:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 		// debug_put_token_list(i_vars->token_list);
 		// コマンド実行
 		exec(i_vars);
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
+		if (i_vars->child_pids != NULL)
+			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
 		i_vars->child_pids = NULL;
 	}
