@@ -6,7 +6,11 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/25 18:04:26 by atashiro         ###   ########.fr       */
+=======
+/*   Updated: 2025/06/27 09:30:51 by kkamei           ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +50,6 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
-
-extern volatile sig_atomic_t	g_recieve_signal;
 
 // 起動モード
 typedef enum e_mode
@@ -118,6 +120,17 @@ typedef struct s_exec_vars
 	char					*script;
 }							t_exec_vars;
 
+// グローバル変数を保持する構造体
+typedef struct s_runtime_data
+{
+	int						exit_status;
+	volatile sig_atomic_t	signal;
+}							t_runtime_data;
+
+extern t_runtime_data		g_runtime_data;
+
+// src ============================================================
+
 // handle_keys.c
 void						handle_signal(void);
 
@@ -157,17 +170,26 @@ t_token						*process_double_quote(t_token *token_list);
 // parse.c
 bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
+void						null_to_empty(t_token *token);
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
+void						reset_redirection(t_list *redirect_fds);
+int							open_and_redirect_files(t_proc_unit *current_proc,
+								t_list **redirect_fds);
+t_list						*pipe_redirect(t_proc_unit *proc,
+								t_list *redirect_fds);
+t_proc_unit					*process_division(t_token *token_list,
+								int *pro_count);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
-void						handle_error(int *status, char *cmd_path);
+void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
+void						libc_error(void);
 
 // proc_unit.c
 void						debug_put_proc_list(t_proc_unit *proc_list);
@@ -185,13 +207,16 @@ bool						is_syntax_error(t_token *token_list);
 // here_doc.c
 int							here_doc(char *delimiter);
 
+// handle_signal_heredoc.c
+void						handle_signal_heredoc(void);
+
 // file.c
 bool						is_readable_file(char *pathname);
 int							open_additionalfile(char *filename, int *fd);
 int							open_outfile(char *filename, int *fd);
 int							open_infile(char *filename, int *fd);
 
-// util ============================================================
+// src/util ============================================================
 
 // util.c
 void						ft_free(void *p);
@@ -222,7 +247,6 @@ char						**ft_multi_split(char *s, char *separators);
 char						**ft_split_by_word_leave_separator(char *str,
 								char *word);
 
-// TODO: 削除予定
 // ft_splitarr_by_word_leave_separator.c
 char						**ft_splitarr_by_word_leave_separator(char **arr,
 								char *separator);
@@ -235,13 +259,10 @@ char						**ft_multi_split_by_word_leave_separator(char *str,
 char						**ft_multi_splitarr_by_word_leave_separator(char **arr,
 								char **separator);
 
-// ft_splitarr_leave_separator.c
-char						**ft_splitarr_leave_separator(char **arr,
-								char separator);
-
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
+<<<<<<< HEAD
 void	set_signal_handler(int signum, void (*handler)(int));
 
 
@@ -255,4 +276,6 @@ int							builtin_export(char **argv);
 int							builtin_pwd(void);
 int							builtin_unset(char **argv);
 
+=======
+>>>>>>> origin/main
 #endif

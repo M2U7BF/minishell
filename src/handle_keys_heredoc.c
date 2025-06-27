@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_keys.c                                      :+:      :+:    :+:   */
+/*   handle_keys_heredoc.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:20:50 by kkamei           ###   ########.fr       */
+/*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
+/*   Updated: 2025/06/26 09:20:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void	signal_handler(int signum)
 	g_runtime_data.signal = signum;
 	if (g_runtime_data.signal == SIGINT)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (write(STDERR_FILENO, "\n", 1) == -1)
+      libc_error();
+    rl_replace_line("", 0);
+    rl_done = 1;
 	}
 }
 
@@ -36,9 +36,7 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 		put_error_exit("sigaction", EXIT_FAILURE);
 }
 
-void	handle_signal(void)
+void	handle_signal_heredoc(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
-	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-    libc_error();
 }

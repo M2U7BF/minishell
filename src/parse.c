@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 10:54:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/26 14:52:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ void	quote_removal(t_token *token)
 	tmp2 = NULL;
 	current_token = token;
 	double_quote_count = 0;
-	while (current_token)
+	while (current_token && current_token->str)
 	{
-    str_len = ft_strlen(current_token->str);
+		str_len = ft_strlen(current_token->str);
 		if (current_token->type == DELIMITER)
 		{
 			current_token = current_token->next;
@@ -69,12 +69,13 @@ void	quote_removal(t_token *token)
 				if (!current_quote && (ft_strncmp("\"", tmp[i], 2) == 0
 							|| ft_strncmp("\'", tmp[i], 2) == 0))
 				{
-					current_quote = tmp[i];
+					current_quote = ft_strdup(tmp[i]);
 					continue ;
 				}
 				// xクォートと一致したら、そこまでの要素を結合する
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					tmp_strarr = lst_to_str_arr(tmp_list);
 					tmp_str = ft_strjoin_all(tmp_strarr);
@@ -107,8 +108,21 @@ void	quote_removal(t_token *token)
 			free_str_array(tmp);
 			ft_lstclear(&tmp2, del_content);
 			free_str_array(tmp_strarr);
-			free(old);
+			ft_free(old);
 		}
+		current_token = current_token->next;
+	}
+}
+
+void	null_to_empty(t_token *token)
+{
+	t_token	*current_token;
+
+	current_token = token;
+	while (current_token)
+	{
+		if (!current_token->str)
+			current_token->str = ft_strdup("");
 		current_token = current_token->next;
 	}
 }
@@ -133,7 +147,12 @@ void	variable_expansion(t_token **token_list)
 	is_expand = true;
 	while (current_token)
 	{
-		if (ft_strchr(current_token->str, '$'))
+		if (ft_strncmp(current_token->str, "$", 2) == 0)
+    {
+      current_token = current_token->next;
+			continue ;
+    }
+		else if (ft_strchr(current_token->str, '$'))
 		{
 			splited_words = ft_multi_split_leave_separator(current_token->str,
 					"$\'\"");
@@ -144,13 +163,14 @@ void	variable_expansion(t_token **token_list)
 				if (current_quote && ft_strchr(splited_words[j],
 						current_quote[0]))
 				{
+          ft_free(current_quote);
 					current_quote = NULL;
 					is_expand = true;
 				}
 				else if (!current_quote && (ft_strchr(splited_words[j], '"')
 						|| ft_strchr(splited_words[j], '\'')))
 				{
-					current_quote = splited_words[j];
+					current_quote = ft_strdup(splited_words[j]);
 					if (ft_strncmp(current_quote, "\'", 2) == 0)
 						is_expand = false;
 				}
@@ -159,8 +179,7 @@ void	variable_expansion(t_token **token_list)
 					tmp = ft_split_by_word_leave_separator(splited_words[j],
 							"$?");
 					ft_free(tmp[0]);
-					// TODO: 直前のプロセスの最終ステータスを取得する
-					tmp[0] = ft_itoa(0);
+					tmp[0] = ft_itoa(g_runtime_data.exit_status);
 					ft_free(splited_words[j]);
 					splited_words[j] = ft_strjoin_all(tmp);
 					free_str_array(tmp);
@@ -176,7 +195,7 @@ void	variable_expansion(t_token **token_list)
 					else
 					{
 						ft_free(splited_words[j]);
-						splited_words[j] = ft_strdup("");
+						splited_words[j] = NULL;
 					}
 				}
 			}

@@ -1,13 +1,18 @@
-tmp*
 *
 !*/
 !Makefile
+!*.c
+tmp*
 *.txt
 .vscode/
 minishell_test/
 minishell_doc/
 some_dir/
+<<<<<<< HEAD
 !*.c
+=======
+minishell_tester/
+>>>>>>> origin/main
 
 # Prerequisites
 *.d
