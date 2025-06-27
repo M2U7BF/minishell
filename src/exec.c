@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 09:39:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 10:53:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,11 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 		if (current->type == REDIRECTION && (current->next->type == WORD
 				|| current->next->type == DELIMITER))
 		{
+			if (!current->next->str)
+			{
+				ft_dprintf(STDERR_FILENO, "minishell: ambiguous redirect\n");
+				return (EXIT_FAILURE);
+			}
 			fd = malloc(sizeof(int));
 			if (!fd)
 				return (EXIT_FAILURE);
