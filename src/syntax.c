@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 12:04:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 12:07:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ bool	is_redirection_syntax_error(t_token *token_list)
 	t_token	*current;
 	t_token	*prev;
 
-	prev = NULL;
 	current = token_list;
 	while (current)
 	{
@@ -39,7 +38,6 @@ bool	is_redirection_syntax_error(t_token *token_list)
 					return (true);
 			}
 		}
-		prev = current;
 		current = current->next;
 	}
 	return (false);
