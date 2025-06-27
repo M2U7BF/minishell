@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:15:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:22:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
-		i_vars->child_pids = NULL;
 	}
 	clear_history();
 	return (0);
