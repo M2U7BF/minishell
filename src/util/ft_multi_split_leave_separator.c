@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:50:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:55:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	**ft_multi_split_leave_separator(char *s, char *separator)
 		}
 		s_count++;
 	}
-  if (arr[0] == NULL)
-    return (free_str_array(arr), NULL);
+	if (arr[0] == NULL)
+		return (free_str_array(arr), NULL);
 	return (arr);
 }

@@ -6,11 +6,24 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:14:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:44:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	null_to_empty(t_token *token)
+{
+	t_token	*current_token;
+
+	current_token = token;
+	while (current_token)
+	{
+		if (!current_token->str)
+			current_token->str = ft_strdup("");
+		current_token = current_token->next;
+	}
+}
 
 char	*expand_heredoc_line(char *line)
 {

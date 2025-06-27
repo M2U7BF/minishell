@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:50:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:45:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef enum e_token_type
 	REDIRECTION,
 	PIPE,
 	DELIMITER,
-  ERROR,
+	ERROR,
 }							t_token_type;
 
 typedef struct s_token
@@ -183,11 +183,10 @@ bool						is_blank(char *s);
 // quote.c
 t_token						*process_single_quote(t_token *token_list);
 t_token						*process_double_quote(t_token *token_list);
-
-// parse.c
 bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
-void						null_to_empty(t_token *token);
+
+// parse.c
 void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 

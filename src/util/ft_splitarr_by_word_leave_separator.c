@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:36:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:55:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,9 @@ char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
 	i = -1;
 	while (arr[++i])
 	{
-		// printf("[%d], separator:[%s], arr[i]:[%s]\n", i, separator, arr[i]);
 		if (ft_strnstr(arr[i], separator, ft_strlen(arr[i])) != NULL)
 		{
 			tmp = ft_split_by_word_leave_separator(arr[i], separator);
-			// printf("tmp:\n");
-			// put_strarr(tmp);
 			j = 0;
 			while (j < arrlen(tmp))
 			{
@@ -43,11 +40,8 @@ char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
 		else
 			ft_lstadd_back(&new_lst, ft_lstnew((void *)ft_strdup(arr[i])));
 	}
-	// printf("new_lst:\n");
-	// debug_put_lst(new_lst);
-  free_str_array(arr);
+	free_str_array(arr);
 	new = lst_to_str_arr(new_lst);
 	ft_lstclear(&new_lst, del_content);
-	// ft_free(new_lst);
 	return (new);
 }
