@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:23:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:30:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,8 @@ t_token						*join_tokens(t_token *token_list);
 
 // tokenize.c
 t_token						*tokenize(char *input_line);
+
+// tokenize_2.c
 bool						is_word(char *s);
 bool						is_control_operator(char *s);
 bool						is_reserved_word(char *s);

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 11:25:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:50:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,25 +70,27 @@ char	**ft_multi_split_leave_separator(char *s, char *separator)
 	size_t	i;
 	int		j;
 	int		s_count;
-	char	**str;
+	char	**arr;
 
 	i = -1;
 	j = 0;
 	s_count = 0;
 	if (!s || !separator)
 		return (NULL);
-	str = init_str_arr(get_elem_count(s, separator));
-	if (!str)
+	arr = init_str_arr(get_elem_count(s, separator));
+	if (!arr)
 		return (NULL);
 	while (get_elem_count(s, separator) > 0 && ++i <= ft_strlen(s))
 	{
 		if (s_count > 0 && (is_separator(separator, s[i]) || !s[i]))
 		{
-			str[j] = get_fragment(str[j], s + i - s_count, &s_count);
-			if (!str[j++])
-				return (free_str_array(str), NULL);
+			arr[j] = get_fragment(arr[j], s + i - s_count, &s_count);
+			if (!arr[j++])
+				return (free_str_array(arr), NULL);
 		}
 		s_count++;
 	}
-	return (str);
+  if (arr[0] == NULL)
+    return (free_str_array(arr), NULL);
+	return (arr);
 }
