@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 17:29:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:15:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		handle_signal();
 		g_runtime_data.signal = 0;
 		i_vars->input_line = readline(i_vars->prompt);
-		// Ctrl+Cのあとに、Ctrl+Dを打った場合
 		if (!i_vars->input_line)
 		{
 			if (g_runtime_data.signal == SIGINT)
@@ -74,11 +73,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 				DEFAULT_BLANK);
 		if (is_quotation_error(i_vars->input_line) != 0)
 			exit(EXIT_FAILURE);
-		// 単語分割
 		i_vars->token_list = tokenize(i_vars->input_line);
-		// tokenize後の構文エラーを検知する
-		// printf("tokenize後\n");
-		// debug_put_token_list(i_vars->token_list);
 		if (!i_vars->token_list)
 		{
 			ft_free(i_vars->input_line);
@@ -90,14 +85,8 @@ int	exec_interactive(t_exec_vars *e_vars)
 			destroy_i_vars(i_vars);
 			exit(EXIT_SYNTAX_ERROR);
 		}
-		// パース
 		parse(i_vars);
-		// printf("quote_removal前\n");
-		// debug_put_token_list(i_vars->token_list);
 		quote_removal(i_vars->token_list);
-		// printf("exec前\n");
-		// debug_put_token_list(i_vars->token_list);
-		// コマンド実行
 		exec(i_vars);
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
