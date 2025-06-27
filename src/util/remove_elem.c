@@ -6,15 +6,15 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 14:12:42 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/11 15:32:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:25:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char **remove_elem(char **arr, char **remove_list)
+char	**remove_elem(char **arr, char **remove_list)
 {
-  int		i;
+	int		i;
 	t_list	*new_lst;
 	char	**new;
 

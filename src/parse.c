@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 14:52:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:26:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	quote_removal(t_token *token)
 				// xクォートと一致したら、そこまでの要素を結合する
 				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
 				{
-          ft_free(current_quote);
+					ft_free(current_quote);
 					current_quote = NULL;
 					tmp_strarr = lst_to_str_arr(tmp_list);
 					tmp_str = ft_strjoin_all(tmp_strarr);
@@ -148,10 +148,10 @@ void	variable_expansion(t_token **token_list)
 	while (current_token)
 	{
 		if (ft_strncmp(current_token->str, "$", 2) == 0)
-    {
-      current_token = current_token->next;
+		{
+			current_token = current_token->next;
 			continue ;
-    }
+		}
 		else if (ft_strchr(current_token->str, '$'))
 		{
 			splited_words = ft_multi_split_leave_separator(current_token->str,
@@ -163,7 +163,7 @@ void	variable_expansion(t_token **token_list)
 				if (current_quote && ft_strchr(splited_words[j],
 						current_quote[0]))
 				{
-          ft_free(current_quote);
+					ft_free(current_quote);
 					current_quote = NULL;
 					is_expand = true;
 				}

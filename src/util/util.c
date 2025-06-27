@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 09:04:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:25:29 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ char	**lst_to_str_arr(t_list *lst)
 		return (NULL);
 	i = 0;
 	new = malloc(sizeof(char *) * (ft_lstsize(lst) + 1));
-  if (!new)
-    return (NULL);
+	if (!new)
+		return (NULL);
 	new[ft_lstsize(lst)] = NULL;
 	current_lst = lst;
 	while (current_lst)
@@ -111,14 +111,15 @@ void	debug_put_lst(t_list *lst)
 	t_list	*current_lst;
 	int		i;
 
-  if (!lst)
-    dprintf(STDERR_FILENO, "(null)\n");
+	if (!lst)
+		dprintf(STDERR_FILENO, "(null)\n");
 	current_lst = lst;
 	i = 0;
 	while (current_lst)
 	{
-    // printf("[%d] \"%s\"\n", i, (char *)current_lst->content);
-    dprintf(STDERR_FILENO, "[%d] \"%d, %d\"\n", i, *(int *)current_lst->content, *(int *)current_lst->content + 1);
+		// printf("[%d] \"%s\"\n", i, (char *)current_lst->content);
+		dprintf(STDERR_FILENO, "[%d] \"%d, %d\"\n", i,
+			*(int *)current_lst->content, *(int *)current_lst->content + 1);
 		current_lst = current_lst->next;
 		i++;
 	}

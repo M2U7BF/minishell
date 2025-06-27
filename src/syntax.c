@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 13:13:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 12:04:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,23 @@ bool	is_redirection_syntax_error(t_token *token_list)
 	t_token	*current;
 	t_token	*prev;
 
-	// redirection の後ろに制御文字があったらエラー
 	prev = NULL;
 	current = token_list;
 	while (current)
 	{
 		if (current->type == REDIRECTION)
 		{
-			if (ft_strncmp(current->str, "<", 2) == 0 || ft_strncmp(current->str, "<<", 3) == 0)
+			if (ft_strncmp(current->str, "<", 2) == 0
+				|| ft_strncmp(current->str, "<<", 3) == 0)
 			{
 				if (!current->next)
 					return (true);
-        if (current->next && current->next->type != WORD && current->next->type != DELIMITER)
+				if (current->next && current->next->type != WORD
+					&& current->next->type != DELIMITER)
 					return (true);
 			}
-			else if (ft_strncmp(current->str, ">", 2) == 0 || ft_strncmp(current->str, ">>", 3) == 0)
+			else if (ft_strncmp(current->str, ">", 2) == 0
+				|| ft_strncmp(current->str, ">>", 3) == 0)
 			{
 				if (!current->next || current->next->type != WORD)
 					return (true);

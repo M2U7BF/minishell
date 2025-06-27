@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 09:36:39 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/19 13:32:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:25:23 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static bool	is_set(char c, char const *set)
 
 static char	*get_start(const char *s1, const char *set)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (s1[i])
@@ -48,7 +48,7 @@ char	*ft_strtrim_front(char const *s1, char const *set)
 	int		result_len;
 
 	start = get_start(s1, set);
-  end = (char *)s1 + ft_strlen(s1);
+	end = (char *)s1 + ft_strlen(s1);
 	result_len = end - start + 1;
 	if (!start || !end)
 		result_len = 0;

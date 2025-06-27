@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:25:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static char	**init_str_arr(int elem_count)
 	str[elem_count] = NULL;
 	return (str);
 }
+
 // char *s: 分割対象の文字列
 // char *separator: 分割文字の配列
 // 複数の文字にマッチして、文字列を分割する。

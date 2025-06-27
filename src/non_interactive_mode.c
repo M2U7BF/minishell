@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:40:31 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/03 12:49:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 11:24:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	exec_non_interactive(t_exec_vars *e_vars)
 {
-  t_ni_mode_vars	*ni_vars;
+	t_ni_mode_vars *ni_vars;
 
-  (void)ni_vars;
-  (void)e_vars;
-  return (0);
+	(void)ni_vars;
+	(void)e_vars;
+	return (0);
 }
