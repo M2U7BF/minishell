@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:50:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:05:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,34 @@ int	determine_token_type(char *s)
 	return (type);
 }
 
+void	process_token_list(t_token **token_list)
+{
+	t_token	*current;
+
+	*token_list = process_single_quote(*token_list);
+	*token_list = process_double_quote(*token_list);
+	*token_list = join_tokens(*token_list);
+	process_blank(*token_list);
+	*token_list = join_tokens(*token_list);
+	remove_blank(*token_list);
+	current = *token_list;
+	while (current)
+	{
+		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
+				3) == 0)
+		{
+			if (current->next && current->next->type == WORD)
+				current->next->type = DELIMITER;
+		}
+		current = current->next;
+	}
+}
+
 t_token	*tokenize(char *input_line)
 {
 	char			**w;
 	int				i;
 	t_token			*token_list;
-	t_token			*current;
 	t_token_type	type;
 
 	w = split_line(input_line);
@@ -75,22 +97,6 @@ t_token	*tokenize(char *input_line)
 		append_token(&token_list, create_token(w[i], type));
 	}
 	ft_free(w);
-	token_list = process_single_quote(token_list);
-	token_list = process_double_quote(token_list);
-	token_list = join_tokens(token_list);
-	process_blank(token_list);
-	token_list = join_tokens(token_list);
-	remove_blank(token_list);
-	current = token_list;
-	while (current)
-	{
-		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
-				3) == 0)
-		{
-			if (current->next && current->next->type == WORD)
-				current->next->type = DELIMITER;
-		}
-		current = current->next;
-	}
+	process_token_list(&token_list);
 	return (token_list);
 }

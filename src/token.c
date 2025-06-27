@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:30:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/27 16:05:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	append_token(t_token **token_list, t_token *token)
 
 	if (!token)
 		return ;
-  if (!token_list || !(*token_list))
+	if (!token_list || !(*token_list))
 	{
 		(*token_list) = token;
 		return ;
