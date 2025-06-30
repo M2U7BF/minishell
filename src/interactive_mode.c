@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:10:04 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:56:23 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ int	exec_interactive(t_exec_vars *e_vars)
 			exit(EXIT_SYNTAX_ERROR);
 		}
 		// パース
-		parse(i_vars);
+		parse(i_vars, e_vars->env_list);
 		// printf("quote_removal前\n");
 		// debug_put_token_list(i_vars->token_list);
 		quote_removal(i_vars->token_list);
 		// printf("exec前\n");
 		// debug_put_token_list(i_vars->token_list);
 		// コマンド実行
-		exec(i_vars);
+		exec(i_vars,  e_vars->env_list);
 		if (i_vars->child_pids != NULL)
 			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
