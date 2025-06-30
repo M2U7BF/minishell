@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:36:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:38:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
   fd = 0;
 	status = 0;
 	current = current_proc->args;
+  target_fd = STDIN_FILENO;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && (current->next->type == WORD
@@ -176,7 +177,6 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				target_fd = STDIN_FILENO;
 			}
 			else if (ft_strncmp(current->str, ">>", 3) == 0)
 			{
@@ -189,10 +189,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
-			{
 				fd = here_doc(current->next->str);
-				target_fd = STDIN_FILENO;
-			}
       fd = stashfd(fd);
 			stashed_target_fd = stashfd(target_fd);
 			if (fd != target_fd)
