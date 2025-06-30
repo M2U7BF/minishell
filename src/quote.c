@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 13:00:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 13:24:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	quote_removal(t_token *token)
 	char		*old;
 	int			i;
 	static char	*quote[] = {"\"", "\'", NULL};
-	char		*current_quote;
+	char		current_quote;
 	t_list		*tmp_list;
 	t_list		*tmp2;
 	char		**tmp_strarr;
@@ -183,15 +183,15 @@ void	quote_removal(t_token *token)
 		{
 			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
 			i = -1;
-			current_quote = NULL;
+			current_quote = '\0';
 			tmp_list = NULL;
 			while (tmp[++i])
 			{
 				if (!current_quote && is_quote(tmp[i][0]))
-					current_quote = ft_strdup(tmp[i]);
-				else if (current_quote && is_strequal(current_quote, tmp[i]))
+					current_quote = tmp[i][0];
+				else if (current_quote && current_quote == tmp[i][0])
 				{
-					ft_free((void **)&current_quote);
+					current_quote = '\0';
 					tmp_strarr = lst_to_str_arr(tmp_list);
 					tmp_str = ft_strjoin_all(tmp_strarr);
 					free_str_array(tmp_strarr);
