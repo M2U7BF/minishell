@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:40:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:53:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,37 +159,21 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				ft_dprintf(STDERR_FILENO, "minishell: ambiguous redirect\n");
 				return (EXIT_FAILURE);
 			}
-			if (ft_strncmp(current->str, ">", 2) == 0)
-			{
+      if (current->str[0] == '>')
+        target_fd = STDOUT_FILENO;
+			if (is_str_equal(current->str, ">"))
 				status = open_outfile(current->next->str, &fd);
-				if (status != 0)
-				{
-					handle_error(status, current->next->str);
-					return (status);
-				}
-				target_fd = STDOUT_FILENO;
-			}
-			else if (ft_strncmp(current->str, "<", 2) == 0)
-			{
+			else if (is_str_equal(current->str, "<"))
 				status = open_infile(current->next->str, &fd);
-				if (status != 0)
-				{
-					handle_error(status, current->next->str);
-					return (status);
-				}
-			}
-			else if (ft_strncmp(current->str, ">>", 3) == 0)
-			{
+			else if (is_str_equal(current->str, ">>"))
 				status = open_additionalfile(current->next->str, &fd);
-				if (status != 0)
-				{
-					handle_error(status, current->next->str);
-					return (status);
-				}
-				target_fd = STDOUT_FILENO;
-			}
-			else if (ft_strncmp(current->str, "<<", 3) == 0)
+			else if (is_str_equal(current->str, "<<"))
 				fd = here_doc(current->next->str);
+			if (status != 0)
+			{
+				handle_error(status, current->next->str);
+				return (status);
+			}
 			fd = stashfd(fd);
 			stashed_target_fd = stashfd(target_fd);
 			if (fd != target_fd)

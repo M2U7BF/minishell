@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:59:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 11:09:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:52:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ t_list	*get_prev_lst(t_list **list, t_list *elem)
 	return (NULL);
 }
 
-bool	is_strequal(char *s1, char *s2)
+bool	is_str_equal(char *s1, char *s2)
 {
 	return (ft_strncmp(s1, s2, ft_strlen(s1)) == 0);
 }

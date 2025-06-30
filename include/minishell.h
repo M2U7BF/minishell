@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 14:34:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:52:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
 bool						is_include(char *s, char **words);
 t_list						*get_prev_lst(t_list **list, t_list *elem);
-bool						is_strequal(char *s1, char *s2);
+bool						is_str_equal(char *s1, char *s2);
 
 // ft_strtrim_front.c
 char						*ft_strtrim_front(char const *s1, char const *set);
