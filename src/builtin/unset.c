@@ -6,13 +6,11 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:57 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 16:35:21 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:25:24 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-extern char	**environ;
 
 static int	is_valid_identifier(const char *s)
 {
@@ -32,60 +30,26 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
-int builtin_unset(char **argv)
+int builtin_unset(char **argv, t_list **env_list)
 {
-	int		old_count;
-	char	**new_environ;
-	int		i;
-	int		j;
-	int		status;
+	int i;
+	int status;
 
 	status = 0;
 	i = 1;
-	while(argv[i]) // 先に引数のバリデーションを行う
+	while (argv[i])
 	{
 		if (!is_valid_identifier(argv[i]))
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: unset: `%s': not a valid identifier\n", argv[i]);
 			status = 1;
 		}
-		i++;
-	}
-
-	old_count = 0;
-	while (environ[old_count])
-		old_count++;
-
-	// 新しい配列を確保 (最大で元のサイズと同じ)
-	new_environ = ft_calloc(old_count + 1, sizeof(char *));
-	if (!new_environ)
-		return (1);
-
-	i = 0;
-	j = 0;
-	while (environ[i])
-	{
-		int		k = 1;
-		int		should_unset = 0;
-		while (argv[k])
-		{
-			size_t len = ft_strlen(argv[k]);
-			if (is_valid_identifier(argv[k]) && ft_strncmp(environ[i], argv[k], len) == 0 && environ[i][len] == '=')
-			{
-				should_unset = 1;
-				break;
-			}
-			k++;
-		}
-		if (should_unset)
-			free(environ[i]); // 削除対象の文字列を解放
 		else
-			new_environ[j++] = environ[i]; // 保持する変数のポインタを新しい配列にコピー
+		{
+			unset_env_var(env_list, argv[i]);
+		}
 		i++;
 	}
-	new_environ[j] = NULL;
-	free(environ); // 古いポインタ配列を解放
-	environ = new_environ; // グローバルポインタを新しい配列に差し替える
 	return (status);
 }
 

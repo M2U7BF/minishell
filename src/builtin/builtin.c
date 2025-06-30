@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 18:04:44 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:17:56 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,21 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **argv)
+int	exec_builtin(char **argv, t_list *env_list)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		return (builtin_echo(argv));
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		return (builtin_cd(argv));
+		return (builtin_cd(argv, env_list)); // 引数追加
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 		return (builtin_pwd());
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
-		return (builtin_export(argv));
+		return (builtin_export(argv, &env_list)); // 引数追加
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-		return (builtin_unset(argv));
+		return (builtin_unset(argv, &env_list)); // 引数追加
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
-		return (builtin_env());
+		return (builtin_env(env_list)); // 引数追加
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 		return (builtin_exit(argv));
 	return (127);
 }
-
