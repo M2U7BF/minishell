@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:45:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:13:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,13 +138,14 @@ int	stashfd(int fd)
 // 必要なfileをopenし、リダイレクトを行う。
 int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
-	int		*fd;
+	int		fd;
 	int		target_fd;
 	int		stashed_target_fd;
 	t_token	*current;
 	int		*content;
 	int		status;
 
+  fd = 0;
 	status = 0;
 	current = current_proc->args;
 	while (current && current->next)
@@ -157,69 +158,59 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				ft_dprintf(STDERR_FILENO, "minishell: ambiguous redirect\n");
 				return (EXIT_FAILURE);
 			}
-			fd = malloc(sizeof(int));
-			if (!fd)
-				return (EXIT_FAILURE);
 			content = malloc(sizeof(int) * 2);
 			if (!content)
-			{
-				ft_free((void **)&fd);
 				return (EXIT_FAILURE);
-			}
 			if (ft_strncmp(current->str, ">", 2) == 0)
 			{
-				status = open_outfile(current->next->str, fd);
+				status = open_outfile(current->next->str, &fd);
 				if (status != 0)
 				{
-					ft_free((void **)&fd);
 					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				*fd = stashfd(*fd);
+				fd = stashfd(fd);
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<", 2) == 0)
 			{
-				status = open_infile(current->next->str, fd);
+				status = open_infile(current->next->str, &fd);
 				if (status != 0)
 				{
-					ft_free((void **)&fd);
 					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				*fd = stashfd(*fd);
+				fd = stashfd(fd);
 				target_fd = STDIN_FILENO;
 			}
 			else if (ft_strncmp(current->str, ">>", 3) == 0)
 			{
-				status = open_additionalfile(current->next->str, fd);
+				status = open_additionalfile(current->next->str, &fd);
 				if (status != 0)
 				{
-					ft_free((void **)&fd);
 					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				*fd = stashfd(*fd);
+				fd = stashfd(fd);
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
 			{
-				*fd = here_doc(current->next->str);
-				*fd = stashfd(*fd);
+				fd = here_doc(current->next->str);
+				fd = stashfd(fd);
 				target_fd = STDIN_FILENO;
 			}
 			stashed_target_fd = stashfd(target_fd);
-			if (*fd != target_fd)
+			if (fd != target_fd)
 			{
-				if (dup2(*fd, target_fd) == -1)
+				if (dup2(fd, target_fd) == -1)
 					libc_error();
-				if (close(*fd) == -1)
+				if (close(fd) == -1)
 					libc_error();
 			}
-			ft_free((void **)&fd);
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
