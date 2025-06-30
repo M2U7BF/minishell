@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:33:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:36:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,6 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				fd = stashfd(fd);
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<", 2) == 0)
@@ -177,7 +176,6 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				fd = stashfd(fd);
 				target_fd = STDIN_FILENO;
 			}
 			else if (ft_strncmp(current->str, ">>", 3) == 0)
@@ -188,15 +186,14 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 					handle_error(status, current->next->str);
 					return (status);
 				}
-				fd = stashfd(fd);
 				target_fd = STDOUT_FILENO;
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
 			{
 				fd = here_doc(current->next->str);
-				fd = stashfd(fd);
 				target_fd = STDIN_FILENO;
 			}
+      fd = stashfd(fd);
 			stashed_target_fd = stashfd(target_fd);
 			if (fd != target_fd)
 			{
