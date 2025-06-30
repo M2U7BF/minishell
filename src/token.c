@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:05:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:45:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	del_token(t_token **token_list, t_token *token)
 		if (current == token)
 			prev->next = token->next;
 	}
-	ft_free(token->str);
-	ft_free(token);
+	ft_free((void **)&token->str);
+	ft_free((void **)&token);
 }
 
 void	free_token_list(t_token *token_list)
@@ -100,7 +100,7 @@ void	free_token_list(t_token *token_list)
 	{
 		tmp = current_token;
 		current_token = current_token->next;
-		ft_free(tmp->str);
-		ft_free(tmp);
+		ft_free((void **)&tmp->str);
+		ft_free((void **)&tmp);
 	}
 }

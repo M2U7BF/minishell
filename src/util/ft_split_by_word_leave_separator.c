@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:48:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 11:25:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:45:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static void	free_all(char **result, int result_len)
 	i = 0;
 	while (result && i <= result_len && result[i])
 	{
-		ft_free(result[i]);
+		ft_free((void **)&result[i]);
 		i++;
 	}
-	ft_free(result);
+	ft_free((void **)&result);
 }
 
 char	**ft_split_by_word_leave_separator(char *str, char *word)

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:44:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:46:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	here_doc(char *delimiter)
 		free_token_list(tmp_token);
 		tmp_str = ft_strjoin_all(tmp_arr);
 		free_str_array(tmp_arr);
-		ft_free(delimiter);
+		ft_free((void **)&delimiter);
 		delimiter = tmp_str;
 	}
 	if (pipe(pipe_fds) == -1)
@@ -82,10 +82,10 @@ int	here_doc(char *delimiter)
 		if (!is_quoted)
 			line = expand_heredoc_line(line);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
-		ft_free(line);
+		ft_free((void **)&line);
 	}
-	ft_free(line);
-	ft_free(delimiter);
+	ft_free((void **)&line);
+	ft_free((void **)&delimiter);
 	if (close(pipe_fds[1]) == -1)
 		libc_error();
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)

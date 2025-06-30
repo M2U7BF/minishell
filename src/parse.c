@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:53:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:59:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void	variable_expansion(t_token **token_list)
 				if (current_quote && ft_strchr(splited_words[j],
 						current_quote[0]))
 				{
-					ft_free(current_quote);
-					current_quote = NULL;
+					ft_free((void **)&current_quote);
 					is_expand = true;
 				}
 				else if (!current_quote && (ft_strchr(splited_words[j], '"')
@@ -63,9 +62,9 @@ void	variable_expansion(t_token **token_list)
 				{
 					tmp = ft_split_by_word_leave_separator(splited_words[j],
 							"$?");
-					ft_free(tmp[0]);
+					ft_free((void **)&tmp[0]);
 					tmp[0] = ft_itoa(g_runtime_data.exit_status);
-					ft_free(splited_words[j]);
+					ft_free((void **)&splited_words[j]);
 					splited_words[j] = ft_strjoin_all(tmp);
 					free_str_array(tmp);
 				}
@@ -74,17 +73,14 @@ void	variable_expansion(t_token **token_list)
 					env_var = getenv(&splited_words[j][1]);
 					if (env_var)
 					{
-						ft_free(splited_words[j]);
+						ft_free((void **)&splited_words[j]);
 						splited_words[j] = ft_strdup(env_var);
 					}
 					else
-					{
-						ft_free(splited_words[j]);
-						splited_words[j] = NULL;
-					}
+						ft_free((void **)&splited_words[j]);
 				}
 			}
-			ft_free(current_token->str);
+			ft_free((void **)&current_token->str);
 			current_token->str = ft_strjoin_all(splited_words);
 			free_str_array(splited_words);
 		}

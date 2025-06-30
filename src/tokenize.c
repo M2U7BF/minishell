@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:05:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:45:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_token	*tokenize(char *input_line)
 		type = determine_token_type(w[i]);
 		append_token(&token_list, create_token(w[i], type));
 	}
-	ft_free(w);
+	ft_free((void **)&w);
 	process_token_list(&token_list);
 	return (token_list);
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:22:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:43:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 			add_history(i_vars->input_line);
 		else
 		{
-			ft_free(i_vars->input_line);
+			ft_free((void **)&i_vars->input_line);
 			continue ;
 		}
 		i_vars->input_line = ft_strtrim_front(i_vars->input_line,
@@ -76,7 +76,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		i_vars->token_list = tokenize(i_vars->input_line);
 		if (!i_vars->token_list)
 		{
-			ft_free(i_vars->input_line);
+			ft_free((void **)&i_vars->input_line);
 			continue ;
 		}
 		if (is_syntax_error(i_vars->token_list))

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 10:48:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:45:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static int	search_command_path(char **cmd_name, char **path_env)
 	{
 		tmp = ft_strjoin(path_env[i], "/");
 		path = ft_strjoin(tmp, *cmd_name);
-		ft_free(tmp);
+		ft_free((void **)&tmp);
 		if (access(path, F_OK) != 0)
 		{
-			ft_free(path);
+			ft_free((void **)&path);
 			i++;
 			continue ;
 		}
-		ft_free(*cmd_name);
+		ft_free((void **)cmd_name);
 		*cmd_name = path;
 		if (access(*cmd_name, X_OK) != 0)
 			return (errno);
@@ -163,7 +163,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			content = malloc(sizeof(int) * 2);
 			if (!content)
 			{
-				ft_free(fd);
+				ft_free((void **)&fd);
 				return (EXIT_FAILURE);
 			}
 			if (ft_strncmp(current->str, ">", 2) == 0)
@@ -171,8 +171,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_outfile(current->next->str, fd);
 				if (status != 0)
 				{
-					ft_free(fd);
-					ft_free(content);
+					ft_free((void **)&fd);
+					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -184,8 +184,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_infile(current->next->str, fd);
 				if (status != 0)
 				{
-					ft_free(fd);
-					ft_free(content);
+					ft_free((void **)&fd);
+					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -197,8 +197,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				status = open_additionalfile(current->next->str, fd);
 				if (status != 0)
 				{
-					ft_free(fd);
-					ft_free(content);
+					ft_free((void **)&fd);
+					ft_free((void **)&content);
 					handle_error(status, current->next->str);
 					return (status);
 				}
@@ -219,7 +219,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				if (close(*fd) == -1)
 					libc_error();
 			}
-			ft_free(fd);
+			ft_free((void **)&fd);
 			content[0] = stashed_target_fd;
 			content[1] = target_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
