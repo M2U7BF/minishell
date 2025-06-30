@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 12:44:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 13:00:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,29 +165,21 @@ void	quote_removal(t_token *token)
 	t_token		*current_token;
 	char		**tmp;
 	char		*old;
-	int			double_quote_count;
 	int			i;
 	static char	*quote[] = {"\"", "\'", NULL};
 	char		*current_quote;
 	t_list		*tmp_list;
 	t_list		*tmp2;
-	int			str_len;
 	char		**tmp_strarr;
 	char		*tmp_str;
 
 	tmp2 = NULL;
 	current_token = token;
-	double_quote_count = 0;
 	while (current_token && current_token->str)
 	{
-		str_len = ft_strlen(current_token->str);
-		if (current_token->type == DELIMITER)
-		{
-			current_token = current_token->next;
-			continue ;
-		}
-		if (ft_strchr(current_token->str, '\'') != NULL
-				|| ft_strchr(current_token->str, '\"') != NULL)
+		if (current_token->type != DELIMITER && (ft_strchr(current_token->str,
+					'\'') != NULL || ft_strchr(current_token->str,
+					'\"') != NULL))
 		{
 			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
 			i = -1;
@@ -196,11 +188,8 @@ void	quote_removal(t_token *token)
 			while (tmp[++i])
 			{
 				if (!current_quote && is_quote(tmp[i][0]))
-				{
 					current_quote = ft_strdup(tmp[i]);
-					continue ;
-				}
-				if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
+				else if (current_quote && is_strequal(current_quote, tmp[i]))
 				{
 					ft_free((void **)&current_quote);
 					tmp_strarr = lst_to_str_arr(tmp_list);
@@ -211,9 +200,10 @@ void	quote_removal(t_token *token)
 						ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
 					}
 					ft_lstclear(&tmp_list, del_content);
-					continue ;
 				}
-				ft_lstadd_back(&tmp_list, ft_lstnew((void *)ft_strdup(tmp[i])));
+				else
+					ft_lstadd_back(&tmp_list,
+						ft_lstnew((void *)ft_strdup(tmp[i])));
 			}
 			if (tmp_list != NULL)
 			{
@@ -242,10 +232,5 @@ void	quote_removal(t_token *token)
 
 bool	is_quote(char c)
 {
-	bool	is_double_quote;
-	bool	is_single_quote;
-
-	is_double_quote = c == '"';
-	is_single_quote = c == '\'';
-	return (is_double_quote || is_single_quote);
+	return (c == '"' || c == '\'');
 }
