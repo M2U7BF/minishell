@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 13:24:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 14:01:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,71 +162,54 @@ bool	is_quotation_error(char *input_line)
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
 void	quote_removal(t_token *token)
 {
-	t_token		*current_token;
-	char		**tmp;
-	char		*old;
-	int			i;
-	static char	*quote[] = {"\"", "\'", NULL};
-	char		current_quote;
-	t_list		*tmp_list;
-	t_list		*tmp2;
-	char		**tmp_strarr;
-	char		*tmp_str;
+	t_token	*current;
+	char	*old;
+	int		i;
+	int		j;
+	char	current_quote;
+	char	*result;
 
-	tmp2 = NULL;
-	current_token = token;
-	while (current_token && current_token->str)
+	current = token;
+	while (current && current->str)
 	{
-		if (current_token->type != DELIMITER && (ft_strchr(current_token->str,
-					'\'') != NULL || ft_strchr(current_token->str,
-					'\"') != NULL))
+		if (current->type == WORD && (ft_strchr(current->str, '\'') != NULL
+					|| ft_strchr(current->str, '\"') != NULL))
 		{
-			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
-			i = -1;
+			result = NULL;
 			current_quote = '\0';
-			tmp_list = NULL;
-			while (tmp[++i])
+			i = -1;
+			j = 0;
+			while (current->str[++i])
 			{
-				if (!current_quote && is_quote(tmp[i][0]))
-					current_quote = tmp[i][0];
-				else if (current_quote && current_quote == tmp[i][0])
-				{
+				if (!current_quote && is_quote(current->str[i]))
+					current_quote = current->str[i];
+				else if (current_quote && current_quote == current->str[i])
 					current_quote = '\0';
-					tmp_strarr = lst_to_str_arr(tmp_list);
-					tmp_str = ft_strjoin_all(tmp_strarr);
-					free_str_array(tmp_strarr);
-					if (tmp_str != NULL)
-					{
-						ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
-					}
-					ft_lstclear(&tmp_list, del_content);
-				}
 				else
-					ft_lstadd_back(&tmp_list,
-						ft_lstnew((void *)ft_strdup(tmp[i])));
+					j++;
 			}
-			if (tmp_list != NULL)
+			result = malloc(sizeof(char) * (j + 1));
+			result[j] = '\0';
+			current_quote = '\0';
+			i = -1;
+			j = 0;
+			while (current->str[++i])
 			{
-				tmp_strarr = lst_to_str_arr(tmp_list);
-				tmp_str = ft_strjoin_all(tmp_strarr);
-				free_str_array(tmp_strarr);
-				if (tmp_str != NULL)
-					ft_lstadd_back(&tmp2, ft_lstnew((void *)tmp_str));
-				ft_lstclear(&tmp_list, del_content);
+				if (!current_quote && is_quote(current->str[i]))
+					current_quote = current->str[i];
+				else if (current_quote && current_quote == current->str[i])
+					current_quote = '\0';
+				else
+				{
+					result[j] = current->str[i];
+					j++;
+				}
 			}
-			old = current_token->str;
-			tmp_strarr = lst_to_str_arr(tmp2);
-			tmp_str = ft_strjoin_all(tmp_strarr);
-			if (tmp_str)
-				current_token->str = tmp_str;
-			else
-				current_token->str = ft_strdup("");
-			free_str_array(tmp);
-			ft_lstclear(&tmp2, del_content);
-			free_str_array(tmp_strarr);
+			old = current->str;
+			current->str = result;
 			ft_free((void **)&old);
 		}
-		current_token = current_token->next;
+		current = current->next;
 	}
 }
 

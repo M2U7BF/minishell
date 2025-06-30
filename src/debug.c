@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:29:28 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:54:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 13:55:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	debug_put_token_list(t_token *token_list)
 	i = 0;
 	while (current_token)
 	{
-		printf("[%2d] str:\"%s\", type:%d\n", i, current_token->str,
+		printf("[%2d] str:[%s], type:%d\n", i, current_token->str,
 			current_token->type);
 		current_token = current_token->next;
 		i++;
@@ -62,11 +62,11 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 		if (is_different)
 		{
 			is_not_all_equal = true;
-			printf("[%2d] [❌] result:\"%s\", expected:\"%s\"\n", i,
+			printf("[%2d] [❌] result:[%s], expected:[%s]\n", i,
 				current_t->str, current_t_e->str);
 		}
 		else
-			printf("[%2d] [⭕] result:\"%s\", expected:\"%s\"\n", i,
+			printf("[%2d] [⭕] result:[%s], expected:[%s]\n", i,
 				current_t->str, current_t_e->str);
 		current_t = current_t->next;
 		current_t_e = current_t_e->next;
