@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:53:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:58:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	stashfd(int fd)
 int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
 	int		fd;
-	int		target_fd;
+	int		to_fd;
 	int		stashed_target_fd;
 	t_token	*current;
 	int		*content;
@@ -148,7 +148,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	fd = 0;
 	status = 0;
 	current = current_proc->args;
-	target_fd = STDIN_FILENO;
+	to_fd = STDIN_FILENO;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && (current->next->type == WORD
@@ -159,8 +159,8 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				ft_dprintf(STDERR_FILENO, "minishell: ambiguous redirect\n");
 				return (EXIT_FAILURE);
 			}
-      if (current->str[0] == '>')
-        target_fd = STDOUT_FILENO;
+			if (current->str[0] == '>')
+				to_fd = STDOUT_FILENO;
 			if (is_str_equal(current->str, ">"))
 				status = open_outfile(current->next->str, &fd);
 			else if (is_str_equal(current->str, "<"))
@@ -175,17 +175,14 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				return (status);
 			}
 			fd = stashfd(fd);
-			stashed_target_fd = stashfd(target_fd);
-			if (fd != target_fd)
-			{
-				if (dup2(fd, target_fd) == -1 || close(fd) == -1)
-					libc_error();
-			}
+			stashed_target_fd = stashfd(to_fd);
+			if (fd != to_fd && (dup2(fd, to_fd) == -1 || close(fd) == -1))
+				libc_error();
 			content = malloc(sizeof(int) * 2);
 			if (!content)
 				return (EXIT_FAILURE);
 			content[0] = stashed_target_fd;
-			content[1] = target_fd;
+			content[1] = to_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 			current = current->next;
 		}
