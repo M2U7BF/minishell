@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:14:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 13:04:57 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*expand_heredoc_line(char *line)
+char	*expand_heredoc_line(char *line, t_list *env_list)
 {
 	t_token	*token;
 	char	**tmp_arr;
@@ -21,7 +21,7 @@ char	*expand_heredoc_line(char *line)
 	if (line && line[0] == '\0')
 		return (line);
 	token = tokenize(line);
-	variable_expansion(&token);
+	variable_expansion(&token, env_list);
 	quote_removal(token);
 	null_to_empty(token);
 	tmp_arr = tokens_to_arr(token);
@@ -33,7 +33,7 @@ char	*expand_heredoc_line(char *line)
 
 // ヒアドキュメントの処理。
 // 入力データはパイプによって、カーネルにバッファリングされる。
-int	here_doc(char *delimiter)
+int	here_doc(char *delimiter, t_list *env_list)
 {
 	char	*line;
 	int		pipe_fds[2];
@@ -67,7 +67,7 @@ int	here_doc(char *delimiter)
 				delimiter, ft_strlen(delimiter) + 1) == 0)
 			break ;
 		if (!is_quoted)
-			line = expand_heredoc_line(line);
+			line = expand_heredoc_line(line, env_list);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free(line);
 	}
