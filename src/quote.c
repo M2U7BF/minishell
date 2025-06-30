@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 11:06:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 12:44:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,14 +189,13 @@ void	quote_removal(t_token *token)
 		if (ft_strchr(current_token->str, '\'') != NULL
 				|| ft_strchr(current_token->str, '\"') != NULL)
 		{
-			tmp = ft_split_by_words_keep_sep(current_token->str,
-					quote);
+			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
 			i = -1;
 			current_quote = NULL;
 			tmp_list = NULL;
 			while (tmp[++i])
 			{
-				if (!current_quote && is_quote(tmp[i]))
+				if (!current_quote && is_quote(tmp[i][0]))
 				{
 					current_quote = ft_strdup(tmp[i]);
 					continue ;
@@ -241,12 +240,12 @@ void	quote_removal(t_token *token)
 	}
 }
 
-bool	is_quote(char *s)
+bool	is_quote(char c)
 {
 	bool	is_double_quote;
 	bool	is_single_quote;
 
-	is_double_quote = ft_strncmp("\"", s, 2) == 0;
-	is_single_quote = ft_strncmp("\'", s, 2) == 0;
+	is_double_quote = c == '"';
+	is_single_quote = c == '\'';
 	return (is_double_quote || is_single_quote);
 }

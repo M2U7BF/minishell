@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 11:11:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 12:38:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ t_token						*process_single_quote(t_token *token_list);
 t_token						*process_double_quote(t_token *token_list);
 bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
-bool						is_quote(char *s);
+bool						is_quote(char c);
 
 // parse.c
 void						parse(t_i_mode_vars *i_vars);

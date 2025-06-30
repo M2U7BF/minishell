@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:36:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 11:16:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 12:51:33 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,11 @@ void	remove_blank(t_token *token_list)
 // クォートに囲まれたblankをwordにする。
 void	process_blank(t_token *token_list)
 {
-	t_token		*current_token;
-	char		*current_quote;
-	static char	*quote[] = {"\"", "\'", NULL};
-	char		**tmp;
-	int			i;
+	t_token	*current_token;
+	char	current_quote;
+	int		i;
 
-	current_quote = NULL;
+	current_quote = '\0';
 	current_token = token_list;
 	while (current_token)
 	{
@@ -48,17 +46,16 @@ void	process_blank(t_token *token_list)
 			current_token->type = WORD;
 		else if (current_token->type == WORD)
 		{
-			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
 			i = -1;
-			while (tmp && tmp[++i])
+			while (current_token->str[++i])
 			{
-				if (!current_quote && is_quote(tmp[i]))
-					current_quote = ft_strdup(tmp[i]);
-				else if (current_quote && is_strequal(current_quote, tmp[i]))
-					ft_free((void **)&current_quote);
+				if (!current_quote && is_quote(current_token->str[i]))
+					current_quote = current_token->str[i];
+				else if (current_quote
+					&& current_quote == current_token->str[i])
+					current_quote = '\0';
 			}
-			free_str_array(tmp);
 		}
-    current_token = current_token->next;
+		current_token = current_token->next;
 	}
 }
