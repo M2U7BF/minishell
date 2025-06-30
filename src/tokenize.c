@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:45:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 14:35:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	process_token_list(t_token **token_list)
 {
 	t_token	*current;
 
-	*token_list = process_single_quote(*token_list);
-	*token_list = process_double_quote(*token_list);
-	*token_list = join_tokens(*token_list);
-	process_blank(*token_list);
+	process_str_quoted(*token_list);
 	*token_list = join_tokens(*token_list);
 	remove_blank(*token_list);
 	current = *token_list;
