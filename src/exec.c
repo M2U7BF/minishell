@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:30:54 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:11:42 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int	stashfd(int fd)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
+int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds, t_list *env_list)
 {
 	int		*fd;
 	int		target_fd;
@@ -207,7 +207,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
 			{
-				*fd = here_doc(current->next->str);
+				*fd = here_doc(current->next->str, env_list);
 				*fd = stashfd(*fd);
 				target_fd = STDIN_FILENO;
 			}
@@ -366,7 +366,7 @@ void	handle_error(int status, char *cmd_path)
 		perror("minishell");
 }
 
-int	exec(t_i_mode_vars *i_vars)
+int	exec(t_i_mode_vars *i_vars, t_list *env_list)
 {
 	int			i;
 	t_proc_unit	*proc_list;
@@ -391,7 +391,7 @@ int	exec(t_i_mode_vars *i_vars)
 		redirect_fds = NULL;
 		// redirect_fds = open_and_redirect_files(proc_list, redirect_fds);------mergeしたら型が変わっていて迷子
 		char **trimmed_argv = trim_redirection(&argv); // argvはここで消費される
-		status = exec_builtin(trimmed_argv); // 親プロセスで実行
+		status = exec_builtin(trimmed_argv, env_list); // 親プロセスで実行
 		free_str_array(trimmed_argv);
 		reset_redirection(redirect_fds);
 		free_proc_list(proc_list);
@@ -422,7 +422,7 @@ int	exec(t_i_mode_vars *i_vars)
 			current_proc->next->read_fd = pipe_fds[0];
 		}
 		redirect_fds = pipe_redirect(current_proc, redirect_fds);
-		status = open_and_redirect_files(current_proc, &redirect_fds);
+		status = open_and_redirect_files(current_proc, &redirect_fds, env_list);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
@@ -451,7 +451,7 @@ int	exec(t_i_mode_vars *i_vars)
 			//atashiro-----------------------
 			if (is_builtin(argv[0]))
 			{
-				status = exec_builtin(argv);
+				status = exec_builtin(argv, env_list);//追加env
 				exit(status);
 			}
 			//-------------
@@ -461,7 +461,9 @@ int	exec(t_i_mode_vars *i_vars)
 				handle_error(g_runtime_data.exit_status, argv[0]);
 				exit(g_runtime_data.exit_status);
 			}
-			execve(argv[0], argv, __environ);
+			char **envp_array = convert_env_list_to_array(env_list);
+			execve(argv[0], argv, envp_array);
+			free_str_array(envp_array); // execveが失敗した場合
 			perror("execve");
 			exit(EXIT_CMD_NOT_FOUND);
 		}
