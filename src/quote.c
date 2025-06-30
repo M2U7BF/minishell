@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 14:01:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 14:03:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,10 +162,9 @@ bool	is_quotation_error(char *input_line)
 // 先頭から見て、ダブルクォートの数が偶数の場合、”ダブルクォートに囲まれていない”と判断する。
 void	quote_removal(t_token *token)
 {
-	t_token	*current;
-	char	*old;
 	int		i;
 	int		j;
+	t_token	*current;
 	char	current_quote;
 	char	*result;
 
@@ -205,9 +204,8 @@ void	quote_removal(t_token *token)
 					j++;
 				}
 			}
-			old = current->str;
+			ft_free((void **)&current->str);
 			current->str = result;
-			ft_free((void **)&old);
 		}
 		current = current->next;
 	}
