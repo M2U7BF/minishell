@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:29:28 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 13:55:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 14:58:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,16 @@ int	debug_put_token_list_compare(t_token *t, t_token *t_e)
 			break ;
 		}
 		is_different = ft_strncmp(current_t->str, current_t_e->str,
-				ft_strlen(current_t_e->str) + 1);
+				ft_strlen(current_t_e->str) + 1) != 0 || current_t->type != current_t_e->type;
 		if (is_different)
 		{
 			is_not_all_equal = true;
-			printf("[%2d] [❌] result:[%s], expected:[%s]\n", i,
-				current_t->str, current_t_e->str);
+			printf("[%2d] [❌] result: str=[%s], type=[%d], expected: str=[%s], type=[%d]\n", i,
+				current_t->str, current_t->type, current_t_e->str, current_t_e->type);
 		}
 		else
-			printf("[%2d] [⭕] result:[%s], expected:[%s]\n", i,
-				current_t->str, current_t_e->str);
+			printf("[%2d] [⭕] result: str=[%s], type=[%d], expected: str=[%s], type=[%d]\n", i,
+				current_t->str, current_t->type, current_t_e->str, current_t_e->type);
 		current_t = current_t->next;
 		current_t_e = current_t_e->next;
 		i++;

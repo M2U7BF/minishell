@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:48:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:54:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 15:00:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,37 +29,31 @@ static int	token_list_len(t_token *token_list)
 	return (i);
 }
 
-// BLANK, REDIRECTION, を挟まずに隣り合う文字列を結合する。
+// 隣接するWORDタイプのトークンを結合する
 t_token	*join_tokens(t_token *token_list)
 {
-	t_list	*tmp;
 	t_token	*current;
 	t_token	*prev;
 	t_token	*old;
-	t_token	*old_prev;
-	char	**tmp_arr;
-	char	*tmp_str;
+	char	*s1;
 
 	current = token_list;
 	prev = NULL;
-	tmp = NULL;
 	while (current)
 	{
-		if (current != NULL && prev != NULL && prev->type == WORD
-			&& current->type == WORD)
+		if (current && prev && prev->type == WORD && current->type == WORD)
 		{
-			old_prev = prev;
+			s1 = NULL;
 			old = current;
-			current = get_prev_token(&token_list, old_prev);
-			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old_prev->str)));
-			ft_lstadd_back(&tmp, ft_lstnew((void *)ft_strdup(old->str)));
+			current = get_prev_token(&token_list, prev);
+			s1 = malloc(sizeof(char) * (ft_strlen(prev->str)
+						+ ft_strlen(old->str) + 1));
+			ft_memcpy(s1, prev->str, ft_strlen(prev->str));
+			ft_memcpy(s1 + ft_strlen(prev->str), old->str, ft_strlen(old->str));
+			s1[ft_strlen(prev->str) + ft_strlen(old->str)] = '\0';
 			del_token(&token_list, old);
-			del_token(&token_list, old_prev);
-			tmp_arr = lst_to_str_arr(tmp);
-			tmp_str = ft_strjoin_all(tmp_arr);
-			free_str_array(tmp_arr);
-			ft_lstclear(&tmp, del_content);
-			insert_token(&token_list, current, create_token(tmp_str, WORD));
+			del_token(&token_list, prev);
+			insert_token(&token_list, current, create_token(s1, WORD));
 		}
 		prev = current;
 		if (!current)
@@ -72,11 +66,11 @@ t_token	*join_tokens(t_token *token_list)
 
 char	**tokens_to_arr(t_token *token_list)
 {
-	int i;
-	int null_count;
-	int len;
-	char **arr;
-	t_token *current_token;
+	int		i;
+	int		null_count;
+	int		len;
+	char	**arr;
+	t_token	*current_token;
 
 	null_count = 0;
 	if (!token_list)
