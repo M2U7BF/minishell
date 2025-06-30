@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:38:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:40:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,10 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	int		*content;
 	int		status;
 
-  fd = 0;
+	fd = 0;
 	status = 0;
 	current = current_proc->args;
-  target_fd = STDIN_FILENO;
+	target_fd = STDIN_FILENO;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && (current->next->type == WORD
@@ -190,16 +190,14 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			}
 			else if (ft_strncmp(current->str, "<<", 3) == 0)
 				fd = here_doc(current->next->str);
-      fd = stashfd(fd);
+			fd = stashfd(fd);
 			stashed_target_fd = stashfd(target_fd);
 			if (fd != target_fd)
 			{
-				if (dup2(fd, target_fd) == -1)
-					libc_error();
-				if (close(fd) == -1)
+				if (dup2(fd, target_fd) == -1 || close(fd) == -1)
 					libc_error();
 			}
-      content = malloc(sizeof(int) * 2);
+			content = malloc(sizeof(int) * 2);
 			if (!content)
 				return (EXIT_FAILURE);
 			content[0] = stashed_target_fd;
