@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:58:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 17:59:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
 	int		fd;
 	int		to_fd;
-	int		stashed_target_fd;
+	int		stashed_to_fd;
 	t_token	*current;
 	int		*content;
 	int		status;
@@ -175,13 +175,13 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				return (status);
 			}
 			fd = stashfd(fd);
-			stashed_target_fd = stashfd(to_fd);
+			stashed_to_fd = stashfd(to_fd);
 			if (fd != to_fd && (dup2(fd, to_fd) == -1 || close(fd) == -1))
 				libc_error();
 			content = malloc(sizeof(int) * 2);
 			if (!content)
 				return (EXIT_FAILURE);
-			content[0] = stashed_target_fd;
+			content[0] = stashed_to_fd;
 			content[1] = to_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 			current = current->next;
