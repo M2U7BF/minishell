@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 14:52:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 13:01:37 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	null_to_empty(t_token *token)
 // $から始まる環境変数があれば、展開を行う。
 // シングルクォートに囲まれている場合、展開は行わない。
 // 先頭から見て、シングルクォートの数が偶数の場合、”シングルクォートに囲まれていない”と判断する。
-void	variable_expansion(t_token **token_list)
+void	variable_expansion(t_token **token_list, t_list *env_list)
 {
 	int		j;
 	char	*env_var;
@@ -186,7 +186,7 @@ void	variable_expansion(t_token **token_list)
 				}
 				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
 				{
-					env_var = getenv(&splited_words[j][1]);
+					env_var = get_env_value(env_list, &splited_words[j][1]);
 					if (env_var)
 					{
 						ft_free(splited_words[j]);
@@ -207,7 +207,7 @@ void	variable_expansion(t_token **token_list)
 	}
 }
 
-void	parse(t_i_mode_vars *i_vars)
+void	parse(t_i_mode_vars *i_vars, t_list *env_list)
 {
-	variable_expansion(&i_vars->token_list);
+	variable_expansion(&i_vars->token_list, env_list);
 }
