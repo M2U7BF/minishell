@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_multi_split_by_word_leave_separator.c           :+:      :+:    :+:   */
+/*   ft_split_by_words_keep_sep.c           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,7 +25,7 @@ static void	free_all(char **result, int result_len)
 	ft_free((void **)&result);
 }
 
-char	**ft_multi_split_by_word_leave_separator(char *str, char **words)
+char	**ft_split_by_words_keep_sep(char *str, char **words)
 {
 	int		i;
 	int		j;

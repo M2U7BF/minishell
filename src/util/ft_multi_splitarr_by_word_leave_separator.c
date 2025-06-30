@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:55:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 11:06:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	**inner_process(char **arr, char **separators)
 	{
 		if (is_include_separator(arr[i], separators))
 		{
-			tmp = ft_multi_split_by_word_leave_separator(arr[i], separators);
+			tmp = ft_split_by_words_keep_sep(arr[i], separators);
 			j = 0;
 			while (j < arrlen(tmp))
 			{

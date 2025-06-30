@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:36:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:46:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 11:16:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,17 @@ void	process_blank(t_token *token_list)
 			current_token->type = WORD;
 		else if (current_token->type == WORD)
 		{
-			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
-					quote);
+			tmp = ft_split_by_words_keep_sep(current_token->str, quote);
 			i = -1;
 			while (tmp && tmp[++i])
 			{
 				if (!current_quote && is_quote(tmp[i]))
 					current_quote = ft_strdup(tmp[i]);
-				else if (current_quote && ft_strncmp(current_quote, tmp[i], 2) == 0)
+				else if (current_quote && is_strequal(current_quote, tmp[i]))
 					ft_free((void **)&current_quote);
 			}
 			free_str_array(tmp);
-			current_token = current_token->next;
 		}
-		else
-			current_token = current_token->next;
+    current_token = current_token->next;
 	}
 }

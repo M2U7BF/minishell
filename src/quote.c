@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:59:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/06/30 11:06:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	quote_removal(t_token *token)
 		if (ft_strchr(current_token->str, '\'') != NULL
 				|| ft_strchr(current_token->str, '\"') != NULL)
 		{
-			tmp = ft_multi_split_by_word_leave_separator(current_token->str,
+			tmp = ft_split_by_words_keep_sep(current_token->str,
 					quote);
 			i = -1;
 			current_quote = NULL;
