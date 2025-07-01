@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:51:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:58:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 	rl_outstream = stderr;
 	while (1)
 	{
-		handle_signal();
-		g_runtime_data.signal = 0;
+		set_signal_handlers();
 		i_vars->input = readline(i_vars->prompt);
 		if (!i_vars->input)
 			exit(g_runtime_data.exit_status);

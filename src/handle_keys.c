@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:38:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:58:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 		put_error_exit("sigaction", EXIT_FAILURE);
 }
 
-void	handle_signal(void)
+void	set_signal_handlers(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 		libc_error();
+	g_runtime_data.signal = 0;
 }

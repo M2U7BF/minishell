@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:38:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:59:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 		put_error_exit("sigaction", EXIT_FAILURE);
 }
 
-void	handle_signal_heredoc(void)
+void	set_heredoc_signal_handlers(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:59:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ extern t_runtime_data		g_runtime_data;
 // src ============================================================
 
 // handle_keys.c
-void						handle_signal(void);
+void						set_signal_handlers(void);
 
 // i_mode_vars.c
 void						init_i_vars(t_i_mode_vars *i_vars);
@@ -223,7 +223,7 @@ bool						is_syntax_error(t_token *token_list);
 int							here_doc(char *delimiter);
 
 // handle_signal_heredoc.c
-void						handle_signal_heredoc(void);
+void						set_heredoc_signal_handlers(void);
 
 // file.c
 bool						is_readable_file(char *pathname);
