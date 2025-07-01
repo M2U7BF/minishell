@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 09:36:39 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 10:10:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 12:13:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	ft_strtrim_front(char **s1, char *set)
 		result_len = 0;
 	str = malloc(sizeof(char) * (result_len + 1));
 	if (str)
-  {
-    ft_memcpy(str, start, result_len);
-    str[result_len] = '\0';
-  }
-  ft_free((void **)s1);
-  *s1 = str;
+	{
+		ft_memcpy(str, start, result_len);
+		str[result_len] = '\0';
+	}
+	ft_free((void **)s1);
+	*s1 = str;
 }

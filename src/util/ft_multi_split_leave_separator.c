@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:03:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:55:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 12:22:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	get_elem_count(char const *s, char *separator)
 	int		elem_count;
 	int		s_count;
 
+	if (!s || !separator)
+		return (0);
 	i = 0;
 	elem_count = 0;
 	s_count = 0;
@@ -55,6 +57,8 @@ static char	**init_str_arr(int elem_count)
 {
 	char	**str;
 
+	if (elem_count == 0)
+		return (NULL);
 	str = (char **)malloc(sizeof(char *) * (elem_count + 1));
 	if (!str)
 		return (NULL);
@@ -75,8 +79,6 @@ char	**ft_multi_split_leave_separator(char *s, char *separator)
 	i = -1;
 	j = 0;
 	s_count = 0;
-	if (!s || !separator)
-		return (NULL);
 	arr = init_str_arr(get_elem_count(s, separator));
 	if (!arr)
 		return (NULL);
