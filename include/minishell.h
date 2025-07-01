@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 10:07:00 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:37:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int							parse_exec_arg(int argc, char *argv[],
 								t_exec_vars *e_vars);
 
 // interactive_mode.c
-int							exec_interactive(t_exec_vars *e_vars);
+int							exec_interactive(t_i_mode_vars *i_vars);
 
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);
