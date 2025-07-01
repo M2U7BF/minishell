@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:59:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 12:45:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			else if (is_str_equal(current->str, ">>"))
 				status = open_additionalfile(current->next->str, &fd);
 			else if (is_str_equal(current->str, "<<"))
-				fd = here_doc(current->next->str);
+				fd = here_doc(ft_strdup(current->next->str));
 			if (status != 0)
 			{
 				handle_error(status, current->next->str);

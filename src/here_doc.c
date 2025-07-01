@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:59:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 12:45:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ int	here_doc(char *delimiter)
 	char	*tmp_str;
 
 	set_heredoc_signal_handlers();
-	delimiter = ft_strdup(delimiter);
-	is_quoted = ft_strchr(delimiter, '\"') != NULL || ft_strchr(delimiter,
+	is_quoted = ft_strchr(delimiter, '"') != NULL || ft_strchr(delimiter,
 			'\'') != NULL;
 	if (is_quoted)
 	{
@@ -72,7 +71,6 @@ int	here_doc(char *delimiter)
 	}
 	if (pipe(pipe_fds) == -1)
 		libc_error();
-	g_runtime_data.signal = 0;
 	while (1)
 	{
 		line = readline("> ");
