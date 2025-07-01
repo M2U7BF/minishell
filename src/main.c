@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 11:00:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 11:04:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int	main(int argc, char *argv[])
 	g_runtime_data.signal = 0;
 	g_runtime_data.exit_status = EXIT_SUCCESS;
 	if (e_vars.mode == INTERACTIVE)
+	{
+		init_i_vars(&e_vars.i_vars);
 		exec_interactive(&e_vars.i_vars);
+		clear_history();
+	}
 	return (EXIT_SUCCESS);
 }

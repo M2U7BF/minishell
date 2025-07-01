@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 10:38:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 11:05:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	wait_child_processes(int *child_pids, int pro_count)
 
 int	exec_interactive(t_i_mode_vars *i_vars)
 {
-	init_i_vars(i_vars);
 	rl_outstream = stderr;
 	while (1)
 	{
@@ -69,6 +68,5 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
 	}
-	clear_history();
 	return (0);
 }
