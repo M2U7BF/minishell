@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 11:04:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	main(int argc, char *argv[])
 	init_e_vars(&e_vars);
 	if (parse_exec_arg(argc, argv, &e_vars) == -1)
 		return (EXIT_FAILURE);
-	g_runtime_data.signal = 0;
-	g_runtime_data.exit_status = EXIT_SUCCESS;
+	g_vars.signal = 0;
+	g_vars.exit_status = EXIT_SUCCESS;
 	if (e_vars.mode == INTERACTIVE)
 	{
 		init_i_vars(&e_vars.i_vars);

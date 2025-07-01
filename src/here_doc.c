@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:45:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:29:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,49 +44,57 @@ char	*expand_heredoc_line(char *line)
 	return (tmp_str);
 }
 
-// ヒアドキュメントの処理。
-// 入力データはパイプによって、カーネルにバッファリングされる。
-int	here_doc(char *delimiter)
+char	*str_quote_removal(char *s)
 {
-	char	*line;
-	int		pipe_fds[2];
-	bool	is_quoted;
-	t_token	*tmp_token;
 	char	**tmp_arr;
 	char	*tmp_str;
+	t_token	*tmp_token;
+
+	tmp_token = tokenize(s);
+	quote_removal(tmp_token);
+	tmp_arr = tokens_to_arr(tmp_token);
+	free_token_list(tmp_token);
+	tmp_str = ft_strjoin_all(tmp_arr);
+	free_str_array(tmp_arr);
+	ft_free((void **)&s);
+	return (tmp_str);
+}
+
+static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
+{
+	ft_free((void **)line);
+	ft_free((void **)delim);
+	if (close(pipe_fds[1]) == -1)
+		libc_error();
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+		libc_error();
+}
+
+// ヒアドキュメントの処理。
+// 入力データはパイプによって、カーネルにバッファリングされる。
+int	here_doc(char *delim)
+{
+	char		*line;
+	int			pipe_fds[2];
+	bool		is_quoted;
 
 	set_heredoc_signal_handlers();
-	is_quoted = ft_strchr(delimiter, '"') != NULL || ft_strchr(delimiter,
+  is_quoted = ft_strchr(delim, '"') != NULL || ft_strchr(delim,
 			'\'') != NULL;
 	if (is_quoted)
-	{
-		tmp_token = tokenize(delimiter);
-		quote_removal(tmp_token);
-		tmp_arr = tokens_to_arr(tmp_token);
-		free_token_list(tmp_token);
-		tmp_str = ft_strjoin_all(tmp_arr);
-		free_str_array(tmp_arr);
-		ft_free((void **)&delimiter);
-		delimiter = tmp_str;
-	}
+		delim = str_quote_removal(delim);
 	if (pipe(pipe_fds) == -1)
 		libc_error();
 	while (1)
 	{
 		line = readline("> ");
-		if (g_runtime_data.signal == SIGINT || !line || ft_strncmp(line,
-				delimiter, ft_strlen(delimiter) + 1) == 0)
+		if (g_vars.signal == SIGINT || !line || is_str_equal(line, delim))
 			break ;
 		if (!is_quoted)
 			line = expand_heredoc_line(line);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free((void **)&line);
 	}
-	ft_free((void **)&line);
-	ft_free((void **)&delimiter);
-	if (close(pipe_fds[1]) == -1)
-		libc_error();
-	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-		libc_error();
+	finish_here_doc(&line, &delim, pipe_fds);
 	return (pipe_fds[0]);
 }

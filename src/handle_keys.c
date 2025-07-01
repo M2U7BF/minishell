@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 16:55:12 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:58:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	signal_handler(int signum)
 {
-	g_runtime_data.signal = signum;
-	g_runtime_data.exit_status = 128 + signum;
-	if (g_runtime_data.signal == SIGINT)
+	g_vars.signal = signum;
+	g_vars.exit_status = 128 + signum;
+	if (g_vars.signal == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_on_new_line();
@@ -42,5 +42,5 @@ void	set_signal_handlers(void)
 	set_signal_handler(SIGINT, signal_handler);
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
 		libc_error();
-	g_runtime_data.signal = 0;
+	g_vars.signal = 0;
 }

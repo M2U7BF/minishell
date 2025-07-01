@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 15:53:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ typedef struct s_runtime_data
 	volatile sig_atomic_t	signal;
 }							t_runtime_data;
 
-extern t_runtime_data		g_runtime_data;
+extern t_runtime_data		g_vars;
 
 // src ============================================================
 

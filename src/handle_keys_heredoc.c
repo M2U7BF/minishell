@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:53:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	signal_handler(int signum)
 {
-	g_runtime_data.signal = signum;
-	g_runtime_data.exit_status = 128 + signum;
-	if (g_runtime_data.signal == SIGINT)
+	g_vars.signal = signum;
+	g_vars.exit_status = 128 + signum;
+	if (g_vars.signal == SIGINT)
 	{
 		if (write(STDERR_FILENO, "\n", 1) == -1)
 			libc_error();
@@ -40,5 +40,5 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 void	set_heredoc_signal_handlers(void)
 {
 	set_signal_handler(SIGINT, signal_handler);
-	g_runtime_data.signal = 0;
+	g_vars.signal = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:45:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,13 +315,13 @@ void	handle_error(int status, char *cmd_path)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
 			strerror(status));
-		g_runtime_data.exit_status = EXIT_CMD_NOT_FOUND;
+		g_vars.exit_status = EXIT_CMD_NOT_FOUND;
 	}
 	else if (status == EACCES || status == EISDIR)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
 			strerror(status));
-		g_runtime_data.exit_status = EXIT_PERMISSION_DENIED;
+		g_vars.exit_status = EXIT_PERMISSION_DENIED;
 	}
 	else
 		perror("minishell");
@@ -386,11 +386,11 @@ int	exec(t_i_mode_vars *i_vars)
 			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
-			g_runtime_data.exit_status = get_command_path(&argv[0]);
-			if (g_runtime_data.exit_status != 0)
+			g_vars.exit_status = get_command_path(&argv[0]);
+			if (g_vars.exit_status != 0)
 			{
-				handle_error(g_runtime_data.exit_status, argv[0]);
-				exit(g_runtime_data.exit_status);
+				handle_error(g_vars.exit_status, argv[0]);
+				exit(g_vars.exit_status);
 			}
 			execve(argv[0], argv, __environ);
 			perror("execve");
