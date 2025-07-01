@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:35:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	get_command_path(char **cmd_name)
 	return (status);
 }
 
-// TODO ここでprocess数をカウントするようにしてもいいかも？
 t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 {
 	t_token		*current_token;
@@ -344,11 +343,8 @@ int	exec(t_i_mode_vars *i_vars)
 		free_proc_list(proc_list);
 		libc_error();
 	}
-	// printf("process_divisionの後\n");
-	// debug_put_proc_list(proc_list);
 	i = -1;
 	current_proc = proc_list;
-	// dprintf(STDERR_FILENO, "pid:%d\n", getpid());
 	while (proc_list && ++i < i_vars->pro_count)
 	{
 		redirect_fds = NULL;
@@ -379,11 +375,7 @@ int	exec(t_i_mode_vars *i_vars)
 					libc_error();
 			}
 			argv = tokens_to_arr(current_proc->args);
-			// printf("argv1:\n");
-			// put_strarr(argv);
 			argv = trim_redirection(&argv);
-			// printf("argv2:\n");
-			// put_strarr(argv);
 			if (!argv)
 				exit(EXIT_SUCCESS);
 			g_vars.exit_status = get_command_path(&argv[0]);
