@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 11:25:29 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 11:41:29 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,9 @@ static char	*remove_quotes(char *s)
 	current_quote = '\0';
 	i = -1;
 	j = 0;
-	while (s[++i])
-	{
-		if (!current_quote && is_quote(s[i]))
-			current_quote = s[i];
-		else if (current_quote && current_quote == s[i])
-			current_quote = '\0';
-		else
-			j++;
-	}
-	result = malloc(sizeof(char) * (j + 1));
-	result[j] = '\0';
-	i = -1;
-	j = 0;
+	result = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!result)
+		return (NULL);
 	while (s[++i])
 	{
 		if (!current_quote && is_quote(s[i]))
@@ -59,6 +49,7 @@ static char	*remove_quotes(char *s)
 		else
 			result[j++] = s[i];
 	}
+	result[j] = '\0';
 	return (result);
 }
 
