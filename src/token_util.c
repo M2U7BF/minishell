@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:48:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 16:50:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 12:35:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,38 +62,21 @@ t_token	*join_tokens(t_token *token_list)
 char	**tokens_to_arr(t_token *token_list)
 {
 	int		i;
-	int		null_count;
-	int		len;
 	char	**arr;
 	t_token	*current_token;
 
-	null_count = 0;
+	i = 0;
 	if (!token_list)
-		return (0);
-	len = token_list_len(token_list);
-	current_token = token_list;
-	while (current_token)
-	{
-		if (!current_token->str)
-			null_count++;
-		current_token = current_token->next;
-	}
-	arr = malloc(sizeof(char *) * (len + 1 - null_count));
+		return (NULL);
+	arr = malloc(sizeof(char *) * (token_list_len(token_list) + 1));
 	if (!arr)
 		return (NULL);
-	i = 0;
 	current_token = token_list;
 	while (current_token)
 	{
-		if (!current_token->str)
-		{
-			current_token = current_token->next;
-			continue ;
-		}
-		else
-			arr[i] = ft_strdup(current_token->str);
+		if (current_token->str)
+			arr[i++] = ft_strdup(current_token->str);
 		current_token = current_token->next;
-		i++;
 	}
 	arr[i] = NULL;
 	return (arr);
