@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 10:37:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:53:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,16 +239,23 @@ void						process_str_quoted(t_token *token_list);
 
 // util.c
 void						ft_free(void **p);
+
+// arr_util.c
 char						*ft_strjoin_all(char **words);
 void						free_str_array(char **array);
 int							arrlen(char **arr);
+
+// str_util.c
 int							count_chr(char *s, char c);
+bool						is_include(char *s, char **words);
+bool						is_str_equal(char *s1, char *s2);
+
+// lst_util.c
 char						**lst_to_str_arr(t_list *lst);
 void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
-bool						is_include(char *s, char **words);
 t_list						*get_prev_lst(t_list **list, t_list *elem);
-bool						is_str_equal(char *s1, char *s2);
+
 
 // ft_strtrim_front.c
 void						ft_strtrim_front(char **s1, char *set);

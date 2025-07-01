@@ -6,11 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:48:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:35:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:55:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static int	token_list_len(t_token *token_list)
 {
