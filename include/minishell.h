@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:59:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:07:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ t_list						*get_prev_lst(t_list **list, t_list *elem);
 bool						is_str_equal(char *s1, char *s2);
 
 // ft_strtrim_front.c
-char						*ft_strtrim_front(char const *s1, char const *set);
+void						ft_strtrim_front(char **s1, char *set);
 
 // ft_multi_split_leave_separator.c
 char						**ft_multi_split_leave_separator(char *s,

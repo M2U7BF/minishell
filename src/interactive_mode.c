@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:58:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:09:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 			ft_free((void **)&i_vars->input);
 			continue ;
 		}
-		i_vars->input = ft_strtrim_front(i_vars->input, DEFAULT_BLANK);
+		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
 		if (is_quotation_error(i_vars->input) != 0)
 			exit(EXIT_FAILURE);
 		i_vars->token_list = tokenize(i_vars->input);
