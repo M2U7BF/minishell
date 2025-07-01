@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 10:09:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:37:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,21 @@ int	exec_interactive(t_exec_vars *e_vars)
 	rl_outstream = stderr;
 	while (1)
 	{
+		if (i_vars->input)
+			ft_free((void **)&i_vars->input);
 		set_signal_handlers();
 		i_vars->input = readline(i_vars->prompt);
 		if (!i_vars->input)
 			exit(g_runtime_data.exit_status);
-		if (i_vars->input[0] != '\0')
-			add_history(i_vars->input);
-		else
-		{
-			ft_free((void **)&i_vars->input);
+		else if (i_vars->input[0] == '\0')
 			continue ;
-		}
-		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
+		add_history(i_vars->input);
 		if (is_quotation_error(i_vars->input) != 0)
 			exit(EXIT_FAILURE);
+		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
 		i_vars->token_list = tokenize(i_vars->input);
 		if (!i_vars->token_list)
-		{
-			ft_free((void **)&i_vars->input);
 			continue ;
-		}
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
 		exec(i_vars);
