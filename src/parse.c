@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:17:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:40:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ void	variable_expansion(t_token **token_list)
 				}
 				if (ft_strncmp(splited_words[j], "$?", 2) == 0 && is_expand)
 				{
-					tmp = ft_split_by_word_leave_separator(splited_words[j],
-							"$?");
+					tmp = ft_split_by_word_keep_sep(splited_words[j], "$?");
 					ft_free((void **)&tmp[0]);
 					tmp[0] = ft_itoa(g_vars.exit_status);
 					ft_free((void **)&splited_words[j]);

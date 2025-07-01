@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:13:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:40:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	split(char *s, char *separator, t_list **new_lst)
 
 	if (ft_strnstr(s, separator, ft_strlen(s)) != NULL)
 	{
-		tmp = ft_split_by_word_leave_separator(s, separator);
+		tmp = ft_split_by_word_keep_sep(s, separator);
 		j = 0;
 		while (j < arrlen(tmp))
 			ft_lstadd_back(new_lst, ft_lstnew((void *)ft_strdup(tmp[j++])));
