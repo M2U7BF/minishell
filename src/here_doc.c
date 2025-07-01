@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:29:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:33:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,12 @@ static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
 // 入力データはパイプによって、カーネルにバッファリングされる。
 int	here_doc(char *delim)
 {
-	char		*line;
-	int			pipe_fds[2];
-	bool		is_quoted;
+	char	*line;
+	int		pipe_fds[2];
+	bool	is_quoted;
 
 	set_heredoc_signal_handlers();
-  is_quoted = ft_strchr(delim, '"') != NULL || ft_strchr(delim,
-			'\'') != NULL;
+	is_quoted = ft_strchr(delim, '"') != NULL || ft_strchr(delim, '\'') != NULL;
 	if (is_quoted)
 		delim = str_quote_removal(delim);
 	if (pipe(pipe_fds) == -1)
