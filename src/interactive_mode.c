@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:38:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:43:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,24 +55,23 @@ int	exec_interactive(t_exec_vars *e_vars)
 	{
 		handle_signal();
 		g_runtime_data.signal = 0;
-		i_vars->input_line = readline(i_vars->prompt);
-		if (!i_vars->input_line)
+		i_vars->input = readline(i_vars->prompt);
+		if (!i_vars->input)
 			exit(g_runtime_data.exit_status);
-		if (i_vars->input_line[0] != '\0')
-			add_history(i_vars->input_line);
+		if (i_vars->input[0] != '\0')
+			add_history(i_vars->input);
 		else
 		{
-			ft_free((void **)&i_vars->input_line);
+			ft_free((void **)&i_vars->input);
 			continue ;
 		}
-		i_vars->input_line = ft_strtrim_front(i_vars->input_line,
-				DEFAULT_BLANK);
-		if (is_quotation_error(i_vars->input_line) != 0)
+		i_vars->input = ft_strtrim_front(i_vars->input, DEFAULT_BLANK);
+		if (is_quotation_error(i_vars->input) != 0)
 			exit(EXIT_FAILURE);
-		i_vars->token_list = tokenize(i_vars->input_line);
+		i_vars->token_list = tokenize(i_vars->input);
 		if (!i_vars->token_list)
 		{
-			ft_free((void **)&i_vars->input_line);
+			ft_free((void **)&i_vars->input);
 			continue ;
 		}
 		if (is_syntax_error(i_vars->token_list))

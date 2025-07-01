@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 17:52:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_ni_mode_vars
 // 対話的モードで変数を保持する構造体
 typedef struct s_i_mode_vars
 {
-	char					*input_line;
+	char					*input;
 	char					*prompt;
 	t_token					*token_list;
 	int						pro_count;
