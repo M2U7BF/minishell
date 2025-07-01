@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 13:29:34 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:29:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 11:07:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	is_control_operator(char *s)
 {
 	int			i;
 	static char	*opes[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "|&",
-			"\n"};
+		"\n"};
 	static int	len = sizeof(opes) / sizeof(opes[0]);
 
 	if (!s)
@@ -56,8 +56,8 @@ bool	is_reserved_word(char *s)
 {
 	int			i;
 	static char	*words[] = {"!", "case", "do", "done", "elif", "else", "esac",
-			"fi", "for", "function", "if", "in", "select", "then", "until",
-			"while", "{", "}", "time", "[[", "]]"};
+		"fi", "for", "function", "if", "in", "select", "then", "until",
+		"while", "{", "}", "time", "[[", "]]"};
 	static int	len = sizeof(words) / sizeof(words[0]);
 
 	if (!s)
