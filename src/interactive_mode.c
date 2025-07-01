@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:48:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ int	exec_interactive(t_exec_vars *e_vars)
 		{
 			ft_free((void **)&i_vars->input);
 			continue ;
-		}
-		if (is_syntax_error(i_vars->token_list))
-		{
-			ft_dprintf(STDERR_FILENO, "syntax_error\n");
-			destroy_i_vars(i_vars);
-			exit(EXIT_SYNTAX_ERROR);
 		}
 		parse(i_vars);
 		quote_removal(i_vars->token_list);
