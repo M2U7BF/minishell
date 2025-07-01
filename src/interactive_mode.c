@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:43:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:38:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,7 @@ int	exec_interactive(t_exec_vars *e_vars)
 		g_runtime_data.signal = 0;
 		i_vars->input_line = readline(i_vars->prompt);
 		if (!i_vars->input_line)
-		{
-			if (g_runtime_data.signal == SIGINT)
-				g_runtime_data.exit_status = 130;
 			exit(g_runtime_data.exit_status);
-		}
 		if (i_vars->input_line[0] != '\0')
 			add_history(i_vars->input_line);
 		else

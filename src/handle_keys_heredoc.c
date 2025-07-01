@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:41:20 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 11:23:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:38:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	signal_handler(int signum)
 {
 	g_runtime_data.signal = signum;
+	g_runtime_data.exit_status = 128 + signum;
 	if (g_runtime_data.signal == SIGINT)
 	{
 		if (write(STDERR_FILENO, "\n", 1) == -1)
