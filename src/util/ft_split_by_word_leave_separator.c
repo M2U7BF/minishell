@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:48:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 16:34:21 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:05:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ char	**ft_split_by_word_leave_separator(char *str, char *word)
 	len = ft_strlen(str);
 	if (!str || !word || !*word)
 		return (NULL);
-  res = malloc(sizeof(char *) * (len + 1));
-  if (!res)
-    return (NULL);
+	res = malloc(sizeof(char *) * (len + 1));
+	if (!res)
+		return (NULL);
 	while (i < len)
 	{
 		word_position = ft_strnstr(str + i, word, len - i);
