@@ -25,17 +25,52 @@ static void	free_all(char **result, int result_len)
 	ft_free((void **)&result);
 }
 
+static char	*split(char *str, char **words, int *i)
+{
+	int		k;
+	int		l;
+	bool	is_end;
+	char	*result_str;
+	char	*word_position;
+
+	k = -1;
+	word_position = NULL;
+	while (!word_position && words[++k])
+	{
+		if (ft_strncmp(str + *i, words[k], ft_strlen(words[k])) == 0)
+		{
+			word_position = str + *i;
+			*i += ft_strlen(words[k]);
+			return (ft_strdup(words[k]));
+		}
+	}
+	if (!word_position)
+	{
+		l = 0;
+		is_end = false;
+		while (!is_end && *i + ++l < (int)ft_strlen(str))
+		{
+			k = -1;
+			while (!is_end && words[++k])
+				is_end = ft_strncmp(str + *i + l, words[k],
+						ft_strlen(words[k])) == 0;
+		}
+		result_str = malloc(l + 1);
+		if (!result_str)
+			return (NULL);
+		ft_strlcpy(result_str, str + *i, l + 1);
+		*i += l;
+		return (result_str);
+	}
+  return (NULL);
+}
+
 char	**ft_split_by_words_keep_sep(char *str, char **words)
 {
 	int		i;
 	int		j;
-	int		k;
-	int		l;
 	int		str_len;
-	char	*word_position;
 	char	**result;
-	char	*result_str;
-	bool	is_end;
 
 	if (!str || !words || !words[0] || words[0][0] == '\0')
 		return (NULL);
@@ -47,35 +82,10 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 	j = 0;
 	while (i < str_len)
 	{
-		k = -1;
-		word_position = NULL;
-		while (!word_position && words[++k])
-		{
-			if (ft_strncmp(str + i, words[k], ft_strlen(words[k])) == 0)
-			{
-				word_position = str + i;
-				result[j++] = ft_strdup(words[k]);
-				i += ft_strlen(words[k]);
-			}
-		}
-		if (!word_position)
-		{
-			l = 0;
-			is_end = false;
-			while (!is_end && i + ++l < str_len)
-			{
-				k = -1;
-				while (!is_end && words[++k])
-					is_end = ft_strncmp(str + i + l, words[k],
-							ft_strlen(words[k])) == 0;
-			}
-			result_str = malloc(l + 1);
-			if (!result_str)
-				return (free_all(result, j - 1), NULL);
-			ft_strlcpy(result_str, str + i, l + 1);
-			result[j++] = result_str;
-			i += l;
-		}
+		result[j] = split(str, words, &i);
+		if (!result[j])
+			return (free_all(result, j - 1), NULL);
+    j++;
 	}
 	result[j] = NULL;
 	return (result);
