@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 14:22:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:25:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,24 @@ int	get_command_path(char **cmd_name)
 		status = search_command_path(cmd_name, path_env);
 	free_str_array(path_env);
 	return (status);
+}
+
+void	handle_error(int status, char *cmd_path)
+{
+	if (status == EXIT_CMD_NOT_FOUND)
+		ft_dprintf(STDERR_FILENO, "%s: command not found\n", cmd_path);
+	else if (status == ENOENT)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
+			strerror(status));
+		g_vars.exit_status = EXIT_CMD_NOT_FOUND;
+	}
+	else if (status == EACCES || status == EISDIR)
+	{
+		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
+			strerror(status));
+		g_vars.exit_status = EXIT_PERMISSION_DENIED;
+	}
+	else
+		perror("minishell");
 }

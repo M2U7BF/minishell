@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/02 16:59:54 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/02 17:28:28 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						util/ft_split_by_words_keep_sep.c util/ft_multi_splitarr_by_word_leave_separator.c \
 						util/remove_elem.c here_doc.c file.c util/ft_strtrim_front.c handle_keys_heredoc.c debug.c tokenize.c \
 						blank.c quote.c util/token_util.c token_2.c tokenize_2.c tokenize_3.c util/arr_util.c util/str_util.c util/lst_util.c \
-						fd.c redirection.c command_path.c proc_unit_2.c
+						fd.c redirection.c command_path.c proc_unit_2.c pipe.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:14:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:28:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,9 @@ int							open_infile(char *filename, int *fd);
 bool						is_invalid_fd(int fd);
 int							stashfd(int fd);
 
+// pipe.c
+void						close_pipe(t_proc_unit *proc);
+
 // redirection.c
 int							open_and_redirect_files(t_proc_unit *current_proc,
 								t_list **redirect_fds);
@@ -256,6 +259,7 @@ t_list						*pipe_redirect(t_proc_unit *proc,
 
 // command_path.c
 int							get_command_path(char **cmd_name);
+void						handle_error(int status, char *cmd_path);
 
 // blank.c
 void						remove_blank(t_token *token_list);
