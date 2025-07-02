@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 14:12:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 14:22:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,21 @@ bool						is_readable_file(char *pathname);
 int							open_additionalfile(char *filename, int *fd);
 int							open_outfile(char *filename, int *fd);
 int							open_infile(char *filename, int *fd);
+
+// fd.c
+bool						is_invalid_fd(int fd);
+int							stashfd(int fd);
+
+// redirection.c
+int							open_and_redirect_files(t_proc_unit *current_proc,
+								t_list **redirect_fds);
+char						**trim_redirection(char ***argv);
+void						reset_redirection(t_list *redirect_fds);
+t_list						*pipe_redirect(t_proc_unit *proc,
+								t_list *redirect_fds);
+
+// command_path.c
+int							get_command_path(char **cmd_name);
 
 // blank.c
 void						remove_blank(t_token *token_list);
