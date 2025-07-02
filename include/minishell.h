@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 16:45:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:00:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,10 @@ void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);
 t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 								t_proc_unit *proc);
+
+// proc_unit_2.c
+int							proc_len(t_proc_unit *proc_list);
+t_proc_unit					*process_division(t_token *token_list);
 
 // syntax.c
 bool						is_syntax_error(t_token *token_list);
