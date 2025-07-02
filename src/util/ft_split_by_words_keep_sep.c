@@ -44,25 +44,21 @@ static char	*split(char *str, char **words, int *i)
 			return (ft_strdup(words[k]));
 		}
 	}
-	if (!word_position)
+	l = 0;
+	is_end = false;
+	while (!is_end && *i + ++l < (int)ft_strlen(str))
 	{
-		l = 0;
-		is_end = false;
-		while (!is_end && *i + ++l < (int)ft_strlen(str))
-		{
-			k = -1;
-			while (!is_end && words[++k])
-				is_end = ft_strncmp(str + *i + l, words[k],
-						ft_strlen(words[k])) == 0;
-		}
-		result_str = malloc(l + 1);
-		if (!result_str)
-			return (NULL);
-		ft_strlcpy(result_str, str + *i, l + 1);
-		*i += l;
-		return (result_str);
+		k = -1;
+		while (!is_end && words[++k])
+			is_end = ft_strncmp(str + *i + l, words[k],
+					ft_strlen(words[k])) == 0;
 	}
-  return (NULL);
+	result_str = malloc(l + 1);
+	if (!result_str)
+		return (NULL);
+	ft_strlcpy(result_str, str + *i, l + 1);
+	*i += l;
+	return (result_str);
 }
 
 char	**ft_split_by_words_keep_sep(char *str, char **words)
@@ -85,7 +81,7 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 		result[j] = split(str, words, &i);
 		if (!result[j])
 			return (free_all(result, j - 1), NULL);
-    j++;
+		j++;
 	}
 	result[j] = NULL;
 	return (result);
