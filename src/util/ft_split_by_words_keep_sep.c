@@ -37,7 +37,6 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 	char	*result_str;
 	bool	is_end;
 
-	is_end = false;
 	if (!str || !words || !words[0] || words[0][0] == '\0')
 		return (NULL);
 	str_len = ft_strlen(str);
@@ -71,27 +70,18 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 		}
 		else
 		{
-			l = 1;
+			l = 0;
 			is_end = false;
-			while (i + l < str_len)
+			while (!is_end && i + ++l < str_len)
 			{
 				k = -1;
 				while (words[++k] && !is_end)
-				{
-					if (ft_strncmp(str + i + l, words[k],
-							ft_strlen(words[k])) == 0)
-						is_end = true;
-				}
-				if (is_end)
-					break ;
-				l++;
+					is_end = ft_strncmp(str + i + l, words[k],
+							ft_strlen(words[k])) == 0;
 			}
 			result_str = malloc(l + 1);
 			if (!result_str)
-			{
-				free_all(result, j - 1);
-				return (NULL);
-			}
+				return (free_all(result, j - 1), NULL);
 			ft_strlcpy(result_str, str + i, l + 1);
 			result[j++] = result_str;
 			i += l;
