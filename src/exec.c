@@ -6,25 +6,23 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 16:41:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:49:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_proc_unit	*process_division(t_token *token_list, int *pro_count)
+t_proc_unit	*process_division(t_token *token_list)
 {
 	t_token		*tok;
 	t_proc_unit	*result;
 	t_proc_unit	*proc;
-	int			i;
 
 	if (!token_list)
 		return (NULL);
 	proc = new_proc(tok_dup(token_list), CMD, STDIN_FILENO, STDOUT_FILENO);
 	result = proc;
 	tok = token_list->next;
-	i = 1;
 	while (tok)
 	{
 		if (tok->type == PIPE)
@@ -33,13 +31,11 @@ t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 			proc->next = new_proc(tok_dup(tok), PIPE_LINE, STDIN_FILENO,
 					STDOUT_FILENO);
 			proc = proc->next;
-			i++;
 		}
 		else
 			append_token(&proc->args, tok_dup(tok));
 		tok = tok->next;
 	}
-	*pro_count = i;
 	return (result);
 }
 
@@ -77,6 +73,23 @@ void	handle_error(int status, char *cmd_path)
 		perror("minishell");
 }
 
+int	proc_len(t_proc_unit *proc_list)
+{
+	int			i;
+	t_proc_unit	*current;
+
+	if (!proc_list)
+		return (0);
+	i = 0;
+	current = proc_list;
+	while (current)
+	{
+		i++;
+		current = current->next;
+	}
+	return (i);
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
 	int			i;
@@ -87,7 +100,8 @@ int	exec(t_i_mode_vars *i_vars)
 	int			pipe_fds[2];
 	int			status;
 
-	proc_list = process_division(i_vars->token_list, &i_vars->pro_count);
+	proc_list = process_division(i_vars->token_list);
+	i_vars->pro_count = proc_len(proc_list);
 	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
 	if (!i_vars->child_pids)
 	{

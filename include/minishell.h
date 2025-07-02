@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 16:21:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:45:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,7 @@ int							open_and_redirect_files(t_proc_unit *current_proc,
 								t_list **redirect_fds);
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
-t_proc_unit					*process_division(t_token *token_list,
-								int *pro_count);
+t_proc_unit					*process_division(t_token *token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
@@ -215,8 +214,8 @@ void						libc_error(void);
 // proc_unit.c
 void						debug_put_proc_list(t_proc_unit *proc_list);
 void						free_proc_list(t_proc_unit *proc_list);
-t_proc_unit					*new_proc(t_token *args,
-								t_proc_unit_type type, int in_fd, int out_fd);
+t_proc_unit					*new_proc(t_token *args, t_proc_unit_type type,
+								int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);
 t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
