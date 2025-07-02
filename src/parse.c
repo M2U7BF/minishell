@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:40:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:44:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	variable_expansion(t_token **token_list)
 	is_expand = true;
 	while (current_token)
 	{
-		if (ft_strncmp(current_token->str, "$", 2) == 0)
+		if (is_str_equal("$", current_token->str, 1))
 		{
 			current_token = current_token->next;
 			continue ;
@@ -78,10 +78,10 @@ void	variable_expansion(t_token **token_list)
 						|| ft_strchr(splited_words[j], '\'')))
 				{
 					current_quote = ft_strdup(splited_words[j]);
-					if (ft_strncmp(current_quote, "\'", 2) == 0)
+					if (is_str_equal(current_quote, "\'", 1))
 						is_expand = false;
 				}
-				if (ft_strncmp(splited_words[j], "$?", 2) == 0 && is_expand)
+				if (is_str_equal("$?", splited_words[j], 0) && is_expand)
 					expand_question_mark(&splited_words[j]);
 				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
 					expand_variable(&splited_words[j]);
