@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 16:37:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:41:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 
 	if (!token_list)
 		return (NULL);
-	tok = token_list;
-	proc = new_proc(tok_dup(tok), CMD, STDIN_FILENO, STDOUT_FILENO);
+	proc = new_proc(tok_dup(token_list), CMD, STDIN_FILENO, STDOUT_FILENO);
 	result = proc;
-	tok = tok->next;
+	tok = token_list->next;
 	i = 1;
 	while (tok)
 	{
