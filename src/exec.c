@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:13:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:21:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,33 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 	return (redirect_fds);
 }
 
+static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
+		t_proc_unit *proc_list, t_proc_unit *proc)
+{
+	if (status != 0)
+	{
+		destroy_i_vars(i_vars);
+		free_proc_list(proc_list);
+		exit(EXIT_FAILURE);
+	}
+	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+		libc_error();
+	if (proc->next && proc->next->read_fd != STDIN_FILENO)
+	{
+		if (close(proc->next->read_fd) == -1)
+			libc_error();
+	}
+	set_argv(proc);
+	execve(proc->argv[0], proc->argv, __environ);
+	perror("execve");
+	exit(EXIT_CMD_NOT_FOUND);
+}
+
 int	exec(t_i_mode_vars *i_vars)
 {
 	int			i;
 	t_proc_unit	*proc_list;
-	t_proc_unit	*current_proc;
+	t_proc_unit	*current;
 	t_list		*redirect_fds;
 	int			status;
 
@@ -81,32 +103,13 @@ int	exec(t_i_mode_vars *i_vars)
 		libc_error();
 	}
 	i = -1;
-	current_proc = proc_list;
+	current = proc_list;
 	while (proc_list && ++i < i_vars->pro_count)
 	{
-		redirect_fds = exec_redirection(&status, current_proc);
+		redirect_fds = exec_redirection(&status, current);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
-		{
-			if (status != 0)
-			{
-				destroy_i_vars(i_vars);
-				free_proc_list(proc_list);
-				exit(EXIT_FAILURE);
-			}
-			if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-				libc_error();
-			if (current_proc->next
-				&& current_proc->next->read_fd != STDIN_FILENO)
-			{
-				if (close(current_proc->next->read_fd) == -1)
-					libc_error();
-			}
-			set_argv(current_proc);
-			execve(current_proc->argv[0], current_proc->argv, __environ);
-			perror("execve");
-			exit(EXIT_CMD_NOT_FOUND);
-		}
+			exec_child_proc(status, i_vars, proc_list, current);
 		else if (i_vars->child_pids[i] == -1)
 			libc_error();
 		else
@@ -115,7 +118,7 @@ int	exec(t_i_mode_vars *i_vars)
 				libc_error();
 			reset_redirection(redirect_fds);
 		}
-		current_proc = current_proc->next;
+		current = current->next;
 	}
 	free_proc_list(proc_list);
 	return (0);
