@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:44:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:51:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,19 @@ void	variable_expansion(t_token **token_list)
 {
 	int		j;
 	char	**splited_words;
-	t_token	*current_token;
+	t_token	*cur_tok;
 	char	*current_quote;
 	bool	is_expand;
 
 	if (!token_list || !(*token_list))
 		return ;
-	current_token = (*token_list);
+	cur_tok = (*token_list);
 	is_expand = true;
-	while (current_token)
+	while (cur_tok)
 	{
-		if (is_str_equal("$", current_token->str, 1))
+		if (!is_str_equal("$", cur_tok->str, 1) && ft_strchr(cur_tok->str, '$'))
 		{
-			current_token = current_token->next;
-			continue ;
-		}
-		else if (ft_strchr(current_token->str, '$'))
-		{
-			splited_words = ft_multi_split_leave_separator(current_token->str,
-					"$\'\"");
+			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$\'\"");
 			j = -1;
 			current_quote = NULL;
 			while (splited_words[++j])
@@ -86,11 +80,11 @@ void	variable_expansion(t_token **token_list)
 				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
 					expand_variable(&splited_words[j]);
 			}
-			ft_free((void **)&current_token->str);
-			current_token->str = ft_strjoin_all(splited_words);
+			ft_free((void **)&cur_tok->str);
+			cur_tok->str = ft_strjoin_all(splited_words);
 			free_str_array(splited_words);
 		}
-		current_token = current_token->next;
+		cur_tok = cur_tok->next;
 	}
 }
 

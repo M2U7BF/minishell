@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 14:35:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:51:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**split_line(char *input_line)
 
 	if (!input_line)
 		return (NULL);
-	w = ft_multi_split_leave_separator(input_line, DEFAULT_BLANK);
+	w = ft_multi_split_keep_sep(input_line, DEFAULT_BLANK);
 	w = ft_multi_splitarr_by_word_leave_separator(w, redirection_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, blank_list);
 	w = ft_multi_splitarr_by_word_leave_separator(w, quotation_list);

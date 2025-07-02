@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:28:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:51:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,8 +290,8 @@ t_list						*get_prev_lst(t_list **list, t_list *elem);
 // ft_strtrim_front.c
 void						ft_strtrim_front(char **s1, char *set);
 
-// ft_multi_split_leave_separator.c
-char						**ft_multi_split_leave_separator(char *s,
+// ft_multi_split_keep_sep.c
+char						**ft_multi_split_keep_sep(char *s,
 								char *separator);
 
 // ft_split_leave_separator.c

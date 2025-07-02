@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_multi_split_leave_separator.c                   :+:      :+:    :+:   */
+/*   ft_multi_split_keep_sep.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -69,7 +69,7 @@ static char	**init_str_arr(int elem_count)
 // char *s: 分割対象の文字列
 // char *separator: 分割文字の配列
 // 複数の文字にマッチして、文字列を分割する。
-char	**ft_multi_split_leave_separator(char *s, char *separator)
+char	**ft_multi_split_keep_sep(char *s, char *separator)
 {
 	size_t	i;
 	int		j;

@@ -6,14 +6,14 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/02 17:28:28 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/02 17:51:02 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
 						non_interactive_mode.c parse.c util/util.c util/ft_split_leave_separator.c \
 						util/ft_multi_split.c token.c exec.c error.c \
-						util/ft_multi_split_leave_separator.c proc_unit.c syntax.c \
+						util/ft_multi_split_keep_sep.c proc_unit.c syntax.c \
 						util/ft_split_by_word_keep_sep.c util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_split_by_words_keep_sep.c util/ft_multi_splitarr_by_word_leave_separator.c \
 						util/remove_elem.c here_doc.c file.c util/ft_strtrim_front.c handle_keys_heredoc.c debug.c tokenize.c \
