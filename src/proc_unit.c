@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:44:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:20:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	free_proc_list(t_proc_unit *proc_list)
 	}
 }
 
-t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type, int in_fd,
+t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 		int out_fd)
 {
 	t_proc_unit	*proc_unit;

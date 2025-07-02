@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 09:45:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:21:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	append_token(t_token **token_list, t_token *token)
 	}
 }
 
-t_token	*token_dup(t_token *token)
+t_token	*tok_dup(t_token *token)
 {
 	t_token	*result;
 

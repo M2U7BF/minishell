@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 14:22:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:21:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_token
 
 typedef enum e_proc_unit_type
 {
-	SIMPLE_CMD,
+	CMD,
 	PIPE_LINE,
 }							t_proc_unit_type;
 
@@ -162,7 +162,7 @@ t_token						*create_token(char *str, t_token_type type);
 void						append_token(t_token **token_list, t_token *token);
 void						del_token(t_token **token_list, t_token *token);
 void						free_token_list(t_token *token_list);
-t_token						*token_dup(t_token *token);
+t_token						*tok_dup(t_token *token);
 
 // token_2.c
 void						insert_token(t_token **first_token, t_token *token,
@@ -215,7 +215,7 @@ void						libc_error(void);
 // proc_unit.c
 void						debug_put_proc_list(t_proc_unit *proc_list);
 void						free_proc_list(t_proc_unit *proc_list);
-t_proc_unit					*create_proc_unit(t_token *args,
+t_proc_unit					*new_proc(t_token *args,
 								t_proc_unit_type type, int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
 								t_proc_unit *proc_unit);

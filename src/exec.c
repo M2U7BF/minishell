@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 14:22:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:21:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,36 @@
 
 t_proc_unit	*process_division(t_token *token_list, int *pro_count)
 {
-	t_token		*current_token;
+	t_token		*tok;
 	t_proc_unit	*result;
-	t_proc_unit	*current_proc;
+	t_proc_unit	*proc;
 	int			i;
 
 	if (!token_list)
 		return (NULL);
-	current_token = token_list;
+	tok = token_list;
 	result = NULL;
-	current_proc = NULL;
+	proc = NULL;
 	i = 0;
-	while (current_token)
+	while (tok)
 	{
-		if (current_token->type == PIPE)
+		if (tok->type == PIPE)
 		{
-			current_token = current_token->next;
-			current_proc->next = create_proc_unit(token_dup(current_token),
-					PIPE_LINE, STDIN_FILENO, STDOUT_FILENO);
-			current_proc = current_proc->next;
+			tok = tok->next;
+			proc->next = new_proc(tok_dup(tok), PIPE_LINE, STDIN_FILENO,
+					STDOUT_FILENO);
+			proc = proc->next;
 			i++;
 		}
-		else if (!current_proc)
+		else if (!proc)
 		{
-			current_proc = create_proc_unit(token_dup(current_token),
-					SIMPLE_CMD, STDIN_FILENO, STDOUT_FILENO);
-			result = current_proc;
+			proc = new_proc(tok_dup(tok), CMD, STDIN_FILENO, STDOUT_FILENO);
+			result = proc;
 			i++;
 		}
 		else
-			append_token(&current_proc->args, token_dup(current_token));
-		current_token = current_token->next;
+			append_token(&proc->args, tok_dup(tok));
+		tok = tok->next;
 	}
 	*pro_count = i;
 	return (result);
