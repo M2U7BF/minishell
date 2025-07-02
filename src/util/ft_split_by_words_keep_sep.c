@@ -25,17 +25,35 @@ static void	free_all(char **result, int result_len)
 	ft_free((void **)&result);
 }
 
-static char	*split(char *str, char **words, int *i)
+static int	get_not_word_part(char *str, char **words, int i)
 {
 	int		k;
 	int		l;
 	bool	is_end;
+
+	k = 0;
+	l = 0;
+	is_end = false;
+	while (!is_end && i + ++l < (int)ft_strlen(str))
+	{
+		k = -1;
+		while (!is_end && words[++k])
+			is_end = ft_strncmp(str + i + l, words[k],
+					ft_strlen(words[k])) == 0;
+	}
+	return (l);
+}
+
+static char	*split(char *str, char **words, int *i)
+{
+	int		k;
+	int		l;
 	char	*result_str;
 	char	*word_position;
 
 	k = -1;
 	word_position = NULL;
-	while (!word_position && words[++k])
+	while (words[++k])
 	{
 		if (ft_strncmp(str + *i, words[k], ft_strlen(words[k])) == 0)
 		{
@@ -44,15 +62,7 @@ static char	*split(char *str, char **words, int *i)
 			return (ft_strdup(words[k]));
 		}
 	}
-	l = 0;
-	is_end = false;
-	while (!is_end && *i + ++l < (int)ft_strlen(str))
-	{
-		k = -1;
-		while (!is_end && words[++k])
-			is_end = ft_strncmp(str + *i + l, words[k],
-					ft_strlen(words[k])) == 0;
-	}
+	l = get_not_word_part(str, words, *i);
 	result_str = malloc(l + 1);
 	if (!result_str)
 		return (NULL);
