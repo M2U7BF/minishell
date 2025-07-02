@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:00:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:05:53 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,22 @@ void	handle_error(int status, char *cmd_path)
 		perror("minishell");
 }
 
-void exec_redirection()
+static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 {
-  // 
+	t_list	*redirect_fds;
+	int		pipe_fds[2];
+
+	redirect_fds = NULL;
+	if (current_proc->next && current_proc->next->type == PIPE_LINE)
+	{
+		if (pipe(pipe_fds) == -1)
+			libc_error();
+		current_proc->write_fd = pipe_fds[1];
+		current_proc->next->read_fd = pipe_fds[0];
+	}
+	redirect_fds = pipe_redirect(current_proc, redirect_fds);
+	*status = open_and_redirect_files(current_proc, &redirect_fds);
+	return (redirect_fds);
 }
 
 int	exec(t_i_mode_vars *i_vars)
@@ -58,7 +71,6 @@ int	exec(t_i_mode_vars *i_vars)
 	t_proc_unit	*current_proc;
 	char		**argv;
 	t_list		*redirect_fds;
-	int			pipe_fds[2];
 	int			status;
 
 	proc_list = process_division(i_vars->token_list);
@@ -73,16 +85,7 @@ int	exec(t_i_mode_vars *i_vars)
 	current_proc = proc_list;
 	while (proc_list && ++i < i_vars->pro_count)
 	{
-		redirect_fds = NULL;
-		if (current_proc->next && current_proc->next->type == PIPE_LINE)
-		{
-			if (pipe(pipe_fds) == -1)
-				libc_error();
-			current_proc->write_fd = pipe_fds[1];
-			current_proc->next->read_fd = pipe_fds[0];
-		}
-		redirect_fds = pipe_redirect(current_proc, redirect_fds);
-		status = open_and_redirect_files(current_proc, &redirect_fds);
+		redirect_fds = exec_redirection(&status, current_proc);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 		{
