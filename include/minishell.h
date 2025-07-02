@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:08:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:14:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,7 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 // proc_unit_2.c
 int							proc_len(t_proc_unit *proc_list);
 t_proc_unit					*process_division(t_token *token_list);
+void						set_argv(t_proc_unit *current_proc);
 
 // syntax.c
 bool						is_syntax_error(t_token *token_list);

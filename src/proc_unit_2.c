@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:00:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:13:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,18 @@ t_proc_unit	*process_division(t_token *token_list)
 		tok = tok->next;
 	}
 	return (result);
+}
+
+void	set_argv(t_proc_unit *current_proc)
+{
+	current_proc->argv = tokens_to_arr(current_proc->args);
+	current_proc->argv = trim_redirection(&current_proc->argv);
+	if (!current_proc->argv)
+		exit(EXIT_SUCCESS);
+	g_vars.exit_status = get_command_path(&current_proc->argv[0]);
+	if (g_vars.exit_status != 0)
+	{
+		handle_error(g_vars.exit_status, current_proc->argv[0]);
+		exit(g_vars.exit_status);
+	}
 }
