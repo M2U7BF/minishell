@@ -6,11 +6,37 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:40:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:40:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	expand_question_mark(char **s)
+{
+	char	**tmp;
+
+	tmp = ft_split_by_word_keep_sep(*s, "$?");
+	ft_free((void **)&tmp[0]);
+	tmp[0] = ft_itoa(g_vars.exit_status);
+	ft_free((void **)s);
+	*s = ft_strjoin_all(tmp);
+	free_str_array(tmp);
+}
+
+void	expand_variable(char **s)
+{
+	char	*env_var;
+
+	env_var = getenv(&(*s)[1]);
+	if (env_var)
+	{
+		ft_free((void **)s);
+		*s = ft_strdup(env_var);
+	}
+	else
+		ft_free((void **)s);
+}
 
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
@@ -18,11 +44,9 @@
 void	variable_expansion(t_token **token_list)
 {
 	int		j;
-	char	*env_var;
 	char	**splited_words;
 	t_token	*current_token;
 	char	*current_quote;
-	char	**tmp;
 	bool	is_expand;
 
 	if (!token_list || !(*token_list))
@@ -58,25 +82,9 @@ void	variable_expansion(t_token **token_list)
 						is_expand = false;
 				}
 				if (ft_strncmp(splited_words[j], "$?", 2) == 0 && is_expand)
-				{
-					tmp = ft_split_by_word_keep_sep(splited_words[j], "$?");
-					ft_free((void **)&tmp[0]);
-					tmp[0] = ft_itoa(g_vars.exit_status);
-					ft_free((void **)&splited_words[j]);
-					splited_words[j] = ft_strjoin_all(tmp);
-					free_str_array(tmp);
-				}
+					expand_question_mark(&splited_words[j]);
 				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
-				{
-					env_var = getenv(&splited_words[j][1]);
-					if (env_var)
-					{
-						ft_free((void **)&splited_words[j]);
-						splited_words[j] = ft_strdup(env_var);
-					}
-					else
-						ft_free((void **)&splited_words[j]);
-				}
+					expand_variable(&splited_words[j]);
 			}
 			ft_free((void **)&current_token->str);
 			current_token->str = ft_strjoin_all(splited_words);
