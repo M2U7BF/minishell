@@ -52,23 +52,13 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 		while (!word_position && words[++k])
 		{
 			if (ft_strncmp(str + i, words[k], ft_strlen(words[k])) == 0)
-				word_position = str + i;
-		}
-		if (word_position)
-		{
-			if (str + i != word_position)
 			{
-				result_str = malloc(word_position - str + 1);
-				if (!result_str)
-					return (free_all(result, j - 1), NULL);
-				ft_strlcpy(result_str, str + i, word_position - (str + i) + 1);
-				result[j++] = result_str;
-				i += word_position - (str + i);
+				word_position = str + i;
+				result[j++] = ft_strdup(words[k]);
+				i += ft_strlen(words[k]);
 			}
-			result[j++] = ft_strdup(words[k]);
-			i += ft_strlen(words[k]);
 		}
-		else
+		if (!word_position)
 		{
 			l = 0;
 			is_end = false;
