@@ -50,12 +50,10 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 	{
 		k = -1;
 		word_position = NULL;
-		while (words[++k])
+		while (!word_position && words[++k])
 		{
 			if (ft_strncmp(str + i, words[k], ft_strlen(words[k])) == 0)
 				word_position = str + i;
-			if (word_position)
-				break ;
 		}
 		if (word_position)
 		{
