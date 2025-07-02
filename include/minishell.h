@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:00:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:08:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ typedef enum e_proc_unit_type
 typedef struct s_proc_unit
 {
 	t_token					*args;
+	char					**argv;
 	t_proc_unit_type		type;
 	struct s_proc_unit		*next;
 	int						read_fd;
