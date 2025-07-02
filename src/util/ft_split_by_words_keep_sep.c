@@ -65,7 +65,7 @@ char	**ft_split_by_words_keep_sep(char *str, char **words)
 			while (!is_end && i + ++l < str_len)
 			{
 				k = -1;
-				while (words[++k] && !is_end)
+				while (!is_end && words[++k])
 					is_end = ft_strncmp(str + i + l, words[k],
 							ft_strlen(words[k])) == 0;
 			}
