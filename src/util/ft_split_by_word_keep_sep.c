@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:40:33 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:40:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 12:56:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ static void	free_all(char **result, int result_len)
 	ft_free((void **)&result);
 }
 
+static char	*get_x(char *word_position, char *str, int i)
+{
+	char	*tmp;
+
+	tmp = malloc(word_position - str + i + 1);
+	if (!tmp)
+		return (NULL);
+	ft_strlcpy(tmp, str + i, word_position - (str + i) + 1);
+	return (tmp);
+}
+
 char	**ft_split_by_word_keep_sep(char *str, char *word)
 {
 	char	**res;
@@ -32,7 +43,6 @@ char	**ft_split_by_word_keep_sep(char *str, char *word)
 	int		j;
 	int		len;
 	char	*word_position;
-	char	*tmp;
 
 	i = 0;
 	j = 0;
@@ -49,11 +59,9 @@ char	**ft_split_by_word_keep_sep(char *str, char *word)
 		{
 			if (word_position != str + i)
 			{
-				tmp = malloc(word_position - (str + i) + 1);
-				if (!tmp)
+				res[j] = get_x(word_position, str, i);
+				if (!res[j++])
 					return (free_all(res, j - 1), NULL);
-				ft_strlcpy(tmp, str + i, word_position - (str + i) + 1);
-				res[j++] = tmp;
 			}
 			res[j++] = ft_strdup(word);
 			i = word_position - str + ft_strlen(word);
