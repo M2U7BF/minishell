@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:35:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 13:42:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,13 +160,13 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			}
 			if (current->str[0] == '>')
 				to_fd = STDOUT_FILENO;
-			if (is_str_equal(current->str, ">"))
+			if (is_str_equal(current->str, ">", 1))
 				status = open_outfile(current->next->str, &fd);
-			else if (is_str_equal(current->str, "<"))
+			else if (is_str_equal(current->str, "<", 1))
 				status = open_infile(current->next->str, &fd);
-			else if (is_str_equal(current->str, ">>"))
+			else if (is_str_equal(current->str, ">>", 1))
 				status = open_additionalfile(current->next->str, &fd);
-			else if (is_str_equal(current->str, "<<"))
+			else if (is_str_equal(current->str, "<<", 1))
 				fd = here_doc(ft_strdup(current->next->str));
 			if (status != 0)
 			{

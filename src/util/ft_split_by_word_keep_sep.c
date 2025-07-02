@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:40:33 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 13:39:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 13:46:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,16 @@ char	**ft_split_by_word_keep_sep(char *str, char *word)
 		return (NULL);
 	while (++i <= len)
 	{
-		if (ft_strncmp(str + i, word, ft_strlen(word)) == 0)
-		{
-			if (i != 0 && i - k > 0)
-			{
-				tmp = malloc(sizeof(char) * (i - k + 1));
-				ft_strlcpy(tmp, str + k, i - k + 1);
-				res[j++] = tmp;
-			}
-			res[j++] = ft_strdup(word);
-			k = i + ft_strlen(word);
-		}
-		else if (str[i] == '\0' && i - k > 0)
+		if (i - k > 0 && (is_str_equal(word, str + i, 0) || !str[i]))
 		{
 			tmp = malloc(sizeof(char) * (i - k + 1));
 			ft_strlcpy(tmp, str + k, i - k + 1);
 			res[j++] = tmp;
+		}
+		if (is_str_equal(word, str + i, 0))
+		{
+			res[j++] = ft_strdup(word);
+			k = i + ft_strlen(word);
 		}
 	}
 	res[j] = NULL;

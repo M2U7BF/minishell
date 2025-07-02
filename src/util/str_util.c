@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 17:12:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 13:43:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,12 @@ bool	is_include(char *s, char **words)
 	return (false);
 }
 
-bool	is_str_equal(char *s1, char *s2)
+bool	is_str_equal(char *s1, char *s2, bool include_null_char)
 {
-	return (ft_strncmp(s1, s2, ft_strlen(s1) + 1) == 0);
+	int	len;
+
+	len = ft_strlen(s1);
+	if (include_null_char)
+		len++;
+	return (ft_strncmp(s1, s2, len) == 0);
 }
