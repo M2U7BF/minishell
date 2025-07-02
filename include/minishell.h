@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 13:42:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/02 14:12:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,12 @@ typedef struct s_runtime_data
 	int						exit_status;
 	volatile sig_atomic_t	signal;
 }							t_runtime_data;
+
+typedef struct s_split_vars
+{
+	char					*str;
+	char					*word;
+}							t_split_vars;
 
 extern t_runtime_data		g_vars;
 
@@ -248,14 +254,14 @@ int							arrlen(char **arr);
 // str_util.c
 int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
-bool						is_str_equal(char *s1, char *s2, bool include_null_char);
+bool						is_str_equal(char *s1, char *s2,
+								bool include_null_char);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);
 void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
 t_list						*get_prev_lst(t_list **list, t_list *elem);
-
 
 // ft_strtrim_front.c
 void						ft_strtrim_front(char **s1, char *set);
@@ -271,8 +277,7 @@ char						**ft_split_leave_separator(char *s, char separator);
 char						**ft_multi_split(char *s, char *separators);
 
 // ft_split_by_word_keep_sep.c
-char						**ft_split_by_word_keep_sep(char *str,
-								char *word);
+char						**ft_split_by_word_keep_sep(char *str, char *word);
 
 // ft_splitarr_by_word_leave_separator.c
 char						**ft_splitarr_by_word_leave_separator(char **arr,
