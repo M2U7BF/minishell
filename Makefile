@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/03 10:58:29 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/03 11:03:43 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRC_NAMES = blank.c command_path.c error.c exec.c exec_vars.c fd.c file.c \
 						interactive_mode.c main.c non_interactive_mode.c parse.c pipe.c \
 						proc_unit_2.c proc_unit.c quote.c redirection_2.c redirection.c \
 						syntax.c token_2.c token.c tokenize_2.c tokenize_3.c tokenize.c \
-						util/arr_util.c util/ft_multi_splitarr_by_word_leave_separator.c \
+						util/arr_util.c util/ft_splitarr_by_words_keep_sep.c \
 						util/ft_multi_split.c util/ft_multi_split_keep_sep.c \
 						util/ft_splitarr_by_word_leave_separator.c \
 						util/ft_split_by_word_keep_sep.c util/ft_split_by_words_keep_sep.c \
