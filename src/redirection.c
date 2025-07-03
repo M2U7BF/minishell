@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:04:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:09:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	fd = 0;
 	status = 0;
 	current = current_proc->args;
-	to_fd = STDIN_FILENO;
 	while (current && current->next)
 	{
 		if (current->type == REDIRECTION && (current->next->type == WORD
@@ -46,12 +45,14 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			if (!current->next->str)
 				return (ft_dprintf(STDERR_FILENO,
 						"minishell: ambiguous redirect\n"), EXIT_FAILURE);
-			if (current->str[0] == '>')
-				to_fd = STDOUT_FILENO;
 			open_files(current, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, current->next->str), status);
 			fd = stashfd(fd);
+			if (current->str[0] == '>')
+				to_fd = STDOUT_FILENO;
+      else
+        to_fd = STDIN_FILENO;
 			stashed_to_fd = stashfd(to_fd);
 			if (fd != to_fd && (dup2(fd, to_fd) == -1 || close(fd) == -1))
 				libc_error();
