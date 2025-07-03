@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 10:26:41 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:27:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:34:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 {
 	int	target_fd;
-	int	stashed_target_fd;
 	int	*content;
 
 	if (!proc)
@@ -29,16 +28,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 			ft_lstclear(&redirect_fds, del_content);
 			return (NULL);
 		}
-		proc->read_fd = stashfd(proc->read_fd);
-		target_fd = STDIN_FILENO;
-		stashed_target_fd = stashfd(target_fd);
-		if (dup2(proc->read_fd, target_fd) == -1)
-			libc_error();
-		if (close(proc->read_fd) == -1)
-			libc_error();
-		content[0] = stashed_target_fd;
-		content[1] = target_fd;
-		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+    redirect(&proc->read_fd, STDIN_FILENO, &redirect_fds);
 	}
 	if (proc->write_fd != STDOUT_FILENO)
 	{
@@ -48,16 +38,7 @@ t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
 			ft_lstclear(&redirect_fds, del_content);
 			libc_error();
 		}
-		proc->write_fd = stashfd(proc->write_fd);
-		target_fd = STDOUT_FILENO;
-		stashed_target_fd = stashfd(target_fd);
-		if (dup2(proc->write_fd, target_fd) == -1)
-			libc_error();
-		if (close(proc->write_fd) == -1)
-			libc_error();
-		content[0] = stashed_target_fd;
-		content[1] = target_fd;
-		ft_lstadd_back(&redirect_fds, ft_lstnew((void *)content));
+    redirect(&proc->write_fd, STDOUT_FILENO, &redirect_fds);
 	}
 	return (redirect_fds);
 }

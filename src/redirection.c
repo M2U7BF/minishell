@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:27:00 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:33:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,12 @@ static void	open_files(t_token *current, int *status, int *fd)
 		*fd = here_doc(ft_strdup(current->next->str));
 }
 
-static void	redirect(int *fd, t_token *current, t_list **redirect_fds)
+void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 {
 	int	*content;
 	int	stashed_to_fd;
-	int	to_fd;
 
 	*fd = stashfd(*fd);
-	if (current->str[0] == '>')
-		to_fd = STDOUT_FILENO;
-	else
-		to_fd = STDIN_FILENO;
 	stashed_to_fd = stashfd(to_fd);
 	if (*fd != to_fd && (dup2(*fd, to_fd) == -1 || close(*fd) == -1))
 		libc_error();
@@ -52,10 +47,12 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	int		fd;
 	t_token	*cur;
 	int		status;
+  int	to_fd;
 
 	fd = 0;
 	status = 0;
 	cur = current_proc->args;
+  to_fd = STDIN_FILENO;
 	while (cur && cur->next)
 	{
 		if (cur->type == REDIRECTION && (cur->next->type == WORD
@@ -66,7 +63,9 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			open_files(cur, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);
-			redirect(&fd, cur, redirect_fds);
+			if (cur->str[0] == '>')
+				to_fd = STDOUT_FILENO;
+			redirect(&fd, to_fd, redirect_fds);
 			cur = cur->next;
 		}
 		cur = cur->next;

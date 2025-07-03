@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:27:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:34:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,7 @@ int							stashfd(int fd);
 void						close_pipe(t_proc_unit *proc);
 
 // redirection.c
+void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_proc_unit *current_proc,
 								t_list **redirect_fds);
 char						**trim_redirection(char ***argv);
