@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:33:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:36:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	int		fd;
 	t_token	*cur;
 	int		status;
-  int	to_fd;
+	int		to_fd;
 
 	fd = 0;
 	status = 0;
 	cur = current_proc->args;
-  to_fd = STDIN_FILENO;
+	to_fd = STDIN_FILENO;
 	while (cur && cur->next)
 	{
 		if (cur->type == REDIRECTION && (cur->next->type == WORD
