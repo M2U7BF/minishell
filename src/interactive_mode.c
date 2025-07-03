@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 17:29:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:07:20 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_runtime_data	g_runtime_data = {};
+t_runtime_data	g_vars = {};
 
 void	wait_child_processes(int *child_pids, int pro_count)
 {
@@ -27,82 +27,47 @@ void	wait_child_processes(int *child_pids, int pro_count)
 		i++;
 	}
 	if (WIFEXITED(status))
-		g_runtime_data.exit_status = WEXITSTATUS(status);
+		g_vars.exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_runtime_data.exit_status = 128 + SIGQUIT;
+			g_vars.exit_status = 128 + SIGQUIT;
 		}
 		else if (WTERMSIG(status) == SIGINT)
-			g_runtime_data.exit_status = 128 + SIGINT;
+			g_vars.exit_status = 128 + SIGINT;
 	}
 	else
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
-int	exec_interactive(t_exec_vars *e_vars)
+int	exec_interactive(t_i_mode_vars *i_vars)
 {
-	t_i_mode_vars	*i_vars;
-
-	init_i_vars(&e_vars->i_vars);
-	i_vars = &e_vars->i_vars;
 	rl_outstream = stderr;
-	g_runtime_data.signal = 0;
-	g_runtime_data.exit_status = EXIT_SUCCESS;
 	while (1)
 	{
-		handle_signal();
-		g_runtime_data.signal = 0;
-		i_vars->input_line = readline(i_vars->prompt);
-		// Ctrl+Cのあとに、Ctrl+Dを打った場合
-		if (!i_vars->input_line)
-		{
-			if (g_runtime_data.signal == SIGINT)
-				g_runtime_data.exit_status = 130;
-			exit(g_runtime_data.exit_status);
-		}
-		if (i_vars->input_line[0] != '\0')
-			add_history(i_vars->input_line);
-		else
-		{
-			ft_free(i_vars->input_line);
+		if (i_vars->input)
+			ft_free((void **)&i_vars->input);
+		set_signal_handlers();
+		i_vars->input = readline(i_vars->prompt);
+		if (!i_vars->input)
+			exit(g_vars.exit_status);
+		else if (i_vars->input[0] == '\0')
 			continue ;
-		}
-		i_vars->input_line = ft_strtrim_front(i_vars->input_line,
-				DEFAULT_BLANK);
-		if (is_quotation_error(i_vars->input_line) != 0)
+		add_history(i_vars->input);
+		if (is_quotation_error(i_vars->input) != 0)
 			exit(EXIT_FAILURE);
-		// 単語分割
-		i_vars->token_list = tokenize(i_vars->input_line);
-		// tokenize後の構文エラーを検知する
-		// printf("tokenize後\n");
-		// debug_put_token_list(i_vars->token_list);
+		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
+		i_vars->token_list = tokenize(i_vars->input);
 		if (!i_vars->token_list)
-		{
-			ft_free(i_vars->input_line);
 			continue ;
-		}
-		if (is_syntax_error(i_vars->token_list))
-		{
-			ft_dprintf(STDERR_FILENO, "syntax_error\n");
-			destroy_i_vars(i_vars);
-			exit(EXIT_SYNTAX_ERROR);
-		}
-		// パース
 		parse(i_vars);
-		// printf("quote_removal前\n");
-		// debug_put_token_list(i_vars->token_list);
 		quote_removal(i_vars->token_list);
-		// printf("exec前\n");
-		// debug_put_token_list(i_vars->token_list);
-		// コマンド実行
 		exec(i_vars);
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
+		if (i_vars->child_pids != NULL)
+			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
-		i_vars->child_pids = NULL;
 	}
-	clear_history();
 	return (0);
 }

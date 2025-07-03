@@ -1,28 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   i_mode_vars.c                                      :+:      :+:    :+:   */
+/*   fd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
+/*   Created: 2025/07/02 14:16:41 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/02 14:16:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	init_i_vars(t_i_mode_vars *i_vars)
+bool	is_invalid_fd(int fd)
 {
-	i_vars->input = NULL;
-	i_vars->prompt = "hoge> ";
-	i_vars->token_list = NULL;
-	i_vars->child_pids = NULL;
+	struct stat	sb;
+
+	if (fstat(fd, &sb) == -1 && errno == EBADF)
+		return (true);
+	return (false);
 }
 
-void	destroy_i_vars(t_i_mode_vars *vars)
+int	stashfd(int fd)
 {
-	ft_free((void **)&vars->input);
-	free_token_list(vars->token_list);
-	ft_free((void **)&vars->child_pids);
+	int	stashfd;
+
+	if (fd == -1)
+		return (-1);
+	stashfd = 10;
+	while (1)
+	{
+		if (is_invalid_fd(stashfd))
+			break ;
+		stashfd++;
+	}
+	if (dup2(fd, stashfd) == -1)
+		libc_error();
+	if (close(fd) == -1)
+		libc_error();
+	return (stashfd);
 }

@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   i_mode_vars.c                                      :+:      :+:    :+:   */
+/*   tokenize_3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
+/*   Created: 2025/06/27 13:29:34 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/03 10:52:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	init_i_vars(t_i_mode_vars *i_vars)
+bool	is_blank(char *s)
 {
-	i_vars->input = NULL;
-	i_vars->prompt = "hoge> ";
-	i_vars->token_list = NULL;
-	i_vars->child_pids = NULL;
-}
+	int			i;
+	static char	*chars[] = {" ", "\t", NULL};
+	static int	len = sizeof(chars) / sizeof(chars[0]);
 
-void	destroy_i_vars(t_i_mode_vars *vars)
-{
-	ft_free((void **)&vars->input);
-	free_token_list(vars->token_list);
-	ft_free((void **)&vars->child_pids);
+	if (!s)
+		return (false);
+	i = -1;
+	while (++i < len)
+	{
+		if (ft_strncmp(s, chars[i], ft_strlen(s) + 1) == 0)
+			return (true);
+	}
+	return (false);
 }
