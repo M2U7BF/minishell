@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:49:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,14 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
+int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
 {
-	int		fd;
-	t_token	*cur;
-	int		status;
-	int		to_fd;
+	int	fd;
+	int	status;
+	int	to_fd;
 
 	fd = 0;
 	status = 0;
-	cur = current_proc->args;
 	to_fd = STDIN_FILENO;
 	while (cur && cur->next)
 	{

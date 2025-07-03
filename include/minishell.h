@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:49:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,8 +199,6 @@ void						variable_expansion(t_token **token_list);
 
 // exec.c
 void						reset_redirection(t_list *redirect_fds);
-int							open_and_redirect_files(t_proc_unit *current_proc,
-								t_list **redirect_fds);
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
 t_proc_unit					*process_division(t_token *token_list);
@@ -252,7 +250,7 @@ void						close_pipe(t_proc_unit *proc);
 
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
-int							open_and_redirect_files(t_proc_unit *current_proc,
+int							open_and_redirect_files(t_token *cur,
 								t_list **redirect_fds);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
