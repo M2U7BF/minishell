@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:36:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 	to_fd = STDIN_FILENO;
 	while (cur && cur->next)
 	{
-		if (cur->type == REDIRECTION && (cur->next->type == WORD
+		if (cur->type == REDIR && (cur->next->type == WORD
 				|| cur->next->type == DELIM))
 		{
 			if (!cur->next->str)
-				return (ft_dprintf(STDERR_FILENO, ERR_REDCT_1), EXIT_FAILURE);
+				return (ft_dprintf(STDERR_FILENO, ERR_REDIR_1), EXIT_FAILURE);
 			open_files(cur, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);

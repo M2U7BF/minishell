@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:16:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	is_redirection_syntax_error(t_token *token_list)
 	current = token_list;
 	while (current)
 	{
-		if (current->type == REDIRECTION)
+		if (current->type == REDIR)
 		{
 			if (ft_strncmp(current->str, "<", 1) == 0)
 			{

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:16:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	determine_token_type(char *s)
 	else if (is_reserved_word(s))
 		type = RESERVED_WORD;
 	else if (is_redirection(s))
-		type = REDIRECTION;
+		type = REDIR;
 	else if (is_word(s))
 		type = WORD;
 	else if (is_blank(s))
@@ -66,7 +66,7 @@ void	process_token_list(t_token **token_list)
 	current = *token_list;
 	while (current)
 	{
-		if (current->type == REDIRECTION && ft_strncmp(current->str, "<<",
+		if (current->type == REDIR && ft_strncmp(current->str, "<<",
 				3) == 0)
 		{
 			if (current->next && current->next->type == WORD)

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:34:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 	{                    \
 		"\"", "\'", NULL \
 	}
-# define ERR_REDCT_1 "minishell: ambiguous redirect\n"
+# define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 
 // 起動モード
 typedef enum e_mode
@@ -63,7 +63,7 @@ typedef enum e_token_type
 	BLANK,
 	VARIABLE,
 	CONTROL_OPERATOR,
-	REDIRECTION,
+	REDIR,
 	PIPE,
 	DELIM,
 	ERROR,
