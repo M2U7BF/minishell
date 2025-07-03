@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:16:33 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:25:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	open_files(t_token *current, int *status, int *fd)
 		*fd = here_doc(ft_strdup(current->next->str));
 }
 
-static int	*redirect(int *fd, t_token *current)
+static void	redirect(int *fd, t_token *current, t_list **redirect_fds)
 {
 	int	*content;
 	int	stashed_to_fd;
@@ -40,10 +40,10 @@ static int	*redirect(int *fd, t_token *current)
 		libc_error();
 	content = malloc(sizeof(int) * 2);
 	if (!content)
-		return (NULL);
+		libc_error();
 	content[0] = stashed_to_fd;
 	content[1] = to_fd;
-	return (content);
+	ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
@@ -51,7 +51,6 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
 	int		fd;
 	t_token	*cur;
-	int		*content;
 	int		status;
 
 	fd = 0;
@@ -67,10 +66,7 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 			open_files(cur, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);
-			content = redirect(&fd, cur);
-			if (!content)
-				return (EXIT_FAILURE);
-			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
+			redirect(&fd, cur, redirect_fds);
 			cur = cur->next;
 		}
 		cur = cur->next;
