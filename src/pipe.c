@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   i_mode_vars.c                                      :+:      :+:    :+:   */
+/*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
+/*   Created: 2025/07/02 17:27:49 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/02 17:27:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	init_i_vars(t_i_mode_vars *i_vars)
+void	close_pipe(t_proc_unit *proc)
 {
-	i_vars->input = NULL;
-	i_vars->prompt = "hoge> ";
-	i_vars->token_list = NULL;
-	i_vars->child_pids = NULL;
-}
-
-void	destroy_i_vars(t_i_mode_vars *vars)
-{
-	ft_free((void **)&vars->input);
-	free_token_list(vars->token_list);
-	ft_free((void **)&vars->child_pids);
+	if (proc->read_fd != STDIN_FILENO)
+	{
+		if (close(proc->read_fd) == -1)
+			libc_error();
+	}
+	if (proc->write_fd != STDOUT_FILENO)
+	{
+		if (close(proc->write_fd) == -1)
+			libc_error();
+	}
 }

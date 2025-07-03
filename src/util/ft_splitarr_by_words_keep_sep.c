@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_multi_splitarr_by_word_leave_separator.c        :+:      :+:    :+:   */
+/*   ft_splitarr_by_words_keep_sep.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/10 12:39:24 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/20 12:52:20 by kkamei           ###   ########.fr       */
+/*   Created: 2025/07/03 11:03:25 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/03 11:03:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,43 +39,36 @@ static char	**inner_process(char **arr, char **separators)
 	i = -1;
 	while (arr[++i])
 	{
-		// printf("[%d], separator:[%s], arr[i]:[%s]\n", i, separator, arr[i]);
 		if (is_include_separator(arr[i], separators))
 		{
-			tmp = ft_multi_split_by_word_leave_separator(arr[i], separators);
-			// printf("tmp:\n");
-			// put_strarr(tmp);
+			tmp = ft_split_by_words_keep_sep(arr[i], separators);
 			j = 0;
 			while (j < arrlen(tmp))
-			{
-				ft_lstadd_back(&new_lst, ft_lstnew((void *)ft_strdup(tmp[j])));
-				j++;
-			}
+				ft_lstadd_back(&new_lst,
+					ft_lstnew((void *)ft_strdup(tmp[j++])));
 			free_str_array(tmp);
 		}
 		else
 			ft_lstadd_back(&new_lst, ft_lstnew((void *)ft_strdup(arr[i])));
 	}
-	// printf("new_lst:\n");
-	// debug_put_lst(new_lst);
 	new = lst_to_str_arr(new_lst);
 	ft_lstclear(&new_lst, del_content);
-	// ft_free(new_lst);
 	return (new);
 }
 
 // char **arr: 文字列の配列
 // char **separators: 分割文字の配列
 // 複数の文字列にマッチして、配列を更新する。
-char	**ft_multi_splitarr_by_word_leave_separator(char **arr,
+char	**ft_splitarr_by_words_keep_sep(char **arr,
 		char **separators)
 {
 	char	**old;
 	char	**new;
 
-  if (!arr || !*arr || !separators)
-    return (NULL);
+	if (!arr || !*arr || !separators)
+		return (NULL);
 	old = inner_process(arr, separators);
+	free_str_array(arr);
 	new = inner_process(old, separators);
 	while (arrlen(old) != arrlen(new))
 	{

@@ -6,33 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 13:14:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:59:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	debug_put_proc_list(t_proc_unit *proc_unit)
-{
-	t_proc_unit	*current_proc;
-	int			i;
-
-	if (!proc_unit)
-	{
-		printf("(null)\n");
-		return ;
-	}
-	current_proc = proc_unit;
-	i = 0;
-	while (current_proc)
-	{
-		printf("[%d] args:\n", i);
-		debug_put_token_list(current_proc->args);
-		printf("type:%d\n", current_proc->type);
-		current_proc = current_proc->next;
-		i++;
-	}
-}
 
 void	free_proc_list(t_proc_unit *proc_list)
 {
@@ -47,11 +25,11 @@ void	free_proc_list(t_proc_unit *proc_list)
 		tmp = current_proc;
 		current_proc = current_proc->next;
 		free_token_list(tmp->args);
-		ft_free(tmp);
+		ft_free((void **)&tmp);
 	}
 }
 
-t_proc_unit	*create_proc_unit(t_token *args, t_proc_unit_type type, int in_fd,
+t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 		int out_fd)
 {
 	t_proc_unit	*proc_unit;
