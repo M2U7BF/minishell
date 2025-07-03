@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:16:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:27:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,8 @@ int							open_and_redirect_files(t_proc_unit *current_proc,
 								t_list **redirect_fds);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
+
+// redirection_2.c
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
 
