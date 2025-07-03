@@ -6,11 +6,23 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 14:20:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:04:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	open_files(t_token *current, int *status, int *fd)
+{
+	if (is_str_equal(current->str, ">", 1))
+		*status = open_outfile(current->next->str, fd);
+	else if (is_str_equal(current->str, "<", 1))
+		*status = open_infile(current->next->str, fd);
+	else if (is_str_equal(current->str, ">>", 1))
+		*status = open_additionalfile(current->next->str, fd);
+	else if (is_str_equal(current->str, "<<", 1))
+		*fd = here_doc(ft_strdup(current->next->str));
+}
 
 // 必要なfileをopenし、リダイレクトを行う。
 int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
@@ -32,25 +44,13 @@ int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 				|| current->next->type == DELIMITER))
 		{
 			if (!current->next->str)
-			{
-				ft_dprintf(STDERR_FILENO, "minishell: ambiguous redirect\n");
-				return (EXIT_FAILURE);
-			}
+				return (ft_dprintf(STDERR_FILENO,
+						"minishell: ambiguous redirect\n"), EXIT_FAILURE);
 			if (current->str[0] == '>')
 				to_fd = STDOUT_FILENO;
-			if (is_str_equal(current->str, ">", 1))
-				status = open_outfile(current->next->str, &fd);
-			else if (is_str_equal(current->str, "<", 1))
-				status = open_infile(current->next->str, &fd);
-			else if (is_str_equal(current->str, ">>", 1))
-				status = open_additionalfile(current->next->str, &fd);
-			else if (is_str_equal(current->str, "<<", 1))
-				fd = here_doc(ft_strdup(current->next->str));
+			open_files(current, &status, &fd);
 			if (status != 0)
-			{
-				handle_error(status, current->next->str);
-				return (status);
-			}
+				return (handle_error(status, current->next->str), status);
 			fd = stashfd(fd);
 			stashed_to_fd = stashfd(to_fd);
 			if (fd != to_fd && (dup2(fd, to_fd) == -1 || close(fd) == -1))
