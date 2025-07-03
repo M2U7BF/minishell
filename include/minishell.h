@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:06:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:46:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct s_ni_mode_vars
 typedef struct s_i_mode_vars
 {
 	char					*input;
-	char					*prompt;
 	t_token					*token_list;
 	int						pro_count;
 	pid_t					*child_pids;

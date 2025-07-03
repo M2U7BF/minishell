@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:07:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:46:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers();
-		i_vars->input = readline(i_vars->prompt);
+		i_vars->input = readline("minishell$ ");
 		if (!i_vars->input)
 			exit(g_vars.exit_status);
 		else if (i_vars->input[0] == '\0')

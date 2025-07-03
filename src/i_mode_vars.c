@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:46:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	init_i_vars(t_i_mode_vars *i_vars)
 {
 	i_vars->input = NULL;
-	i_vars->prompt = "hoge> ";
 	i_vars->token_list = NULL;
 	i_vars->child_pids = NULL;
 }
