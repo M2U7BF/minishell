@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:17:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:24:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,21 +80,23 @@ int	exec(t_i_mode_vars *i_vars)
 
 	proc_list = process_division(i_vars->token_list);
 	update_proc(i_vars, proc_list);
-  //------------------------------------------atashiro
+	current = proc_list;
+	//------------------------------------------atashiro
 	if (!proc_list)
 		return (0);
-  current->argv = tokens_to_arr(proc_list->args);
+	current->argv = tokens_to_arr(proc_list->args);
 	// パイプがなく、コマンドが "cd" または "exit" の場合
-	if (proc_list->type == CMD && current->argv != NULL &&
-		(ft_strncmp(current->argv[0], "cd", 3) == 0 ||
-		 ft_strncmp(current->argv[0], "exit", 5) == 0 ||
-		 ft_strncmp(current->argv[0], "export", 7) == 0 ||
-		 ft_strncmp(current->argv[0], "unset", 6) == 0))
+	if (proc_list->type == CMD && current->argv != NULL
+		&& (ft_strncmp(current->argv[0], "cd", 3) == 0
+			|| ft_strncmp(current->argv[0], "exit", 5) == 0
+			|| ft_strncmp(current->argv[0], "export", 7) == 0
+			|| ft_strncmp(current->argv[0], "unset", 6) == 0))
 	{
 		redirect_fds = NULL;
-		redirect_fds = open_and_redirect_files(proc_list, redirect_fds);
+		// TODO ファイルopen時のstatus受け取り
+		open_and_redirect_files(proc_list->args, &redirect_fds);
 		char **trimmed_argv = trim_redirection(&current->argv); // argvはここで消費される
-		status = exec_builtin(trimmed_argv); // 親プロセスで実行
+		status = exec_builtin(trimmed_argv);                    // 親プロセスで実行
 		free_str_array(trimmed_argv);
 		reset_redirection(redirect_fds);
 		free_proc_list(proc_list);
@@ -103,7 +105,6 @@ int	exec(t_i_mode_vars *i_vars)
 	}
 	free_str_array(current->argv);
 	// ------------------------------------------------------------------
-	current = proc_list;
 	i = -1;
 	while (proc_list && ++i < i_vars->pro_count)
 	{
