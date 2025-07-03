@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:09:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:16:33 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,47 +24,56 @@ static void	open_files(t_token *current, int *status, int *fd)
 		*fd = here_doc(ft_strdup(current->next->str));
 }
 
+static int	*redirect(int *fd, t_token *current)
+{
+	int	*content;
+	int	stashed_to_fd;
+	int	to_fd;
+
+	*fd = stashfd(*fd);
+	if (current->str[0] == '>')
+		to_fd = STDOUT_FILENO;
+	else
+		to_fd = STDIN_FILENO;
+	stashed_to_fd = stashfd(to_fd);
+	if (*fd != to_fd && (dup2(*fd, to_fd) == -1 || close(*fd) == -1))
+		libc_error();
+	content = malloc(sizeof(int) * 2);
+	if (!content)
+		return (NULL);
+	content[0] = stashed_to_fd;
+	content[1] = to_fd;
+	return (content);
+}
+
 // 必要なfileをopenし、リダイレクトを行う。
 int	open_and_redirect_files(t_proc_unit *current_proc, t_list **redirect_fds)
 {
 	int		fd;
-	int		to_fd;
-	int		stashed_to_fd;
-	t_token	*current;
+	t_token	*cur;
 	int		*content;
 	int		status;
 
 	fd = 0;
 	status = 0;
-	current = current_proc->args;
-	while (current && current->next)
+	cur = current_proc->args;
+	while (cur && cur->next)
 	{
-		if (current->type == REDIRECTION && (current->next->type == WORD
-				|| current->next->type == DELIMITER))
+		if (cur->type == REDIRECTION && (cur->next->type == WORD
+				|| cur->next->type == DELIM))
 		{
-			if (!current->next->str)
-				return (ft_dprintf(STDERR_FILENO,
-						"minishell: ambiguous redirect\n"), EXIT_FAILURE);
-			open_files(current, &status, &fd);
+			if (!cur->next->str)
+				return (ft_dprintf(STDERR_FILENO, ERR_REDCT_1), EXIT_FAILURE);
+			open_files(cur, &status, &fd);
 			if (status != 0)
-				return (handle_error(status, current->next->str), status);
-			fd = stashfd(fd);
-			if (current->str[0] == '>')
-				to_fd = STDOUT_FILENO;
-      else
-        to_fd = STDIN_FILENO;
-			stashed_to_fd = stashfd(to_fd);
-			if (fd != to_fd && (dup2(fd, to_fd) == -1 || close(fd) == -1))
-				libc_error();
-			content = malloc(sizeof(int) * 2);
+				return (handle_error(status, cur->next->str), status);
+			content = redirect(&fd, cur);
 			if (!content)
 				return (EXIT_FAILURE);
-			content[0] = stashed_to_fd;
-			content[1] = to_fd;
 			ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
-			current = current->next;
+			cur = cur->next;
 		}
-		current = current->next;
+		cur = cur->next;
 	}
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 12:20:54 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:16:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	is_redirection_syntax_error(t_token *token_list)
 				if (!current->next)
 					return (true);
 				else if (current->next->type != WORD
-					&& current->next->type != DELIMITER)
+					&& current->next->type != DELIM)
 					return (true);
 			}
 			else

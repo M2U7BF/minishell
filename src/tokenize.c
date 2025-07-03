@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:51:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:16:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	process_token_list(t_token **token_list)
 				3) == 0)
 		{
 			if (current->next && current->next->type == WORD)
-				current->next->type = DELIMITER;
+				current->next->type = DELIM;
 		}
 		current = current->next;
 	}
