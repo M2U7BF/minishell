@@ -6,33 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 16:20:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:59:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	debug_put_proc_list(t_proc_unit *proc_unit)
-{
-	t_proc_unit	*current_proc;
-	int			i;
-
-	if (!proc_unit)
-	{
-		printf("(null)\n");
-		return ;
-	}
-	current_proc = proc_unit;
-	i = 0;
-	while (current_proc)
-	{
-		printf("[%d] args:\n", i);
-		debug_put_token_list(current_proc->args);
-		printf("type:%d\n", current_proc->type);
-		current_proc = current_proc->next;
-		i++;
-	}
-}
 
 void	free_proc_list(t_proc_unit *proc_list)
 {

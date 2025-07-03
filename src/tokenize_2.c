@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 13:29:34 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 11:07:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:54:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ bool	is_reserved_word(char *s)
 bool	is_redirection(char *s)
 {
 	int			i;
-	static char	*chars[] = REDIRECTION_LIST;
+	static char	*chars[] = {">>", "<<", ">", "<", NULL};
 
 	if (!s)
 		return (false);

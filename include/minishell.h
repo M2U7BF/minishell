@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:49:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:01:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -34,18 +33,6 @@
 # define EXIT_SYNTAX_ERROR 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
-# define REDIRECTION_LIST           \
-	{                              \
-		">>", "<<", ">", "<", NULL \
-	}
-# define BLANK_LIST      \
-	{                   \
-		" ", "\t", NULL \
-	}
-# define QUOTATION_LIST   \
-	{                    \
-		"\"", "\'", NULL \
-	}
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 
 // 起動モード
@@ -154,11 +141,6 @@ int							exec_interactive(t_i_mode_vars *i_vars);
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);
 
-// debug.c
-void						debug_put_token_list(t_token *token_list);
-int							debug_put_token_list_compare(t_token *t,
-								t_token *t_e);
-
 // token.c
 t_token						*create_token(char *str, t_token_type type);
 void						append_token(t_token **token_list, t_token *token);
@@ -212,7 +194,6 @@ void						put_error_exit(char *s, int status);
 void						libc_error(void);
 
 // proc_unit.c
-void						debug_put_proc_list(t_proc_unit *proc_list);
 void						free_proc_list(t_proc_unit *proc_list);
 t_proc_unit					*new_proc(t_token *args, t_proc_unit_type type,
 								int in_fd, int out_fd);
@@ -285,7 +266,6 @@ bool						is_str_equal(char *s1, char *s2,
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);
-void						debug_put_lst(t_list *lst);
 void						del_content(void *content);
 t_list						*get_prev_lst(t_list **list, t_list *elem);
 

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 13:29:34 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 15:18:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:52:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	is_blank(char *s)
 {
 	int			i;
-	static char	*chars[] = BLANK_LIST;
+	static char	*chars[] = {" ", "\t", NULL};
 	static int	len = sizeof(chars) / sizeof(chars[0]);
 
 	if (!s)

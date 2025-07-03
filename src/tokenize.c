@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:53:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static void	tokenize_error(void)
 char	**split_line(char *input_line)
 {
 	char		**w;
-	static char	*redirection_list[] = REDIRECTION_LIST;
-	static char	*blank_list[] = BLANK_LIST;
-	static char	*quotation_list[] = QUOTATION_LIST;
+	static char	*redirection_list[] = {">>", "<<", ">", "<", NULL};
+	static char	*blank_list[] = {" ", "\t", NULL};
+	static char	*quotation_list[] = {"\"", "\'", NULL};
 
 	if (!input_line)
 		return (NULL);
@@ -66,8 +66,7 @@ void	process_token_list(t_token **token_list)
 	current = *token_list;
 	while (current)
 	{
-		if (current->type == REDIR && ft_strncmp(current->str, "<<",
-				3) == 0)
+		if (current->type == REDIR && ft_strncmp(current->str, "<<", 3) == 0)
 		{
 			if (current->next && current->next->type == WORD)
 				current->next->type = DELIM;

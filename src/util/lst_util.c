@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:45 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 15:53:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:00:23 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,6 @@ char	**lst_to_str_arr(t_list *lst)
 		i++;
 	}
 	return (new);
-}
-
-void	debug_put_lst(t_list *lst)
-{
-	t_list	*current_lst;
-	int		i;
-
-	if (!lst)
-		dprintf(STDERR_FILENO, "(null)\n");
-	current_lst = lst;
-	i = 0;
-	while (current_lst)
-	{
-		dprintf(STDERR_FILENO, "[%d] \"%d, %d\"\n", i,
-			*(int *)current_lst->content, *(int *)current_lst->content + 1);
-		current_lst = current_lst->next;
-		i++;
-	}
 }
 
 void	del_content(void *content)

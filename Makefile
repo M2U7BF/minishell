@@ -6,19 +6,21 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/03 10:27:52 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/03 10:58:29 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC_NAMES = exec_vars.c handle_keys.c i_mode_vars.c interactive_mode.c main.c \
-						non_interactive_mode.c parse.c util/util.c util/ft_split_leave_separator.c \
-						util/ft_multi_split.c token.c exec.c error.c \
-						util/ft_multi_split_keep_sep.c proc_unit.c syntax.c \
-						util/ft_split_by_word_keep_sep.c util/ft_splitarr_by_word_leave_separator.c \
-						util/ft_split_by_words_keep_sep.c util/ft_multi_splitarr_by_word_leave_separator.c \
-						util/remove_elem.c here_doc.c file.c util/ft_strtrim_front.c handle_keys_heredoc.c debug.c tokenize.c \
-						blank.c quote.c util/token_util.c token_2.c tokenize_2.c tokenize_3.c util/arr_util.c util/str_util.c util/lst_util.c \
-						fd.c redirection.c command_path.c proc_unit_2.c pipe.c redirection_2.c
+SRC_NAMES = blank.c command_path.c error.c exec.c exec_vars.c fd.c file.c \
+						handle_keys.c handle_keys_heredoc.c here_doc.c i_mode_vars.c \
+						interactive_mode.c main.c non_interactive_mode.c parse.c pipe.c \
+						proc_unit_2.c proc_unit.c quote.c redirection_2.c redirection.c \
+						syntax.c token_2.c token.c tokenize_2.c tokenize_3.c tokenize.c \
+						util/arr_util.c util/ft_multi_splitarr_by_word_leave_separator.c \
+						util/ft_multi_split.c util/ft_multi_split_keep_sep.c \
+						util/ft_splitarr_by_word_leave_separator.c \
+						util/ft_split_by_word_keep_sep.c util/ft_split_by_words_keep_sep.c \
+						util/ft_split_leave_separator.c util/ft_strtrim_front.c util/lst_util.c \
+						util/remove_elem.c util/str_util.c util/token_util.c util/util.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
