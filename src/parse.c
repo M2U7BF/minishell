@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:51:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 09:58:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,25 @@ void	expand_variable(char **s)
 		ft_free((void **)s);
 }
 
+void	inner_process(char **current_quote, char **s, bool *is_expand)
+{
+	if (*current_quote && ft_strchr(*s, (*current_quote)[0]))
+	{
+		ft_free((void **)current_quote);
+		*is_expand = true;
+	}
+	else if (!(*current_quote) && (ft_strchr(*s, '"') || ft_strchr(*s, '\'')))
+	{
+		*current_quote = ft_strdup(*s);
+		if (is_str_equal(*current_quote, "\'", 1))
+			*is_expand = false;
+	}
+	if (is_str_equal("$?", *s, 0) && *is_expand)
+		expand_question_mark(s);
+	else if (ft_strchr(*s, '$') != NULL && *is_expand)
+		expand_variable(s);
+}
+
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
 // シングルクォートに囲まれている場合、展開は行わない。
@@ -46,7 +65,7 @@ void	variable_expansion(t_token **token_list)
 	int		j;
 	char	**splited_words;
 	t_token	*cur_tok;
-	char	*current_quote;
+	char	*cur_quote;
 	bool	is_expand;
 
 	if (!token_list || !(*token_list))
@@ -59,27 +78,9 @@ void	variable_expansion(t_token **token_list)
 		{
 			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$\'\"");
 			j = -1;
-			current_quote = NULL;
+			cur_quote = NULL;
 			while (splited_words[++j])
-			{
-				if (current_quote && ft_strchr(splited_words[j],
-						current_quote[0]))
-				{
-					ft_free((void **)&current_quote);
-					is_expand = true;
-				}
-				else if (!current_quote && (ft_strchr(splited_words[j], '"')
-						|| ft_strchr(splited_words[j], '\'')))
-				{
-					current_quote = ft_strdup(splited_words[j]);
-					if (is_str_equal(current_quote, "\'", 1))
-						is_expand = false;
-				}
-				if (is_str_equal("$?", splited_words[j], 0) && is_expand)
-					expand_question_mark(&splited_words[j]);
-				else if (ft_strchr(splited_words[j], '$') != NULL && is_expand)
-					expand_variable(&splited_words[j]);
-			}
+				inner_process(&cur_quote, &splited_words[j], &is_expand);
 			ft_free((void **)&cur_tok->str);
 			cur_tok->str = ft_strjoin_all(splited_words);
 			free_str_array(splited_words);
