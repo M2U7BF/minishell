@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:35:00 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:03:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 14:45:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**split_line(char *input_line)
 	char		**w;
 	static char	*redirection_list[] = {">>", "<<", ">", "<", NULL};
 	static char	*blank_list[] = {" ", "\t", NULL};
-	static char	*quotation_list[] = {"\"", "\'", NULL};
+	static char	*quotation_list[] = {"\"", "'", NULL};
 
 	if (!input_line)
 		return (NULL);

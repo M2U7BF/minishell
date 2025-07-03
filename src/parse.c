@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 09:58:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/03 14:45:32 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	inner_process(char **current_quote, char **s, bool *is_expand)
 	else if (!(*current_quote) && (ft_strchr(*s, '"') || ft_strchr(*s, '\'')))
 	{
 		*current_quote = ft_strdup(*s);
-		if (is_str_equal(*current_quote, "\'", 1))
+		if (is_str_equal(*current_quote, "'", 1))
 			*is_expand = false;
 	}
 	if (is_str_equal("$?", *s, 0) && *is_expand)
