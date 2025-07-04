@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 13:43:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:27:58 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool	is_str_equal(char *s1, char *s2, bool include_null_char)
 {
 	int	len;
 
-	len = ft_strlen(s1);
+	len = ft_strlen(s2);
 	if (include_null_char)
 		len++;
 	return (ft_strncmp(s1, s2, len) == 0);

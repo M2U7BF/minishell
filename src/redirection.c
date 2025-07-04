@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:47:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:28:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 static void	open_files(t_token *current, int *status, int *fd)
 {
-	if (is_str_equal(current->str, ">", 1))
+	if (is_str_equal(current->str, ">", true))
 		*status = open_outfile(current->next->str, fd);
-	else if (is_str_equal(current->str, "<", 1))
+	else if (is_str_equal(current->str, "<", true))
 		*status = open_infile(current->next->str, fd);
-	else if (is_str_equal(current->str, ">>", 1))
+	else if (is_str_equal(current->str, ">>", true))
 		*status = open_additionalfile(current->next->str, fd);
-	else if (is_str_equal(current->str, "<<", 1))
+	else if (is_str_equal(current->str, "<<", true))
 		*fd = here_doc(ft_strdup(current->next->str));
 }
 
