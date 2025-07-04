@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 12:06:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	expand_variable(char **s)
 {
 	char	*env_var;
 
-	env_var = get_env_value(g_vars.env_list, *s);
+	env_var = get_env_value(g_vars.env_list, *s + 1);
 	if (env_var)
 	{
 		ft_free((void **)s);
