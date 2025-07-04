@@ -6,26 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/01 12:41:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 12:31:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-bool	is_quotation_error(char *input_line)
-{
-	if (count_chr(input_line, '\'') % 2 == 1)
-	{
-		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (true);
-	}
-	else if (count_chr(input_line, '\"') % 2 == 1)
-	{
-		ft_dprintf(STDERR_FILENO, "Unclosed quote\n");
-		return (true);
-	}
-	return (false);
-}
 
 static char	*remove_quotes(char *s)
 {
@@ -49,6 +34,11 @@ static char	*remove_quotes(char *s)
 		else
 			result[j++] = s[i];
 	}
+	if (current_quote)
+	{
+		ft_dprintf(STDERR_FILENO, "%s\n", ERR_QUOTE_1);
+		exit(EXIT_SYNTAX_ERROR);
+	}
 	result[j] = '\0';
 	return (result);
 }
@@ -59,11 +49,12 @@ void	quote_removal(t_token *token)
 	t_token	*current;
 	char	*new;
 
+	// TODO クォートの閉じ忘れを検知
 	current = token;
 	while (current && current->str)
 	{
 		if (current->type == WORD && (ft_strchr(current->str, '\'') != NULL
-				|| ft_strchr(current->str, '\"') != NULL))
+					|| ft_strchr(current->str, '\"') != NULL))
 		{
 			new = remove_quotes(current->str);
 			ft_free((void **)&current->str);

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 12:06:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 12:25:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,5 @@ void	parse(t_i_mode_vars *i_vars)
 		exit(EXIT_SYNTAX_ERROR);
 	}
 	variable_expansion(&i_vars->token_list);
+  quote_removal(i_vars->token_list);
 }
