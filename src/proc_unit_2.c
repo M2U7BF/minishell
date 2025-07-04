@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:46:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 17:08:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,8 @@ void	set_argv(t_proc_unit *current_proc)
 	current_proc->argv = trim_redirection(&current_proc->argv);
 	if (!current_proc->argv)
 		exit(EXIT_SUCCESS);
-	// atashiro-----------------------
 	if (is_builtin(current_proc->argv[0]))
-		exit(exec_builtin(current_proc->argv));
-	//-------------
+		return ;
 	g_vars.exit_status = get_command_path(&current_proc->argv[0]);
 	if (g_vars.exit_status != 0)
 	{
