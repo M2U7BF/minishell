@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 17:55:24 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:37:26 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin_pwd(void)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		ft_putendl_fd(cwd, STDOUT_FILENO);
-		ft_putendl_fd("ビルトインです", STDOUT_FILENO);
+		// ft_putendl_fd("ビルトインです", STDOUT_FILENO);
 	}
 	else
 	{

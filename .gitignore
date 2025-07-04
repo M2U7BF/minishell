@@ -8,7 +8,7 @@ tmp*
 minishell_test/
 minishell_doc/
 some_dir/
-minishell_tester/
+atashiro_tester/
 
 # Prerequisites
 *.d

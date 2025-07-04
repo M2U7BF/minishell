@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:24:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:27:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	update_proc(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
 }
 
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
-		t_proc_unit *proc_list, t_proc_unit *proc)
+		t_proc_unit *proc_list, t_proc_unit *proc, t_list *env_list)
 {
 	if (status != 0)
 	{
@@ -58,7 +58,8 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 			libc_error();
 	}
 	set_argv(proc);
-	execve(proc->argv[0], proc->argv, __environ);
+  char **envp_array = convert_env_list_to_array(env_list);
+	execve(proc->argv[0], proc->argv, envp_array);
 	perror("execve");
 	exit(EXIT_CMD_NOT_FOUND);
 }
@@ -70,7 +71,7 @@ static void	exec_parent_proc(t_list *redirect_fds)
 	reset_redirection(redirect_fds);
 }
 
-int	exec(t_i_mode_vars *i_vars)
+int	exec(t_i_mode_vars *i_vars, t_list *env_list)
 {
 	int			i;
 	t_proc_unit	*proc_list;
@@ -94,9 +95,10 @@ int	exec(t_i_mode_vars *i_vars)
 	{
 		redirect_fds = NULL;
 		// TODO ファイルopen時のstatus受け取り
-		open_and_redirect_files(proc_list->args, &redirect_fds);
+		open_and_redirect_files(proc_list->args, &redirect_fds, env_list);
 		char **trimmed_argv = trim_redirection(&current->argv); // argvはここで消費される
-		status = exec_builtin(trimmed_argv);                    // 親プロセスで実行
+		status = exec_builtin(trimmed_argv, env_list);                    // 親プロセスで実行
+    g_vars.exit_status = status;//追加？-------------------------------要検討
 		free_str_array(trimmed_argv);
 		reset_redirection(redirect_fds);
 		free_proc_list(proc_list);
@@ -111,7 +113,7 @@ int	exec(t_i_mode_vars *i_vars)
 		redirect_fds = exec_redirection(&status, current);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
-			exec_child_proc(status, i_vars, proc_list, current);
+			exec_child_proc(status, i_vars, proc_list, current, env_list);
 		else if (i_vars->child_pids[i] == -1)
 			libc_error();
 		else

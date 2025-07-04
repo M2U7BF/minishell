@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 14:45:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:33:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ void	expand_question_mark(char **s)
 	free_str_array(tmp);
 }
 
-void	expand_variable(char **s)
+void	expand_variable(char **s, t_list *env_list)
 {
 	char	*env_var;
 
+  env_var = get_env_value(env_list, *s);
 	env_var = getenv(&(*s)[1]);
 	if (env_var)
 	{
@@ -60,7 +61,7 @@ void	inner_process(char **current_quote, char **s, bool *is_expand)
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
 // シングルクォートに囲まれている場合、展開は行わない。
-void	variable_expansion(t_token **token_list)
+void	variable_expansion(t_token **token_list, t_list *env_list)
 {
 	int		j;
 	char	**splited_words;
@@ -89,7 +90,7 @@ void	variable_expansion(t_token **token_list)
 	}
 }
 
-void	parse(t_i_mode_vars *i_vars)
+void	parse(t_i_mode_vars *i_vars, t_list *env_list)
 {
 	if (is_syntax_error(i_vars->token_list))
 	{
@@ -97,5 +98,5 @@ void	parse(t_i_mode_vars *i_vars)
 		destroy_i_vars(i_vars);
 		exit(EXIT_SYNTAX_ERROR);
 	}
-	variable_expansion(&i_vars->token_list);
+	variable_expansion(&i_vars->token_list, env_list);
 }

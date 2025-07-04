@@ -6,52 +6,42 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/23 13:49:11 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:19:59 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	update_env_vars(void);
-static int	change_dir_and_update_env(const char *path);
-static int	update_env_vars(void)
+static int	update_env_vars(t_list *env_list)
 {
-	char	cwd[1000];
+	char	cwd[1024];
 	char	*old_pwd;
 
-	old_pwd = getenv("PWD");
+	old_pwd = get_env_value(env_list, "PWD");
 	if (old_pwd != NULL)
 	{
-		if (setenv("OLDPWD", old_pwd, 1) != 0)
-		{
-			perror("minishell: cd");
-			return (1);
-		}
+		set_env_var(&env_list, "OLDPWD", old_pwd);
 	}
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("minishell: cd");
 		return (1);
 	}
-	if (setenv("PWD", cwd, 1) != 0)
-	{
-		perror("minishell: cd");
-		return (1);
-	}
+	set_env_var(&env_list, "PWD", cwd);
 	return (0);
 }
 
-static int	change_dir_and_update_env(const char *path)
+static int	change_dir_and_update_env(const char *path, t_list *env_list)
 {
 	if (chdir(path) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path, strerror(errno));
 		return (1);
 	}
-	return (update_env_vars());
+	return (update_env_vars(env_list));
 }
 
-int	builtin_cd(char **argv)
+int	builtin_cd(char **argv, t_list *env_list)
 {
 	char	*path;
 	int		argc;
@@ -64,7 +54,7 @@ int	builtin_cd(char **argv)
 	}
 	if (argc == 1 || (argc > 1 && ft_strncmp(argv[1], "~", 2) == 0))
 	{
-		path = getenv("HOME");
+		path = get_env_value(env_list, "HOME");
 		if (path == NULL || *path == '\0')
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
@@ -73,7 +63,7 @@ int	builtin_cd(char **argv)
 	}
 	else if (argc > 1 && ft_strncmp(argv[1], "-", 2) == 0)
 	{
-		path = getenv("OLDPWD");
+		path = get_env_value(env_list, "OLDPWD");
 		if (path == NULL)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
@@ -85,7 +75,7 @@ int	builtin_cd(char **argv)
 	{
 		path = argv[1];
 	}
-	return (change_dir_and_update_env(path));
+	return (change_dir_and_update_env(path, env_list));
 }
 
 //--------------test---------------
