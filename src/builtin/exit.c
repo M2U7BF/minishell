@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 18:05:07 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/04 18:00:13 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	builtin_exit(char **argv)
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (argc == 1)
 	{
-		exit(0);
+		exit(g_vars.exit_status);
 	}
 	if (!is_numeric_argument(argv[1]))
 	{

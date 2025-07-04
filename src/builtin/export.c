@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 15:36:43 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,65 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
+static void	sort_env_array(char **env_array)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+	int		count;
+
+	if (!env_array)
+		return ;
+	count = 0;
+	while (env_array[count])
+		count++;
+	i = 0;
+	while (i < count)
+	{
+		j = i + 1;
+		while (j < count)
+		{
+			if (ft_strncmp(env_array[i], env_array[j], -1) > 0)
+			{
+				tmp = env_array[i];
+				env_array[i] = env_array[j];
+				env_array[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 static void	print_sorted_env(t_list *env_list)
 {
 	char	**env_array;
+	int		i;
+	char	*eq_ptr;
+	char	*key;
+	char	*value;
 
 	env_array = convert_env_list_to_array(env_list);
-	// int count = arrlen(env_array);
+	if (!env_array)
+		return ;
+	sort_env_array(env_array);
+	i = 0;
+	while (env_array[i])
+	{
+		eq_ptr = ft_strchr(env_array[i], '=');
+		if (eq_ptr)
+		{
+			key = ft_substr(env_array[i], 0, eq_ptr - env_array[i]);
+			value = eq_ptr + 1;
+			ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", key, value);
+			free(key);
+		}
+		else
+		{
+			ft_dprintf(STDOUT_FILENO, "declare -x %s\n", env_array[i]);
+		}
+		i++;
+	}
 	free_str_array(env_array);
 }
 
