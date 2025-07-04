@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:31:31 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:35:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char *argv[], char **envp)
   if (e_vars.mode == INTERACTIVE)
   {
     init_i_vars(&e_vars.i_vars);
-    exec_interactive(&e_vars.i_vars);
+    exec_interactive(&e_vars.i_vars, &e_vars);
     clear_history();
   }
   free_env_list(&e_vars.env_list);

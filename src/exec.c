@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:27:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:36:23 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
+static t_list	*exec_redirection(int *status, t_proc_unit *current_proc, t_list *env_list)
 {
 	t_list	*redirect_fds;
 	int		pipe_fds[2];
@@ -26,7 +26,7 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 		current_proc->next->read_fd = pipe_fds[0];
 	}
 	redirect_fds = pipe_redirect(current_proc, redirect_fds);
-	*status = open_and_redirect_files(current_proc->args, &redirect_fds);
+	*status = open_and_redirect_files(current_proc->args, &redirect_fds, env_list);
 	return (redirect_fds);
 }
 
@@ -57,7 +57,7 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		if (close(proc->next->read_fd) == -1)
 			libc_error();
 	}
-	set_argv(proc);
+	set_argv(proc, env_list);
   char **envp_array = convert_env_list_to_array(env_list);
 	execve(proc->argv[0], proc->argv, envp_array);
 	perror("execve");
@@ -110,7 +110,7 @@ int	exec(t_i_mode_vars *i_vars, t_list *env_list)
 	i = -1;
 	while (proc_list && ++i < i_vars->pro_count)
 	{
-		redirect_fds = exec_redirection(&status, current);
+		redirect_fds = exec_redirection(&status, current, env_list);
 		i_vars->child_pids[i] = fork();
 		if (i_vars->child_pids[i] == 0)
 			exec_child_proc(status, i_vars, proc_list, current, env_list);

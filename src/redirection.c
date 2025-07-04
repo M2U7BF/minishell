@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:49:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:37:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	open_files(t_token *current, int *status, int *fd)
+static void	open_files(t_token *current, int *status, int *fd, t_list *env_list)
 {
 	if (is_str_equal(current->str, ">", 1))
 		*status = open_outfile(current->next->str, fd);
@@ -21,7 +21,7 @@ static void	open_files(t_token *current, int *status, int *fd)
 	else if (is_str_equal(current->str, ">>", 1))
 		*status = open_additionalfile(current->next->str, fd);
 	else if (is_str_equal(current->str, "<<", 1))
-		*fd = here_doc(ft_strdup(current->next->str));
+		*fd = here_doc(ft_strdup(current->next->str), env_list);
 }
 
 void	redirect(int *fd, int to_fd, t_list **redirect_fds)
@@ -42,7 +42,7 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
+int	open_and_redirect_files(t_token *cur, t_list **redirect_fds, t_list *env_list)
 {
 	int	fd;
 	int	status;
@@ -58,7 +58,7 @@ int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
 		{
 			if (!cur->next->str)
 				return (ft_dprintf(STDERR_FILENO, ERR_REDIR_1), EXIT_FAILURE);
-			open_files(cur, &status, &fd);
+			open_files(cur, &status, &fd, env_list);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);
 			if (cur->str[0] == '>')
