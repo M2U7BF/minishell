@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 12:31:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:07:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	quote_removal(t_token *token)
 	t_token	*current;
 	char	*new;
 
-	// TODO クォートの閉じ忘れを検知
 	current = token;
 	while (current && current->str)
 	{
