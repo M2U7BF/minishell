@@ -10,6 +10,7 @@ minishell_doc/
 some_dir/
 atashiro_tester/
 minishell_tester/
+atashiro_test
 
 # Prerequisites
 *.d
