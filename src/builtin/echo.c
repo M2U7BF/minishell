@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:45:02 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/25 17:54:15 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:20:21 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	builtin_echo(char **argv)
 
 	n_option = 0;
 	i = 1;
-
 	while (argv[i] && argv[i][0] == '-')
 	{
 		j = 1;
@@ -34,9 +33,7 @@ int	builtin_echo(char **argv)
 			i++;
 		}
 		else
-		{
 			break;
-		}
 	}
 	while (argv[i])
 	{

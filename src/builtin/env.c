@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 12:26:01 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:20:38 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	builtin_env(t_list *env_list)
 	while (current)
 	{
 		env_var = (t_env *)current->content;
-		// value がある環境変数のみ表示
 		if (env_var->value != NULL && *(env_var->value) != '\0')
 		{
 			ft_putstr_fd(env_var->key, STDOUT_FILENO);

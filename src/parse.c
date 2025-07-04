@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 13:01:37 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/03 20:24:50 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ void	variable_expansion(t_token **token_list, t_list *env_list)
 					else
 					{
 						ft_free(splited_words[j]);
-						splited_words[j] = NULL;
+						splited_words[j] = ft_strdup("");//NULLから変更
 					}
 				}
 			}

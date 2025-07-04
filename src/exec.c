@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 13:11:42 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/03 19:55:26 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,6 +392,7 @@ int	exec(t_i_mode_vars *i_vars, t_list *env_list)
 		// redirect_fds = open_and_redirect_files(proc_list, redirect_fds);------mergeしたら型が変わっていて迷子
 		char **trimmed_argv = trim_redirection(&argv); // argvはここで消費される
 		status = exec_builtin(trimmed_argv, env_list); // 親プロセスで実行
+		g_runtime_data.exit_status = status;//追加？-------------------------------要検討
 		free_str_array(trimmed_argv);
 		reset_redirection(redirect_fds);
 		free_proc_list(proc_list);

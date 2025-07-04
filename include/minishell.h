@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 16:14:33 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:12:50 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,13 @@ typedef struct s_i_mode_vars
 	pid_t					*child_pids;
 }							t_i_mode_vars;
 
+// 環境変数のキーとバリューを保持する構造体
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+}					t_env;
+
 // 起動情報などを保持する構造体
 typedef struct s_exec_vars
 {
@@ -114,6 +121,7 @@ typedef struct s_exec_vars
 	struct s_i_mode_vars	i_vars;
 	struct s_ni_mode_vars	ni_vars;
 	char					*script;
+	t_list					*env_list;
 }							t_exec_vars;
 
 // グローバル変数を保持する構造体
@@ -167,20 +175,20 @@ t_token						*process_double_quote(t_token *token_list);
 bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
 void						null_to_empty(t_token *token);
-void						parse(t_i_mode_vars *i_vars);
-void						variable_expansion(t_token **token_list);
+void						parse(t_i_mode_vars *i_vars, t_list *env_list);
+void						variable_expansion(t_token **token_list, t_list *env_list);
 
 // exec.c
 void						reset_redirection(t_list *redirect_fds);
 int							open_and_redirect_files(t_proc_unit *current_proc,
-								t_list **redirect_fds);
+	 						t_list **redirect_fds, t_list *env_list);
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
 t_proc_unit					*process_division(t_token *token_list,
 								int *pro_count);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
-int							exec(t_i_mode_vars *i_vars);
+int							exec(t_i_mode_vars *i_vars, t_list *env_list);
 void						handle_error(int status, char *cmd_path);
 
 // error.c
@@ -201,7 +209,7 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter);
+int							here_doc(char *delimiter, t_list *env_list);
 
 // handle_signal_heredoc.c
 void						handle_signal_heredoc(void);
@@ -260,15 +268,22 @@ char						**remove_elem(char **arr, char **remove_list);
 
 // void	set_signal_handler(int signum, void (*handler)(int));
 
-
-int							is_builtin(char *cmd);
-int							exec_builtin(char **argv);
-int							builtin_cd(char **argv);
-int							builtin_echo(char **argv);
-int							builtin_env(void);
+int	is_builtin(char *cmd);
+int							exec_builtin(char **argv, t_list *env_list);
+int							builtin_cd(char **argv, t_list *env_list);
+int							builtin_echo(char **argv); // echoは環境変数不要?
+int							builtin_env(t_list *env_list);
 int							builtin_exit(char **argv);
-int							builtin_export(char **argv);
+int							builtin_export(char **argv, t_list **env_list);
 int							builtin_pwd(void);
-int							builtin_unset(char **argv);
+int							builtin_unset(char **argv, t_list **env_list);
+
+//env_util
+void						init_env_list(t_list **env_list, char **environ);
+char						*get_env_value(t_list *env_list, const char *key);
+void						set_env_var(t_list **env_list, const char *key, const char *value);
+void						unset_env_var(t_list **env_list, const char *key);
+char						**convert_env_list_to_array(t_list *env_list);
+void						free_env_list(t_list **env_list);
 
 #endif

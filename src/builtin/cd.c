@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 12:26:46 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:19:59 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 	}
 	if (argc == 1 || (argc > 1 && ft_strncmp(argv[1], "~", 2) == 0))
 	{
-		path = get_env_value(env_list, "HOME"); // getenv -> get_env_value
+		path = get_env_value(env_list, "HOME");
 		if (path == NULL || *path == '\0')
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
@@ -63,7 +63,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 	}
 	else if (argc > 1 && ft_strncmp(argv[1], "-", 2) == 0)
 	{
-		path = get_env_value(env_list, "OLDPWD"); // getenv -> get_env_value
+		path = get_env_value(env_list, "OLDPWD");
 		if (path == NULL)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
