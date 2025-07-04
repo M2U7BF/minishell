@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 12:53:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:34:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -327,8 +326,5 @@ void						set_env_var(t_list **env_list, const char *key,
 void						unset_env_var(t_list **env_list, const char *key);
 char						**convert_env_list_to_array(t_list *env_list);
 void						free_env_list(t_list **env_list);
-
-// debug
-void	debug_put_token_list(t_token *token_list);
 
 #endif

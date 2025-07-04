@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:28:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:36:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 		if (*current_quote == '\'')
 			*is_expand = false;
 	}
-	// printf("*s展開前:[%s]\n", *s);
 	if (*s[0] == '$')
 	{
 		if (is_str_equal(*s, "$", true))
@@ -64,7 +63,6 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 				expand_variable(s);
 		}
 	}
-	// printf("*s展開結果:[%s]\n", *s);
 }
 
 // words: free可能なcharの2重配列のポインタ
@@ -87,8 +85,6 @@ void	variable_expansion(t_token **token_list)
 		if (!is_str_equal("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
 		{
 			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
-			// printf("変数展開の内部：\n");
-			// put_strarr(splited_words);
 			j = -1;
 			cur_quote = '\0';
 			while (splited_words[++j])

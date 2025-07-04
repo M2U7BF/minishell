@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:21:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:36:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		add_history(i_vars->input);
 		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
 		i_vars->token_list = tokenize(i_vars->input);
-    // printf("tokenizeのあと：\n");
-    // debug_put_token_list(i_vars->token_list);
 		if (!i_vars->token_list)
 			continue ;
 		parse(i_vars);
