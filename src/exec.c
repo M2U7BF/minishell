@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:52:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,13 @@ int	exec(t_i_mode_vars *i_vars)
 			|| ft_strncmp(current->argv[0], "unset", 6) == 0))
 	{
 		redirect_fds = NULL;
+		i_vars->child_pids[0] = -1;
 		// TODO ファイルopen時のstatus受け取り
 		open_and_redirect_files(proc_list->args, &redirect_fds);
 		char **trimmed_argv = trim_redirection(&current->argv); // argvはここで消費される
 		status = exec_builtin(trimmed_argv);                    // 親プロセスで実行
-		g_vars.exit_status = status;                           
-			//追加？-------------------------------要検討
+		g_vars.exit_status = status;
+		//追加？-------------------------------要検討
 		free_str_array(trimmed_argv);
 		reset_redirection(redirect_fds);
 		free_proc_list(proc_list);
