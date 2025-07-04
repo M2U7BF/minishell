@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:52:19 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 17:08:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 			libc_error();
 	}
 	set_argv(proc);
+	if (is_builtin(proc->argv[0]))
+		exit(exec_builtin(proc->argv));
 	envp_array = convert_env_list_to_array(g_vars.env_list);
 	execve(proc->argv[0], proc->argv, envp_array);
 	perror("execve");
