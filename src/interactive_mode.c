@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:36:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,11 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		else if (i_vars->input[0] == '\0')
 			continue ;
 		add_history(i_vars->input);
-		if (is_quotation_error(i_vars->input) != 0)
-			exit(EXIT_FAILURE);
 		ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
 		i_vars->token_list = tokenize(i_vars->input);
 		if (!i_vars->token_list)
 			continue ;
 		parse(i_vars);
-		quote_removal(i_vars->token_list);
 		exec(i_vars);
 		if (i_vars->child_pids != NULL)
 			wait_child_processes(i_vars->child_pids, i_vars->pro_count);

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:36:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	expand_variable(char **s)
 {
 	char	*env_var;
 
-	env_var = get_env_value(g_vars.env_list, *s);
+	env_var = get_env_value(g_vars.env_list, *s + 1);
 	if (env_var)
 	{
 		ft_free((void **)s);
@@ -38,23 +38,31 @@ void	expand_variable(char **s)
 		ft_free((void **)s);
 }
 
-void	inner_process(char **current_quote, char **s, bool *is_expand)
+void	inner_process(char *current_quote, char **s, bool *is_expand)
 {
-	if (*current_quote && ft_strchr(*s, (*current_quote)[0]))
+	if (*current_quote && ft_strchr(*s, *current_quote))
 	{
-		ft_free((void **)current_quote);
+		*current_quote = '\0';
 		*is_expand = true;
 	}
-	else if (!(*current_quote) && (ft_strchr(*s, '"') || ft_strchr(*s, '\'')))
+	else if (!*current_quote && (*s[0] == '"' || *s[0] == '\''))
 	{
-		*current_quote = ft_strdup(*s);
-		if (is_str_equal(*current_quote, "'", 1))
+		*current_quote = *s[0];
+		if (*current_quote == '\'')
 			*is_expand = false;
 	}
-	if (is_str_equal("$?", *s, 0) && *is_expand)
-		expand_question_mark(s);
-	else if (ft_strchr(*s, '$') != NULL && *is_expand)
-		expand_variable(s);
+	if (*s[0] == '$')
+	{
+		if (is_str_equal(*s, "$", true))
+			return ;
+		if (*is_expand)
+		{
+			if (is_str_equal(*s, "$?", false))
+				expand_question_mark(s);
+			else
+				expand_variable(s);
+		}
+	}
 }
 
 // words: free可能なcharの2重配列のポインタ
@@ -65,7 +73,7 @@ void	variable_expansion(t_token **token_list)
 	int		j;
 	char	**splited_words;
 	t_token	*cur_tok;
-	char	*cur_quote;
+	char	cur_quote;
 	bool	is_expand;
 
 	if (!token_list || !(*token_list))
@@ -74,11 +82,11 @@ void	variable_expansion(t_token **token_list)
 	is_expand = true;
 	while (cur_tok)
 	{
-		if (!is_str_equal("$", cur_tok->str, 1) && ft_strchr(cur_tok->str, '$'))
+		if (!is_str_equal("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
 		{
-			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$\'\"");
+			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
 			j = -1;
-			cur_quote = NULL;
+			cur_quote = '\0';
 			while (splited_words[++j])
 				inner_process(&cur_quote, &splited_words[j], &is_expand);
 			ft_free((void **)&cur_tok->str);
@@ -98,4 +106,5 @@ void	parse(t_i_mode_vars *i_vars)
 		exit(EXIT_SYNTAX_ERROR);
 	}
 	variable_expansion(&i_vars->token_list);
+	quote_removal(i_vars->token_list);
 }

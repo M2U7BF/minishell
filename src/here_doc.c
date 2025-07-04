@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:45:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:28:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	here_doc(char *delim)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_vars.signal == SIGINT || !line || is_str_equal(line, delim, 1))
+		if (g_vars.signal == SIGINT || !line || is_str_equal(line, delim, true))
 			break ;
 		if (!is_quoted)
 			line = expand_heredoc_line(line);

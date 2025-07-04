@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:53:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:34:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@
 # define EXIT_SYNTAX_ERROR 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
+
+// エラー文の定義
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
+# define ERR_QUOTE_1 "Unclosed quote"
 
 // 起動モード
 typedef enum e_mode
@@ -178,7 +181,6 @@ bool						is_redirection(char *s);
 bool						is_blank(char *s);
 
 // quote.c
-bool						is_quotation_error(char *input_line);
 void						quote_removal(t_token *token);
 bool						is_quote(char c);
 
