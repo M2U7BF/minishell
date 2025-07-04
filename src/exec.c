@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 17:08:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 17:59:23 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,12 @@ int	exec(t_i_mode_vars *i_vars)
 	current->argv = tokens_to_arr(proc_list->args);
 	// パイプがなく、コマンドが "cd" または "exit" の場合
 	if (proc_list->type == CMD && current->argv != NULL
-		&& (ft_strncmp(current->argv[0], "cd", 3) == 0
-			|| ft_strncmp(current->argv[0], "exit", 5) == 0
-			|| ft_strncmp(current->argv[0], "export", 7) == 0
-			|| ft_strncmp(current->argv[0], "unset", 6) == 0))
+		&& i_vars->pro_count == 1 && is_builtin(current->argv[0]))
 	{
 		redirect_fds = NULL;
 		i_vars->child_pids[0] = -1;
 		// TODO ファイルopen時のstatus受け取り
-		open_and_redirect_files(proc_list->args, &redirect_fds);
+		redirect_fds = exec_redirection(&status, current);
 		char **trimmed_argv = trim_redirection(&current->argv); // argvはここで消費される
 		status = exec_builtin(trimmed_argv);                    // 親プロセスで実行
 		g_vars.exit_status = status;

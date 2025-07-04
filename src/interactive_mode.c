@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:52:22 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 17:56:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 	while (++i < pro_count)
 	{
 		if (child_pids[i] == -1)
-			continue ;
+			return ;
 		if (waitpid(child_pids[i], &status, 0) == -1)
 			perror("waitpid");
 	}
