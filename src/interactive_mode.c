@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:34:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
-int	exec_interactive(t_i_mode_vars *i_vars, t_exec_vars *e_vars)
+int	exec_interactive(t_i_mode_vars *i_vars)
 {
 	rl_outstream = stderr;
 	while (1)
@@ -62,12 +62,12 @@ int	exec_interactive(t_i_mode_vars *i_vars, t_exec_vars *e_vars)
 		i_vars->token_list = tokenize(i_vars->input);
 		if (!i_vars->token_list)
 			continue ;
-		parse(i_vars, e_vars->env_list);
+		parse(i_vars);
 		quote_removal(i_vars->token_list);
-		exec(i_vars, e_vars->env_list);
+		exec(i_vars);
 		if (i_vars->child_pids != NULL)
 			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-		destroy_i_vars(i_vars);\
+		destroy_i_vars(i_vars);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:36:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:53:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ typedef struct s_i_mode_vars
 // 環境変数のキーとバリューを保持する構造体
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-}					t_env;
+	char					*key;
+	char					*value;
+}							t_env;
 
 // 起動情報などを保持する構造体
 typedef struct s_exec_vars
@@ -110,7 +110,6 @@ typedef struct s_exec_vars
 	struct s_i_mode_vars	i_vars;
 	struct s_ni_mode_vars	ni_vars;
 	char					*script;
-	t_list					*env_list;
 }							t_exec_vars;
 
 // グローバル変数を保持する構造体
@@ -118,6 +117,7 @@ typedef struct s_runtime_data
 {
 	int						exit_status;
 	volatile sig_atomic_t	signal;
+	t_list					*env_list;
 }							t_runtime_data;
 
 typedef struct s_split_vars
@@ -143,7 +143,7 @@ int							parse_exec_arg(int argc, char *argv[],
 								t_exec_vars *e_vars);
 
 // interactive_mode.c
-int							exec_interactive(t_i_mode_vars *i_vars, t_exec_vars *e_vars);
+int							exec_interactive(t_i_mode_vars *i_vars);
 
 // non_interactive_mode.c
 int							exec_non_interactive(t_exec_vars *e_vars);
@@ -183,8 +183,8 @@ void						quote_removal(t_token *token);
 bool						is_quote(char c);
 
 // parse.c
-void						parse(t_i_mode_vars *i_vars, t_list *env_list);
-void						variable_expansion(t_token **token_list, t_list *env_list);
+void						parse(t_i_mode_vars *i_vars);
+void						variable_expansion(t_token **token_list);
 
 // exec.c
 void						reset_redirection(t_list *redirect_fds);
@@ -193,7 +193,7 @@ t_list						*pipe_redirect(t_proc_unit *proc,
 t_proc_unit					*process_division(t_token *token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
-int							exec(t_i_mode_vars *i_vars, t_list *env_list);
+int							exec(t_i_mode_vars *i_vars);
 void						handle_error(int status, char *cmd_path);
 
 // error.c
@@ -212,13 +212,13 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 // proc_unit_2.c
 int							proc_len(t_proc_unit *proc_list);
 t_proc_unit					*process_division(t_token *token_list);
-void						set_argv(t_proc_unit *current_proc, t_list *env_list);
+void						set_argv(t_proc_unit *current_proc);
 
 // syntax.c
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter, t_list *env_list);
+int							here_doc(char *delimiter);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
@@ -239,7 +239,7 @@ void						close_pipe(t_proc_unit *proc);
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds, t_list *env_list);
+								t_list **redirect_fds);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
@@ -306,20 +306,21 @@ char						**ft_splitarr_by_words_keep_sep(char **arr,
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
-int	is_builtin(char *cmd);
-int							exec_builtin(char **argv, t_list *env_list);
-int							builtin_cd(char **argv, t_list *env_list);
-int							builtin_echo(char **argv); // echoは環境変数不要?
-int							builtin_env(t_list *env_list);
+int							is_builtin(char *cmd);
+int							exec_builtin(char **argv);
+int							builtin_cd(char **argv);
+int	builtin_echo(char **argv); // echoは環境変数不要?
+int							builtin_env(void);
 int							builtin_exit(char **argv);
-int							builtin_export(char **argv, t_list **env_list);
+int							builtin_export(char **argv);
 int							builtin_pwd(void);
-int							builtin_unset(char **argv, t_list **env_list);
+int							builtin_unset(char **argv);
 
-//env_util
+// env_util
 void						init_env_list(t_list **env_list, char **environ);
 char						*get_env_value(t_list *env_list, const char *key);
-void						set_env_var(t_list **env_list, const char *key, const char *value);
+void						set_env_var(t_list **env_list, const char *key,
+								const char *value);
 void						unset_env_var(t_list **env_list, const char *key);
 char						**convert_env_list_to_array(t_list *env_list);
 void						free_env_list(t_list **env_list);

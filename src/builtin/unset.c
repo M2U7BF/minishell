@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:57 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 12:25:24 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:16 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
-int builtin_unset(char **argv, t_list **env_list)
+int	builtin_unset(char **argv)
 {
-	int i;
-	int status;
+	int	i;
+	int	status;
 
 	status = 0;
 	i = 1;
@@ -41,12 +41,13 @@ int builtin_unset(char **argv, t_list **env_list)
 	{
 		if (!is_valid_identifier(argv[i]))
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: unset: `%s': not a valid identifier\n", argv[i]);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: unset: `%s': not a valid identifier\n", argv[i]);
 			status = 1;
 		}
 		else
 		{
-			unset_env_var(env_list, argv[i]);
+			unset_env_var(&g_vars.env_list, argv[i]);
 		}
 		i++;
 	}
@@ -104,5 +105,5 @@ int builtin_unset(char **argv, t_list **env_list)
 // 		free(environ[i]);
 // 	free(environ);
 
-// 	return 0;
+// 	return (0);
 // }

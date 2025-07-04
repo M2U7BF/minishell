@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:23:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:46:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_proc_unit	*process_division(t_token *token_list)
 	return (result);
 }
 
-void	set_argv(t_proc_unit *current_proc, t_list *env_list)
+void	set_argv(t_proc_unit *current_proc)
 {
 	current_proc->argv = tokens_to_arr(current_proc->args);
 	current_proc->argv = trim_redirection(&current_proc->argv);
@@ -64,7 +64,7 @@ void	set_argv(t_proc_unit *current_proc, t_list *env_list)
 		exit(EXIT_SUCCESS);
 	// atashiro-----------------------
 	if (is_builtin(current_proc->argv[0]))
-		exit(exec_builtin(current_proc->argv, env_list));
+		exit(exec_builtin(current_proc->argv));
 	//-------------
 	g_vars.exit_status = get_command_path(&current_proc->argv[0]);
 	if (g_vars.exit_status != 0)

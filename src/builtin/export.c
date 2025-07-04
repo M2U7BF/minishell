@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 13:25:09 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,44 +28,49 @@ static int	is_valid_identifier(const char *s)
 
 static void	print_sorted_env(t_list *env_list)
 {
-	char **env_array = convert_env_list_to_array(env_list);
+	char	**env_array;
+
+	env_array = convert_env_list_to_array(env_list);
 	// int count = arrlen(env_array);
 	free_str_array(env_array);
 }
 
-int builtin_export(char **argv, t_list **env_list)
+int	builtin_export(char **argv)
 {
-	int i = 1;
-	int status = 0;
-	char *key;
-	char *value;
-	char *eq_ptr;
+	int		i;
+	int		status;
+	char	*key;
+	char	*value;
+	char	*eq_ptr;
 
+	i = 1;
+	status = 0;
 	if (argv[1] == NULL)
 	{
-		print_sorted_env(*env_list); // 引数を渡す
+		print_sorted_env(g_vars.env_list); // 引数を渡す
 		return (0);
 	}
-	while(argv[i])
+	while (argv[i])
 	{
 		if (!is_valid_identifier(argv[i]))
 		{
-			ft_dprintf(STDERR_FILENO, "minishell: export: `%s': not a valid identifier\n", argv[i]);
+			ft_dprintf(STDERR_FILENO,
+				"minishell: export: `%s': not a valid identifier\n", argv[i]);
 			status = 1;
 			i++;
-			continue;
+			continue ;
 		}
 		eq_ptr = ft_strchr(argv[i], '=');
 		if (eq_ptr) // "key=value" 形式
 		{
 			key = ft_substr(argv[i], 0, eq_ptr - argv[i]);
 			value = eq_ptr + 1;
-			set_env_var(env_list, key, value);
+			set_env_var(&g_vars.env_list, key, value);
 			free(key);
 		}
 		else
 		{
-			set_env_var(env_list, argv[i], "");
+			set_env_var(&g_vars.env_list, argv[i], "");
 		}
 		i++;
 	}
@@ -86,7 +91,7 @@ int builtin_export(char **argv, t_list **env_list)
 // 		i++;
 // 	}
 // 	argv[i] = NULL;
-// 	return argv;
+// 	return (argv);
 // }
 
 // void free_argv(char **argv)
@@ -134,5 +139,5 @@ int builtin_export(char **argv, t_list **env_list)
 // 	builtin_export(argv5);
 // 	free_argv(argv5);
 
-// 	return 0;
+// 	return (0);
 // }

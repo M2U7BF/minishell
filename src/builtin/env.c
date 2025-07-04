@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 14:20:38 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	builtin_env(t_list *env_list)
+int	builtin_env(void)
 {
 	t_list	*current;
 	t_env	*env_var;
 
-	current = env_list;
+	current = g_vars.env_list;
 	while (current)
 	{
 		env_var = (t_env *)current->content;

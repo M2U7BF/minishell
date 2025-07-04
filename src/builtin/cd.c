@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 14:19:59 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ static int	change_dir_and_update_env(const char *path, t_list *env_list)
 {
 	if (chdir(path) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path, strerror(errno));
+		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path,
+			strerror(errno));
 		return (1);
 	}
 	return (update_env_vars(env_list));
 }
 
-int	builtin_cd(char **argv, t_list *env_list)
+int	builtin_cd(char **argv)
 {
 	char	*path;
 	int		argc;
@@ -54,7 +55,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 	}
 	if (argc == 1 || (argc > 1 && ft_strncmp(argv[1], "~", 2) == 0))
 	{
-		path = get_env_value(env_list, "HOME");
+		path = get_env_value(g_vars.env_list, "HOME");
 		if (path == NULL || *path == '\0')
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
@@ -63,7 +64,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 	}
 	else if (argc > 1 && ft_strncmp(argv[1], "-", 2) == 0)
 	{
-		path = get_env_value(env_list, "OLDPWD");
+		path = get_env_value(g_vars.env_list, "OLDPWD");
 		if (path == NULL)
 		{
 			ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
@@ -75,7 +76,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 	{
 		path = argv[1];
 	}
-	return (change_dir_and_update_env(path, env_list));
+	return (change_dir_and_update_env(path, g_vars.env_list));
 }
 
 //--------------test---------------
@@ -85,9 +86,8 @@ int	builtin_cd(char **argv, t_list *env_list)
 // 	int i = 0;
 // 	while (argv[i])
 // 		i++;
-// 	return i;
+// 	return (i);
 // }
-
 
 // void print_current_directory(void)
 // {
@@ -127,8 +127,7 @@ int	builtin_cd(char **argv, t_list *env_list)
 // 	builtin_cd(argv5);
 // 	print_current_directory();
 
-// 	return 0;
+// 	return (0);
 // }
 
-
- //cc cd.c ../../lib/ft_dprintf/libftdprintf.a ../../lib/libft/libft.a
+// cc cd.c ../../lib/ft_dprintf/libftdprintf.a ../../lib/libft/libft.a

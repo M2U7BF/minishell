@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:35:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:54:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ void	expand_question_mark(char **s)
 	free_str_array(tmp);
 }
 
-void	expand_variable(char **s, t_list *env_list)
+void	expand_variable(char **s)
 {
 	char	*env_var;
 
-  env_var = get_env_value(env_list, *s);
-	env_var = getenv(&(*s)[1]);
+	env_var = get_env_value(g_vars.env_list, *s);
 	if (env_var)
 	{
 		ft_free((void **)s);
@@ -39,7 +38,7 @@ void	expand_variable(char **s, t_list *env_list)
 		ft_free((void **)s);
 }
 
-void	inner_process(char **current_quote, char **s, bool *is_expand, t_list *env_list)
+void	inner_process(char **current_quote, char **s, bool *is_expand)
 {
 	if (*current_quote && ft_strchr(*s, (*current_quote)[0]))
 	{
@@ -55,13 +54,13 @@ void	inner_process(char **current_quote, char **s, bool *is_expand, t_list *env_
 	if (is_str_equal("$?", *s, 0) && *is_expand)
 		expand_question_mark(s);
 	else if (ft_strchr(*s, '$') != NULL && *is_expand)
-		expand_variable(s, env_list);
+		expand_variable(s);
 }
 
 // words: free可能なcharの2重配列のポインタ
 // $から始まる環境変数があれば、展開を行う。
 // シングルクォートに囲まれている場合、展開は行わない。
-void	variable_expansion(t_token **token_list, t_list *env_list)
+void	variable_expansion(t_token **token_list)
 {
 	int		j;
 	char	**splited_words;
@@ -81,7 +80,7 @@ void	variable_expansion(t_token **token_list, t_list *env_list)
 			j = -1;
 			cur_quote = NULL;
 			while (splited_words[++j])
-				inner_process(&cur_quote, &splited_words[j], &is_expand, env_list);
+				inner_process(&cur_quote, &splited_words[j], &is_expand);
 			ft_free((void **)&cur_tok->str);
 			cur_tok->str = ft_strjoin_all(splited_words);
 			free_str_array(splited_words);
@@ -90,7 +89,7 @@ void	variable_expansion(t_token **token_list, t_list *env_list)
 	}
 }
 
-void	parse(t_i_mode_vars *i_vars, t_list *env_list)
+void	parse(t_i_mode_vars *i_vars)
 {
 	if (is_syntax_error(i_vars->token_list))
 	{
@@ -98,5 +97,5 @@ void	parse(t_i_mode_vars *i_vars, t_list *env_list)
 		destroy_i_vars(i_vars);
 		exit(EXIT_SYNTAX_ERROR);
 	}
-	variable_expansion(&i_vars->token_list, env_list);
+	variable_expansion(&i_vars->token_list);
 }

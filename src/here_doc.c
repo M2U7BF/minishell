@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 11:28:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:45:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	null_to_empty(t_token *token)
 	}
 }
 
-char	*expand_heredoc_line(char *line, t_list *env_list)
+char	*expand_heredoc_line(char *line)
 {
 	t_token	*token;
 	char	**tmp_arr;
@@ -34,7 +34,7 @@ char	*expand_heredoc_line(char *line, t_list *env_list)
 	if (line && line[0] == '\0')
 		return (line);
 	token = tokenize(line);
-	variable_expansion(&token, env_list);
+	variable_expansion(&token);
 	quote_removal(token);
 	null_to_empty(token);
 	tmp_arr = tokens_to_arr(token);
@@ -72,7 +72,7 @@ static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
 
 // ヒアドキュメントの処理。
 // 入力データはパイプによって、カーネルにバッファリングされる。
-int	here_doc(char *delim, t_list *env_list)
+int	here_doc(char *delim)
 {
 	char	*line;
 	int		pipe_fds[2];
@@ -90,7 +90,7 @@ int	here_doc(char *delim, t_list *env_list)
 		if (g_vars.signal == SIGINT || !line || is_str_equal(line, delim, 1))
 			break ;
 		if (!is_quoted)
-			line = expand_heredoc_line(line, env_list);
+			line = expand_heredoc_line(line);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free((void **)&line);
 	}
