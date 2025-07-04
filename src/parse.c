@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:22:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/04 13:27:08 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 			return ;
 		if (*is_expand)
 		{
-			if (is_str_equal(*s, "$?", false))
+			if (is_str_equal("$?", *s, false))
 				expand_question_mark(s);
 			else
 				expand_variable(s);
