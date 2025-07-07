@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:03:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:36:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,7 +265,7 @@ void						ft_free(void **p);
 
 // arr_util.c
 char						*ft_strjoin_all(char **words);
-void						free_str_array(char **array);
+void						free_str_array(char ***array);
 int							arrlen(char **arr);
 
 // str_util.c

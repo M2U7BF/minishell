@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:28:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:37:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ char	**trim_redirection(char ***argv)
 	t_list	*tmp_lst;
 	int		len;
 
-	if (!argv || !(*argv))
+	if (!argv || !*argv)
 		return (NULL);
 	i = 0;
 	tmp_lst = NULL;
-	len = arrlen((*argv));
+	len = arrlen(*argv);
 	while (i < len)
 	{
 		if (is_redirection((*argv)[i]) && (*argv)[i + 1])
@@ -93,7 +93,7 @@ char	**trim_redirection(char ***argv)
 		ft_lstadd_back(&tmp_lst, ft_lstnew((void *)ft_strdup((*argv)[i])));
 		i++;
 	}
-	free_str_array((*argv));
+	free_str_array(argv);
 	new = lst_to_str_arr(tmp_lst);
 	ft_lstclear(&tmp_lst, del_content);
 	return (new);

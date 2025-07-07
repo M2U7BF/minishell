@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:36:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	print_sorted_env(t_list *env_list)
 
 	env_array = convert_env_list_to_array(env_list);
 	// int count = arrlen(env_array);
-	free_str_array(env_array);
+	free_str_array(&env_array);
 }
 
 int	builtin_export(char **argv)

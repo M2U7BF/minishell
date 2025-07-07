@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:02:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:37:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*expand_heredoc_line(char *line)
 	tmp_arr = tokens_to_arr(token);
 	free_token_list(&token);
 	tmp_str = ft_strjoin_all(tmp_arr);
-	free_str_array(tmp_arr);
+	free_str_array(&tmp_arr);
 	return (tmp_str);
 }
 
@@ -55,7 +55,7 @@ char	*str_quote_removal(char *s)
 	tmp_arr = tokens_to_arr(tmp_token);
 	free_token_list(&tmp_token);
 	tmp_str = ft_strjoin_all(tmp_arr);
-	free_str_array(tmp_arr);
+	free_str_array(&tmp_arr);
 	ft_free((void **)&s);
 	return (tmp_str);
 }

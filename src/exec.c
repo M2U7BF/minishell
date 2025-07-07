@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:17:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:37:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	exec(t_i_mode_vars *i_vars)
 	{
 		current->argv = tokens_to_arr(proc_list->args);
 		// パイプがなく、コマンドが "cd" または "exit" の場合
-		if (proc_list->type == CMD && current->argv != NULL
+		if (proc_list->type == CMD && current->argv
 			&& is_builtin(current->argv[0]))
 		{
 			redirect_fds = NULL;
@@ -106,7 +106,7 @@ int	exec(t_i_mode_vars *i_vars)
 			status = exec_builtin(trimmed_argv); // 親プロセスで実行
 			g_vars.exit_status = status;
 			//追加？-------------------------------要検討
-			free_str_array(trimmed_argv);
+			free_str_array(&trimmed_argv);
 			reset_redirection(redirect_fds);
 			free_proc_list(&proc_list);
 			// 注意: builtin_exitはプロセスを終了するので、ここに戻らない可能性がある
