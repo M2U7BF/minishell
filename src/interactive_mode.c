@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 17:53:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 18:18:02 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		set_signal_handlers();
 		i_vars->input = readline("minishell$ ");
 		if (!i_vars->input)
+		{
+			free_env_list(&g_vars.env_list);
+			rl_clear_history();
 			exit(g_vars.exit_status);
+		}
 		else if (i_vars->input[0] == '\0')
 			continue ;
 		add_history(i_vars->input);

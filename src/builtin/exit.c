@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 11:06:11 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:00:08 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ static int	is_numeric_argument(const char *s)
 	return (1);
 }
 
+static void finalize_and_exit(int status)
+{
+	free_env_list(&g_vars.env_list);
+	rl_clear_history();
+	exit(status);
+}
+
 int	builtin_exit(char **argv)
 {
 	int			argc;
@@ -61,15 +68,16 @@ int	builtin_exit(char **argv)
 
 	argc = arrlen(argv);
 	ft_putendl_fd("exit", STDERR_FILENO);
+
 	if (argc == 1)
 	{
-		exit(g_vars.exit_status);
+		finalize_and_exit(g_vars.exit_status);
 	}
 	if (!is_numeric_argument(argv[1]))
 	{
 		ft_dprintf(STDERR_FILENO, \
 			"minishell: exit: %s: numeric argument required\n", argv[1]);
-		exit(2);
+		finalize_and_exit(2);
 	}
 	if (argc > 2)
 	{
@@ -77,5 +85,6 @@ int	builtin_exit(char **argv)
 		return (1);
 	}
 	status = ft_atoi(argv[1]);
-	exit((unsigned char)status);
+	finalize_and_exit((unsigned char)status);
+	return (0);
 }
