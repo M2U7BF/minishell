@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 17:55:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 17:59:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	print_sorted_env(t_list *env_list)
 		print_env_entry(env_array[i]);
 		i++;
 	}
-	free_str_array(env_array);
+	free_str_array(&env_array);
 }
 
 static int	handle_invalid_identifier(const char *arg)

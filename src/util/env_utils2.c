@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:39:29 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 11:49:44 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:58:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ void	del_env_var(void *content)
 	t_env	*env_var;
 
 	env_var = (t_env *)content;
-	free(env_var->key);
-	free(env_var->value);
-	free(env_var);
+	ft_free((void **)&env_var->key);
+	ft_free((void **)&env_var->value);
+	ft_free((void **)&env_var);
 }
 
 void	free_env_list(t_list **env_list)
 {
 	ft_lstclear(env_list, del_env_var);
+	*env_list = NULL;
 }
