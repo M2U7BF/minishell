@@ -3,75 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:10 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 11:21:50 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_valid_identifier(const char *s)
+static void	print_env_entry(const char *entry)
 {
-	if (!s || (!ft_isalpha(*s) && *s != '_'))
-		return (0);
-	s++;
-	while (*s && *s != '=')
+	char	*eq_ptr;
+	char	*key;
+	char	*value;
+
+	eq_ptr = ft_strchr(entry, '=');
+	if (eq_ptr)
 	{
-		if (!ft_isalnum(*s) && *s != '_')
-			return (0);
-		s++;
+		key = ft_substr(entry, 0, eq_ptr - entry);
+		value = eq_ptr + 1;
+		ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", key, value);
+		free(key);
 	}
-	return (1);
+	else
+	{
+		ft_dprintf(STDOUT_FILENO, "declare -x %s\n", entry);
+	}
 }
 
 static void	print_sorted_env(t_list *env_list)
 {
 	char	**env_array;
+	int		i;
 
 	env_array = convert_env_list_to_array(env_list);
-	// int count = arrlen(env_array);
+	if (!env_array)
+		return ;
+	sort_env_array(env_array);
+	i = 0;
+	while (env_array[i])
+	{
+		print_env_entry(env_array[i]);
+		i++;
+	}
 	free_str_array(env_array);
+}
+
+static int	handle_invalid_identifier(const char *arg)
+{
+	ft_dprintf(STDERR_FILENO,
+		"minishell: export: `%s': not a valid identifier\n", arg);
+	return (1);
+}
+
+static void	handle_valid_export(const char *arg)
+{
+	char	*eq_ptr;
+	char	*key;
+	char	*value;
+
+	eq_ptr = ft_strchr(arg, '=');
+	if (eq_ptr)
+	{
+		key = ft_substr(arg, 0, eq_ptr - arg);
+		value = eq_ptr + 1;
+		set_env_var(&g_vars.env_list, key, value);
+		free(key);
+	}
+	else
+	{
+		set_env_var(&g_vars.env_list, arg, "");
+	}
 }
 
 int	builtin_export(char **argv)
 {
-	int		i;
-	int		status;
-	char	*key;
-	char	*value;
-	char	*eq_ptr;
+	int	i;
+	int	status;
 
-	i = 1;
-	status = 0;
 	if (argv[1] == NULL)
 	{
-		print_sorted_env(g_vars.env_list); // 引数を渡す
+		print_sorted_env(g_vars.env_list);
 		return (0);
 	}
+	i = 1;
+	status = 0;
 	while (argv[i])
 	{
-		if (!is_valid_identifier(argv[i]))
-		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: export: `%s': not a valid identifier\n", argv[i]);
-			status = 1;
-			i++;
-			continue ;
-		}
-		eq_ptr = ft_strchr(argv[i], '=');
-		if (eq_ptr) // "key=value" 形式
-		{
-			key = ft_substr(argv[i], 0, eq_ptr - argv[i]);
-			value = eq_ptr + 1;
-			set_env_var(&g_vars.env_list, key, value);
-			free(key);
-		}
+		if (!is_valid_export(argv[i]))
+			status |= handle_invalid_identifier(argv[i]);
 		else
-		{
-			set_env_var(&g_vars.env_list, argv[i], "");
-		}
+			handle_valid_export(argv[i]);
 		i++;
 	}
 	return (status);

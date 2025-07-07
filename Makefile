@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
+#    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/04 11:17:04 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/07 11:45:45 by atashiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,12 +18,13 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						parse.c pipe.c proc_unit_2.c proc_unit.c quote.c redirection_2.c \
 						redirection.c syntax.c token_2.c token.c tokenize_2.c tokenize_3.c \
 						tokenize.c util/arr_util.c util/env_utils.c util/ft_multi_split.c \
-						util/ft_multi_split_keep_sep.c \
-						util/ft_splitarr_by_word_leave_separator.c \
+						util/ft_multi_split_keep_sep.c builtin/export_utils.c \
+						util/ft_splitarr_by_word_leave_separator.c builtin/export_sort.c \
 						util/ft_splitarr_by_words_keep_sep.c util/ft_split_by_word_keep_sep.c \
 						util/ft_split_by_words_keep_sep.c util/ft_split_leave_separator.c \
 						util/ft_strtrim_front.c util/lst_util.c util/remove_elem.c \
-						util/str_util.c util/token_util.c util/util.c
+						util/str_util.c util/token_util.c util/util.c \
+						util/env_utils2.c util/env_utils3.c 
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))

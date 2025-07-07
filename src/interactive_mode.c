@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 17:56:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:21:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	wait_child_processes(int *child_pids, int pro_count)
 	int	i;
 
 	i = -1;
+	status = g_vars.exit_status;
 	while (++i < pro_count)
 	{
 		if (child_pids[i] == -1)
