@@ -6,7 +6,7 @@
 #    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/07 11:22:56 by atashiro         ###   ########.fr        #
+#    Updated: 2025/07/07 11:45:45 by atashiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						util/ft_splitarr_by_words_keep_sep.c util/ft_split_by_word_keep_sep.c \
 						util/ft_split_by_words_keep_sep.c util/ft_split_leave_separator.c \
 						util/ft_strtrim_front.c util/lst_util.c util/remove_elem.c \
-						util/str_util.c util/token_util.c util/util.c
+						util/str_util.c util/token_util.c util/util.c \
+						util/env_utils2.c util/env_utils3.c 
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
