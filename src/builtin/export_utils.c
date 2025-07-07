@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 10:46:39 by atashiro         ###   ########.fr       */
+/*   Created: 2025/07/07 11:04:30 by atashiro          #+#    #+#             */
+/*   Updated: 2025/07/07 11:25:23 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	builtin_pwd(void)
+int	is_valid_export(const char *s)
 {
-	char	cwd[1024];
-
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	if (!s || (!ft_isalpha(*s) && *s != '_'))
+		return (0);
+	s++;
+	while (*s && *s != '=')
 	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
+		if (!ft_isalnum(*s) && *s != '_')
+			return (0);
+		s++;
 	}
-	else
-	{
-		perror("minishell: pwd");
-		return (1);
-	}
-	return (0);
+	return (1);
 }

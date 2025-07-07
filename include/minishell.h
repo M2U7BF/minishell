@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 17:52:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 17:53:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,5 +326,12 @@ void						set_env_var(t_list **env_list, const char *key,
 void						unset_env_var(t_list **env_list, const char *key);
 char						**convert_env_list_to_array(t_list *env_list);
 void						free_env_list(t_list **env_list);
+void						del_env_var(void *content);
+t_env						*create_env_var(const char *env_str);
+
+//export_utils.c
+int							is_valid_export(const char *s);
+void						sort_env_array(char **env_array);
+
 
 #endif
