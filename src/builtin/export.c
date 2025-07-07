@@ -6,53 +6,29 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:52 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/04 15:36:43 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 11:21:50 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_valid_identifier(const char *s)
+static void	print_env_entry(const char *entry)
 {
-	if (!s || (!ft_isalpha(*s) && *s != '_'))
-		return (0);
-	s++;
-	while (*s && *s != '=')
+	char	*eq_ptr;
+	char	*key;
+	char	*value;
+
+	eq_ptr = ft_strchr(entry, '=');
+	if (eq_ptr)
 	{
-		if (!ft_isalnum(*s) && *s != '_')
-			return (0);
-		s++;
+		key = ft_substr(entry, 0, eq_ptr - entry);
+		value = eq_ptr + 1;
+		ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", key, value);
+		free(key);
 	}
-	return (1);
-}
-
-static void	sort_env_array(char **env_array)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-	int		count;
-
-	if (!env_array)
-		return ;
-	count = 0;
-	while (env_array[count])
-		count++;
-	i = 0;
-	while (i < count)
+	else
 	{
-		j = i + 1;
-		while (j < count)
-		{
-			if (ft_strncmp(env_array[i], env_array[j], -1) > 0)
-			{
-				tmp = env_array[i];
-				env_array[i] = env_array[j];
-				env_array[j] = tmp;
-			}
-			j++;
-		}
-		i++;
+		ft_dprintf(STDOUT_FILENO, "declare -x %s\n", entry);
 	}
 }
 
@@ -60,9 +36,6 @@ static void	print_sorted_env(t_list *env_list)
 {
 	char	**env_array;
 	int		i;
-	char	*eq_ptr;
-	char	*key;
-	char	*value;
 
 	env_array = convert_env_list_to_array(env_list);
 	if (!env_array)
@@ -71,60 +44,57 @@ static void	print_sorted_env(t_list *env_list)
 	i = 0;
 	while (env_array[i])
 	{
-		eq_ptr = ft_strchr(env_array[i], '=');
-		if (eq_ptr)
-		{
-			key = ft_substr(env_array[i], 0, eq_ptr - env_array[i]);
-			value = eq_ptr + 1;
-			ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", key, value);
-			free(key);
-		}
-		else
-		{
-			ft_dprintf(STDOUT_FILENO, "declare -x %s\n", env_array[i]);
-		}
+		print_env_entry(env_array[i]);
 		i++;
 	}
 	free_str_array(env_array);
 }
 
-int	builtin_export(char **argv)
+static int	handle_invalid_identifier(const char *arg)
 {
-	int		i;
-	int		status;
+	ft_dprintf(STDERR_FILENO,
+		"minishell: export: `%s': not a valid identifier\n", arg);
+	return (1);
+}
+
+static void	handle_valid_export(const char *arg)
+{
+	char	*eq_ptr;
 	char	*key;
 	char	*value;
-	char	*eq_ptr;
 
-	i = 1;
-	status = 0;
+	eq_ptr = ft_strchr(arg, '=');
+	if (eq_ptr)
+	{
+		key = ft_substr(arg, 0, eq_ptr - arg);
+		value = eq_ptr + 1;
+		set_env_var(&g_vars.env_list, key, value);
+		free(key);
+	}
+	else
+	{
+		set_env_var(&g_vars.env_list, arg, "");
+	}
+}
+
+int	builtin_export(char **argv)
+{
+	int	i;
+	int	status;
+
 	if (argv[1] == NULL)
 	{
-		print_sorted_env(g_vars.env_list); // 引数を渡す
+		print_sorted_env(g_vars.env_list);
 		return (0);
 	}
+	i = 1;
+	status = 0;
 	while (argv[i])
 	{
-		if (!is_valid_identifier(argv[i]))
-		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: export: `%s': not a valid identifier\n", argv[i]);
-			status = 1;
-			i++;
-			continue ;
-		}
-		eq_ptr = ft_strchr(argv[i], '=');
-		if (eq_ptr) // "key=value" 形式
-		{
-			key = ft_substr(argv[i], 0, eq_ptr - argv[i]);
-			value = eq_ptr + 1;
-			set_env_var(&g_vars.env_list, key, value);
-			free(key);
-		}
+		if (!is_valid_export(argv[i]))
+			status |= handle_invalid_identifier(argv[i]);
 		else
-		{
-			set_env_var(&g_vars.env_list, argv[i], "");
-		}
+			handle_valid_export(argv[i]);
 		i++;
 	}
 	return (status);

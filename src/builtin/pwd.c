@@ -6,14 +6,12 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/03 19:37:26 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 10:46:39 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-// #include <limits.h>　//PATH_MAX
 
-// pwd 完成？
 int	builtin_pwd(void)
 {
 	char	cwd[1024];
@@ -21,7 +19,6 @@ int	builtin_pwd(void)
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		ft_putendl_fd(cwd, STDOUT_FILENO);
-		// ft_putendl_fd("ビルトインです", STDOUT_FILENO);
 	}
 	else
 	{
