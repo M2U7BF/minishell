@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 11:47:35 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:53:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int							exec_non_interactive(t_exec_vars *e_vars);
 t_token						*create_token(char *str, t_token_type type);
 void						append_token(t_token **token_list, t_token *token);
 void						del_token(t_token **token_list, t_token *token);
-void						free_token_list(t_token *token_list);
+void						free_token_list(t_token **token_list);
 t_token						*tok_dup(t_token *token);
 
 // token_2.c
@@ -203,7 +203,7 @@ void						put_error_exit(char *s, int status);
 void						libc_error(void);
 
 // proc_unit.c
-void						free_proc_list(t_proc_unit *proc_list);
+void						free_proc_list(t_proc_unit **proc_list);
 t_proc_unit					*new_proc(t_token *args, t_proc_unit_type type,
 								int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
@@ -264,7 +264,7 @@ void						ft_free(void **p);
 
 // arr_util.c
 char						*ft_strjoin_all(char **words);
-void						free_str_array(char **array);
+void						free_str_array(char ***array);
 int							arrlen(char **arr);
 
 // str_util.c

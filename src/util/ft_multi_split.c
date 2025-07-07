@@ -84,7 +84,7 @@ char	**ft_multi_split(char *s, char *separator)
 		{
 			str[j] = get_fragment(str[j], s + i - s_count, &s_count);
 			if (!str[j++])
-				return (free_str_array(str), NULL);
+				return (free_str_array(&str), NULL);
 		}
 		else if (!is_separator(separator, s[i]))
 			s_count++;

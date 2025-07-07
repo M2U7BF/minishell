@@ -6,27 +6,29 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:59:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:35:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	free_proc_list(t_proc_unit *proc_list)
+void	free_proc_list(t_proc_unit **proc_list)
 {
-	t_proc_unit	*current_proc;
+	t_proc_unit	*current;
 	t_proc_unit	*tmp;
 
-	if (!proc_list)
+	if (!*proc_list)
 		return ;
-	current_proc = proc_list;
-	while (current_proc)
+	current = *proc_list;
+	while (current)
 	{
-		tmp = current_proc;
-		current_proc = current_proc->next;
-		free_token_list(tmp->args);
+		tmp = current;
+		current = tmp->next;
+		free_token_list(&tmp->args);
+		free_str_array(&tmp->argv);
 		ft_free((void **)&tmp);
 	}
+	*proc_list = NULL;
 }
 
 t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
@@ -41,6 +43,7 @@ t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 		return (NULL);
 	proc_unit->next = NULL;
 	proc_unit->args = args;
+	proc_unit->argv = NULL;
 	proc_unit->type = type;
 	proc_unit->read_fd = in_fd;
 	proc_unit->write_fd = out_fd;

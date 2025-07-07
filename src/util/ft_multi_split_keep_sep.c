@@ -88,11 +88,11 @@ char	**ft_multi_split_keep_sep(char *s, char *separator)
 		{
 			arr[j] = get_fragment(arr[j], s + i - s_count, &s_count);
 			if (!arr[j++])
-				return (free_str_array(arr), NULL);
+				return (free_str_array(&arr), NULL);
 		}
 		s_count++;
 	}
 	if (arr[0] == NULL)
-		return (free_str_array(arr), NULL);
+		return (free_str_array(&arr), NULL);
 	return (arr);
 }

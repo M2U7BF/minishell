@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:03:25 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:03:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:38:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	**inner_process(char **arr, char **separators)
 			while (j < arrlen(tmp))
 				ft_lstadd_back(&new_lst,
 					ft_lstnew((void *)ft_strdup(tmp[j++])));
-			free_str_array(tmp);
+			free_str_array(&tmp);
 		}
 		else
 			ft_lstadd_back(&new_lst, ft_lstnew((void *)ft_strdup(arr[i])));
@@ -68,14 +68,14 @@ char	**ft_splitarr_by_words_keep_sep(char **arr,
 	if (!arr || !*arr || !separators)
 		return (NULL);
 	old = inner_process(arr, separators);
-	free_str_array(arr);
+	free_str_array(&arr);
 	new = inner_process(old, separators);
 	while (arrlen(old) != arrlen(new))
 	{
-		free_str_array(old);
+		free_str_array(&old);
 		old = new;
 		new = inner_process(old, separators);
 	}
-	free_str_array(new);
+	free_str_array(&new);
 	return (old);
 }

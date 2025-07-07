@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/02 17:25:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:37:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	get_command_path(char **cmd_name)
 		status = EISDIR;
 	else
 		status = search_command_path(cmd_name, path_env);
-	free_str_array(path_env);
+	free_str_array(&path_env);
 	return (status);
 }
 

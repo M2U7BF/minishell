@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:46:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 15:43:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ void	init_i_vars(t_i_mode_vars *i_vars)
 void	destroy_i_vars(t_i_mode_vars *vars)
 {
 	ft_free((void **)&vars->input);
-	free_token_list(vars->token_list);
+	free_token_list(&vars->token_list);
 	ft_free((void **)&vars->child_pids);
 }
