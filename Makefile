@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/07 11:38:34 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/07 17:49:37 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,12 +18,13 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						parse.c pipe.c proc_unit_2.c proc_unit.c quote.c redirection_2.c \
 						redirection.c syntax.c token_2.c token.c tokenize_2.c tokenize_3.c \
 						tokenize.c util/arr_util.c util/env_utils.c util/ft_multi_split.c \
-						util/ft_multi_split_keep_sep.c \
-						util/ft_splitarr_by_word_leave_separator.c \
+						util/ft_multi_split_keep_sep.c builtin/export_utils.c \
+						util/ft_splitarr_by_word_leave_separator.c builtin/export_sort.c \
 						util/ft_splitarr_by_words_keep_sep.c util/ft_split_by_word_keep_sep.c \
 						util/ft_split_by_words_keep_sep.c util/ft_split_leave_separator.c \
 						util/ft_strtrim_front.c util/lst_util.c util/remove_elem.c \
-						util/str_util.c util/token_util.c util/util.c debug.c
+						util/str_util.c util/token_util.c util/util.c \
+						util/env_utils2.c util/env_utils3.c 
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
@@ -64,15 +65,15 @@ libtest:
 	make -C $(LIBTEST_DIR)
 
 clean:
-	@$(RM) $(OBJS)
-	@$(RM) $(BONUS_OBJS)
-	make -sC $(LIBFT_DIR) clean
-	make -sC $(FT_DPRINTF_DIR) clean
+	$(RM) $(OBJS)
+	$(RM) $(BONUS_OBJS)
+	make -C $(LIBFT_DIR) clean
+	make -C $(FT_DPRINTF_DIR) clean
 
 fclean: clean
-	@$(RM) $(NAME)
-	make -sC $(LIBFT_DIR) fclean
-	make -sC $(FT_DPRINTF_DIR) fclean
+	$(RM) $(NAME)
+	make -C $(LIBFT_DIR) fclean
+	make -C $(FT_DPRINTF_DIR) fclean
 
 re: fclean $(NAME)
 
@@ -94,13 +95,12 @@ doc:
 
 debug: CFLAG += $(CFLAG_DEBUG)
 debug: $(OBJS) $(OBJS_NO_MAIN)
-	@echo "make debug"
-	@$(RM) -f $(NAME).a
-	make -s libft
-	make -s ft_dprintf
-	make -s libdebug
-	make -s libtest
-	@$(CC) $(CFLAG) $(OBJS) \
+	rm -f $(NAME).a
+	make libft
+	make ft_dprintf
+	make libdebug
+	make libtest
+	$(CC) $(CFLAG) $(OBJS) \
 		-I$(LIBFT_DIR) \
 		-I$(FT_DPRINTF_DIR)/include \
 		-L$(LIBFT_DIR) -lft \
@@ -109,9 +109,9 @@ debug: $(OBJS) $(OBJS_NO_MAIN)
 		-L$(LIBDEBUG_DIR) -ldebug \
 		-lreadline \
 		-o $(NAME)
-	@ar rcs $(NAME).a $(OBJS_NO_MAIN)
+	ar rcs $(NAME).a $(OBJS_NO_MAIN)
 
 re_debug: fclean debug
 
 %.o: %.c
-	@$(CC) $(CFLAG) -c $< -o $@
+	$(CC) $(CFLAG) -c $< -o $@
