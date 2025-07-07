@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:34:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:03:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -155,7 +156,7 @@ int							exec_non_interactive(t_exec_vars *e_vars);
 t_token						*create_token(char *str, t_token_type type);
 void						append_token(t_token **token_list, t_token *token);
 void						del_token(t_token **token_list, t_token *token);
-void						free_token_list(t_token *token_list);
+void						free_token_list(t_token **token_list);
 t_token						*tok_dup(t_token *token);
 
 // token_2.c
@@ -203,7 +204,7 @@ void						put_error_exit(char *s, int status);
 void						libc_error(void);
 
 // proc_unit.c
-void						free_proc_list(t_proc_unit *proc_list);
+void						free_proc_list(t_proc_unit **proc_list);
 t_proc_unit					*new_proc(t_token *args, t_proc_unit_type type,
 								int in_fd, int out_fd);
 void						append_proc_unit(t_proc_unit **proc_list,
@@ -326,5 +327,11 @@ void						set_env_var(t_list **env_list, const char *key,
 void						unset_env_var(t_list **env_list, const char *key);
 char						**convert_env_list_to_array(t_list *env_list);
 void						free_env_list(t_list **env_list);
+
+// debug.c
+void	debug_put_token_list(t_token *token_list);
+int	debug_put_token_list_compare(t_token *t, t_token *t_e);
+void	debug_put_proc_list(t_proc_unit *proc_unit);
+void	debug_put_lst(t_list *lst);
 
 #endif

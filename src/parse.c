@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:36:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:17:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ void	variable_expansion(t_token **token_list)
 	is_expand = true;
 	while (cur_tok)
 	{
-		if (!is_str_equal("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
+		if (!is_str_equal("$", cur_tok->str, true) && ft_strchr(cur_tok->str,
+				'$'))
 		{
 			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
 			j = -1;
@@ -103,6 +104,7 @@ void	parse(t_i_mode_vars *i_vars)
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
+		free_env_list(&g_vars.env_list);
 		exit(EXIT_SYNTAX_ERROR);
 	}
 	variable_expansion(&i_vars->token_list);

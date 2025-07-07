@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/04 11:17:04 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/07 11:38:34 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						util/ft_splitarr_by_words_keep_sep.c util/ft_split_by_word_keep_sep.c \
 						util/ft_split_by_words_keep_sep.c util/ft_split_leave_separator.c \
 						util/ft_strtrim_front.c util/lst_util.c util/remove_elem.c \
-						util/str_util.c util/token_util.c util/util.c
+						util/str_util.c util/token_util.c util/util.c debug.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
@@ -64,15 +64,15 @@ libtest:
 	make -C $(LIBTEST_DIR)
 
 clean:
-	$(RM) $(OBJS)
-	$(RM) $(BONUS_OBJS)
-	make -C $(LIBFT_DIR) clean
-	make -C $(FT_DPRINTF_DIR) clean
+	@$(RM) $(OBJS)
+	@$(RM) $(BONUS_OBJS)
+	make -sC $(LIBFT_DIR) clean
+	make -sC $(FT_DPRINTF_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME)
-	make -C $(LIBFT_DIR) fclean
-	make -C $(FT_DPRINTF_DIR) fclean
+	@$(RM) $(NAME)
+	make -sC $(LIBFT_DIR) fclean
+	make -sC $(FT_DPRINTF_DIR) fclean
 
 re: fclean $(NAME)
 
@@ -94,12 +94,13 @@ doc:
 
 debug: CFLAG += $(CFLAG_DEBUG)
 debug: $(OBJS) $(OBJS_NO_MAIN)
-	rm -f $(NAME).a
-	make libft
-	make ft_dprintf
-	make libdebug
-	make libtest
-	$(CC) $(CFLAG) $(OBJS) \
+	@echo "make debug"
+	@$(RM) -f $(NAME).a
+	make -s libft
+	make -s ft_dprintf
+	make -s libdebug
+	make -s libtest
+	@$(CC) $(CFLAG) $(OBJS) \
 		-I$(LIBFT_DIR) \
 		-I$(FT_DPRINTF_DIR)/include \
 		-L$(LIBFT_DIR) -lft \
@@ -108,9 +109,9 @@ debug: $(OBJS) $(OBJS_NO_MAIN)
 		-L$(LIBDEBUG_DIR) -ldebug \
 		-lreadline \
 		-o $(NAME)
-	ar rcs $(NAME).a $(OBJS_NO_MAIN)
+	@ar rcs $(NAME).a $(OBJS_NO_MAIN)
 
 re_debug: fclean debug
 
 %.o: %.c
-	$(CC) $(CFLAG) -c $< -o $@
+	@$(CC) $(CFLAG) -c $< -o $@

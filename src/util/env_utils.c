@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:42:04 by atashiro          #+#    #+#             */
-/*   Updated: 2025/06/30 13:42:39 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:18:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-//env
+// env
 static t_env	*create_env_var(const char *env_str)
 {
 	t_env	*env_var;
@@ -42,14 +42,15 @@ static void	del_env_var(void *content)
 	t_env	*env_var;
 
 	env_var = (t_env *)content;
-	free(env_var->key);
-	free(env_var->value);
-	free(env_var);
+	ft_free((void **)&env_var->key);
+	ft_free((void **)&env_var->value);
+	ft_free((void **)&env_var);
 }
 
 void	free_env_list(t_list **env_list)
 {
 	ft_lstclear(env_list, del_env_var);
+	*env_list = NULL;
 }
 
 void	init_env_list(t_list **env_list, char **environ)
@@ -116,10 +117,12 @@ void	set_env_var(t_list **env_list, const char *key, const char *value)
 
 void	unset_env_var(t_list **env_list, const char *key)
 {
-	t_list *current = *env_list;
-	t_list *prev = NULL;
-	t_env *env_var;
+	t_list	*current;
+	t_list	*prev;
+	t_env	*env_var;
 
+	current = *env_list;
+	prev = NULL;
 	while (current)
 	{
 		env_var = (t_env *)current->content;
@@ -130,7 +133,7 @@ void	unset_env_var(t_list **env_list, const char *key)
 			else
 				prev->next = current->next;
 			ft_lstdelone(current, del_env_var);
-			return;
+			return ;
 		}
 		prev = current;
 		current = current->next;
