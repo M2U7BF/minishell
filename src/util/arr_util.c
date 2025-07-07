@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:52:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 16:29:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_str_array(char ***array)
 	int	i;
 
 	i = 0;
-	if (!*array)
+	if (!array || !*array)
 		return ;
 	while ((*array)[i])
 	{

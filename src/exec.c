@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:37:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 16:34:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int	exec(t_i_mode_vars *i_vars)
 
 	proc_list = process_division(i_vars->token_list);
 	update_proc(i_vars, proc_list);
+	// printf("process_division:\n");
+	// debug_put_proc_list(proc_list);
 	current = proc_list;
 	//------------------------------------------atashiro
 	if (i_vars->pro_count == 1)
@@ -112,6 +114,7 @@ int	exec(t_i_mode_vars *i_vars)
 			// 注意: builtin_exitはプロセスを終了するので、ここに戻らない可能性がある
 			return (status);
 		}
+		free_str_array(&current->argv);
 	}
 	// ------------------------------------------------------------------
 	i = -1;
