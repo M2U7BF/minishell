@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 12:55:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 13:07:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,12 +333,5 @@ t_env						*create_env_var(const char *env_str);
 // export_utils.c
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
-
-// debug.c
-void						debug_put_token_list(t_token *token_list);
-int							debug_put_token_list_compare(t_token *t,
-								t_token *t_e);
-void						debug_put_proc_list(t_proc_unit *proc_unit);
-void						debug_put_lst(t_list *lst);
 
 #endif
