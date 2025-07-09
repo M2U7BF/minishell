@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:47:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,6 @@ t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
-t_proc_unit					*process_division(t_token *token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
 int							exec(t_i_mode_vars *i_vars);
@@ -215,7 +214,7 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 
 // proc_unit_2.c
 int							proc_len(t_proc_unit *proc_list);
-t_proc_unit					*process_division(t_token *token_list);
+t_proc_unit					*process_division(t_i_mode_vars *i_vars);
 void						set_argv(t_proc_unit *current_proc);
 void						update_proc(t_i_mode_vars *i_vars,
 								t_proc_unit *proc_list);

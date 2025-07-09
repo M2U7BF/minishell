@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:36:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:47:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ int	exec(t_i_mode_vars *i_vars)
 	int			status;
 
 	status = EXIT_SUCCESS;
-	proc_list = process_division(i_vars->token_list);
-	update_proc(i_vars, proc_list);
+	proc_list = process_division(i_vars);
 	current = proc_list;
 	if (i_vars->pro_count == 1)
 	{

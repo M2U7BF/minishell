@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 14:00:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:48:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,18 @@ int	proc_len(t_proc_unit *proc_list)
 	return (i);
 }
 
-t_proc_unit	*process_division(t_token *token_list)
+t_proc_unit	*process_division(t_i_mode_vars *i_vars)
 {
 	t_token		*tok;
 	t_proc_unit	*result;
 	t_proc_unit	*proc;
 
-	if (!token_list)
+	if (!i_vars->token_list)
 		return (NULL);
-	proc = new_proc(tok_dup(token_list), CMD, STDIN_FILENO, STDOUT_FILENO);
+	proc = new_proc(tok_dup(i_vars->token_list), CMD, STDIN_FILENO,
+			STDOUT_FILENO);
 	result = proc;
-	tok = token_list->next;
+	tok = i_vars->token_list->next;
 	while (tok)
 	{
 		if (tok->type == PIPE)
@@ -53,6 +54,7 @@ t_proc_unit	*process_division(t_token *token_list)
 			append_token(&proc->args, tok_dup(tok));
 		tok = tok->next;
 	}
+	update_proc(i_vars, result);
 	return (result);
 }
 
