@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:05:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 13:43:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,17 +132,14 @@ int	exec(t_i_mode_vars *i_vars)
 	proc_list = process_division(i_vars->token_list);
 	update_proc(i_vars, proc_list);
 	current = proc_list;
-	//------------------------------------------atashiro
 	if (i_vars->pro_count == 1)
 	{
 		current->argv = tokens_to_arr(proc_list->args);
-		// パイプがなく、コマンドが "cd" または "exit" の場合
 		if (proc_list->type == CMD && current->argv && current->argv[0]
 			&& is_builtin(current->argv[0]))
 			i_vars->child_pids[0] = -1;
 		free_str_array(&current->argv);
 	}
-	// ------------------------------------------------------------------
 	i = -1;
 	while (proc_list && ++i < i_vars->pro_count)
 	{

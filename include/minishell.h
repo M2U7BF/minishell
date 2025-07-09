@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:07:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 13:45:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void						variable_expansion(t_token **token_list);
 void						reset_redirection(t_list *redirect_fds);
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
-int						exec_builtin(int status, t_i_mode_vars *i_vars,
+int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
 t_proc_unit					*process_division(t_token *token_list);
 char						**trim_redirection(char ***argv);
@@ -312,7 +312,7 @@ char						**remove_elem(char **arr, char **remove_list);
 
 int							is_builtin(char *cmd);
 int							builtin_cd(char **argv);
-int	builtin_echo(char **argv); // echoは環境変数不要?
+int							builtin_echo(char **argv); // echoは環境変数不要?
 int							builtin_env(void);
 int							builtin_exit(char **argv);
 int							builtin_export(char **argv);
