@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 14:17:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:36:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	exec(t_i_mode_vars *i_vars)
 			else if (i_vars->child_pids[i] == -1)
 				libc_error();
 		}
-    exec_parent_proc(&redirect_fds);
+		exec_parent_proc(&redirect_fds);
 		current = current->next;
 	}
 	free_proc_list(&proc_list);
