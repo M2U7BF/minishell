@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 17:53:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 13:07:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,8 @@ void						variable_expansion(t_token **token_list);
 void						reset_redirection(t_list *redirect_fds);
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
+int						exec_builtin(int status, t_i_mode_vars *i_vars,
+								t_proc_unit *proc);
 t_proc_unit					*process_division(t_token *token_list);
 char						**trim_redirection(char ***argv);
 int							get_command_path(char **cmd_name);
@@ -309,7 +311,6 @@ char						**ft_splitarr_by_words_keep_sep(char **arr,
 char						**remove_elem(char **arr, char **remove_list);
 
 int							is_builtin(char *cmd);
-int							exec_builtin(char **argv);
 int							builtin_cd(char **argv);
 int	builtin_echo(char **argv); // echoは環境変数不要?
 int							builtin_env(void);
@@ -329,9 +330,8 @@ void						free_env_list(t_list **env_list);
 void						del_env_var(void *content);
 t_env						*create_env_var(const char *env_str);
 
-//export_utils.c
+// export_utils.c
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
-
 
 #endif
