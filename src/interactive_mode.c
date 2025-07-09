@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 18:18:02 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/09 14:09:36 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		if (i_vars->child_pids != NULL)
 			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
-		free_env_list(&g_vars.env_list);
 	}
 	return (0);
 }
