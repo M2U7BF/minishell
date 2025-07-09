@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 10:49:41 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/09 14:52:32 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,56 +85,3 @@ int	builtin_cd(char **argv)
 		return (handle_cd_dash());
 	return (change_dir_and_update_env(argv[1], g_vars.env_list));
 }
-
-//--------------test---------------
-
-// int arrlen(char **argv)
-// {
-// 	int i = 0;
-// 	while (argv[i])
-// 		i++;
-// 	return (i);
-// }
-
-// void print_current_directory(void)
-// {
-// 	char cwd[1024];
-// 	if (getcwd(cwd, sizeof(cwd)))
-// 		printf("Current directory: %s\n", cwd);
-// 	else
-// 		perror("getcwd");
-// }
-
-// int main(void)
-// {
-// 	char *argv1[] = {"cd", NULL};
-// 	char *argv2[] = {"cd", "..", NULL};
-// 	char *argv3[] = {"cd", "-", NULL};
-// 	char *argv4[] = {"cd", "/tmp", NULL};
-// 	char *argv5[] = {"cd", "too", "many", NULL};
-
-// 	printf("=== Test 1: cd (no argument) ===\n");
-// 	print_current_directory();
-// 	builtin_cd(argv1);
-// 	print_current_directory();
-
-// 	printf("\n=== Test 2: cd .. ===\n");
-// 	builtin_cd(argv2);
-// 	print_current_directory();
-
-// 	printf("\n=== Test 3: cd - (go to OLDPWD) ===\n");
-// 	builtin_cd(argv3);
-// 	print_current_directory();
-
-// 	printf("\n=== Test 4: cd /tmp ===\n");
-// 	builtin_cd(argv4);
-// 	print_current_directory();
-
-// 	printf("\n=== Test 5: cd with too many arguments ===\n");
-// 	builtin_cd(argv5);
-// 	print_current_directory();
-
-// 	return (0);
-// }
-
-// cc cd.c ../../lib/ft_dprintf/libftdprintf.a ../../lib/libft/libft.a

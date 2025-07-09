@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arr_util.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 16:29:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 14:47:00 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	free_str_array(char ***array)
 		ft_free((void **)&(*array)[i]);
 		i++;
 	}
-  free(*array);
-  *array = NULL;
+	free(*array);
+	*array = NULL;
 }
 
 char	*ft_strjoin_all(char **words)
