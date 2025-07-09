@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:46:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:40:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ static char	*remove_quotes(char *s)
 			result[j++] = s[i];
 	}
 	if (current_quote)
-	{
-		ft_dprintf(STDERR_FILENO, "%s\n", ERR_QUOTE_1);
-		exit(EXIT_SYNTAX_ERROR);
-	}
+		put_error_exit(ERR_QUOTE_1, EXIT_SYNTAX_ERROR);
 	result[j] = '\0';
 	return (result);
 }
