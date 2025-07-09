@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:45:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 14:02:27 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,8 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 int							proc_len(t_proc_unit *proc_list);
 t_proc_unit					*process_division(t_token *token_list);
 void						set_argv(t_proc_unit *current_proc);
+void						update_proc(t_i_mode_vars *i_vars,
+								t_proc_unit *proc_list);
 
 // syntax.c
 bool						is_syntax_error(t_token *token_list);
@@ -310,9 +312,12 @@ char						**ft_splitarr_by_words_keep_sep(char **arr,
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
+// builtin.c
 int							is_builtin(char *cmd);
+int							handle_builtin_cmd(char **argv);
+
 int							builtin_cd(char **argv);
-int							builtin_echo(char **argv); // echoは環境変数不要?
+int							builtin_echo(char **argv);
 int							builtin_env(void);
 int							builtin_exit(char **argv);
 int							builtin_export(char **argv);

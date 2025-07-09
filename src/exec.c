@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:43:54 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 14:01:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,37 +28,6 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 	redirect_fds = pipe_redirect(current_proc, redirect_fds);
 	*status = open_and_redirect_files(current_proc->args, &redirect_fds);
 	return (redirect_fds);
-}
-
-static void	update_proc(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
-{
-	i_vars->pro_count = proc_len(proc_list);
-	i_vars->child_pids = malloc(sizeof(pid_t) * i_vars->pro_count);
-	ft_bzero(i_vars->child_pids, sizeof(pid_t) * i_vars->pro_count);
-	if (!i_vars->child_pids)
-	{
-		free_proc_list(&proc_list);
-		libc_error();
-	}
-}
-
-static int	handle_builtin_cmd(char **argv)
-{
-	if (ft_strncmp(argv[0], "echo", 5) == 0)
-		return (builtin_echo(argv));
-	else if (ft_strncmp(argv[0], "cd", 3) == 0)
-		return (builtin_cd(argv));
-	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-		return (builtin_pwd());
-	else if (ft_strncmp(argv[0], "export", 7) == 0)
-		return (builtin_export(argv));
-	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-		return (builtin_unset(argv));
-	else if (ft_strncmp(argv[0], "env", 4) == 0)
-		return (builtin_env());
-	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-		return (builtin_exit(argv));
-	return (127);
 }
 
 int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
