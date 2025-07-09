@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 12:54:02 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 13:05:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 			libc_error();
 	}
 	set_argv(proc);
-	// dprintf(STDERR_FILENO, "argv:\n");
-	// put_strarr(proc->argv);
 	if (is_builtin(proc->argv[0]))
 		exit(handle_builtin_cmd(proc->argv));
 	envp_array = convert_env_list_to_array(g_vars.env_list);
@@ -133,8 +131,6 @@ int	exec(t_i_mode_vars *i_vars)
 	status = EXIT_SUCCESS;
 	proc_list = process_division(i_vars->token_list);
 	update_proc(i_vars, proc_list);
-	// printf("process_division:\n");
-	// debug_put_proc_list(proc_list);
 	current = proc_list;
 	//------------------------------------------atashiro
 	if (i_vars->pro_count == 1)
