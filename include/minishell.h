@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 17:53:36 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:01:23 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,12 @@ t_env						*create_env_var(const char *env_str);
 //export_utils.c
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
+
+int							update_env_vars(t_list *env_list);
+int							change_dir_and_update_env(const char *path, t_list *env_list);
+int							handle_cd_home(void);
+int							handle_cd_dash(void);
+int							handle_cd_dotdot(void);
 
 
 #endif
