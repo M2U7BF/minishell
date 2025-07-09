@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 16:34:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 10:03:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	exec(t_i_mode_vars *i_vars)
 	{
 		current->argv = tokens_to_arr(proc_list->args);
 		// パイプがなく、コマンドが "cd" または "exit" の場合
-		if (proc_list->type == CMD && current->argv
+		if (proc_list->type == CMD && current->argv && current->argv[0]
 			&& is_builtin(current->argv[0]))
 		{
 			redirect_fds = NULL;
