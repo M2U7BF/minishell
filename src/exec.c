@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 12:06:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 12:54:02 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,48 @@ static void	update_proc(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
 	}
 }
 
+static int	handle_builtin_cmd(char **argv)
+{
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
+		return (builtin_echo(argv));
+	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+		return (builtin_cd(argv));
+	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
+		return (builtin_pwd());
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+		return (builtin_export(argv));
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+		return (builtin_unset(argv));
+	else if (ft_strncmp(argv[0], "env", 4) == 0)
+		return (builtin_env());
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+		return (builtin_exit(argv));
+	return (127);
+}
+
+int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
+{
+	if (status != 0)
+	{
+		destroy_i_vars(i_vars);
+		free_env_list(&g_vars.env_list);
+		g_vars.exit_status = EXIT_FAILURE;
+		return (status);
+	}
+	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
+		libc_error();
+	if (proc->next && proc->next->read_fd != STDIN_FILENO)
+	{
+		if (close(proc->next->read_fd) == -1)
+			libc_error();
+	}
+	if (!proc->argv)
+		set_argv(proc);
+	status = handle_builtin_cmd(proc->argv);
+	g_vars.exit_status = status;
+	return (status);
+}
+
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		t_proc_unit *proc_list, t_proc_unit *proc)
 {
@@ -62,10 +104,10 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 			libc_error();
 	}
 	set_argv(proc);
-  // dprintf(STDERR_FILENO, "argv:\n");
-  // put_strarr(proc->argv);
+	// dprintf(STDERR_FILENO, "argv:\n");
+	// put_strarr(proc->argv);
 	if (is_builtin(proc->argv[0]))
-		exit(exec_builtin(status, i_vars, proc));
+		exit(handle_builtin_cmd(proc->argv));
 	envp_array = convert_env_list_to_array(g_vars.env_list);
 	execve(proc->argv[0], proc->argv, envp_array);
 	perror("execve");
@@ -78,46 +120,6 @@ static void	exec_parent_proc(t_list **redirect_fds)
 		libc_error();
 	reset_redirection(*redirect_fds);
 	*redirect_fds = NULL;
-}
-
-int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
-{
-	if (status != 0)
-	{
-		destroy_i_vars(i_vars);
-		free_env_list(&g_vars.env_list);
-		g_vars.exit_status = EXIT_FAILURE;
-		return (status);
-	}
-	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-		libc_error();
-	if (proc->next && proc->next->read_fd != STDIN_FILENO)
-	{
-		if (close(proc->next->read_fd) == -1)
-			libc_error();
-	}
-  if (!proc->argv)
-	  set_argv(proc);
-	if (ft_strncmp(proc->argv[0], "echo", 5) == 0)
-		status = builtin_echo(proc->argv);
-	else if (ft_strncmp(proc->argv[0], "cd", 3) == 0)
-		status = builtin_cd(proc->argv);
-	else if (ft_strncmp(proc->argv[0], "pwd", 4) == 0)
-		status = builtin_pwd();
-	else if (ft_strncmp(proc->argv[0], "export", 7) == 0)
-		status = builtin_export(proc->argv);
-	else if (ft_strncmp(proc->argv[0], "unset", 6) == 0)
-		status = builtin_unset(proc->argv);
-	else if (ft_strncmp(proc->argv[0], "env", 4) == 0)
-		status = builtin_env();
-	else if (ft_strncmp(proc->argv[0], "exit", 5) == 0)
-		status = builtin_exit(proc->argv);
-	else
-	{
-		status = 127;
-	}
-	g_vars.exit_status = status;
-	return (status);
 }
 
 int	exec(t_i_mode_vars *i_vars)
