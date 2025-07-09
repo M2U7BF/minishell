@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:27:58 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	is_include(char *s, char **words)
 	return (false);
 }
 
-bool	is_str_equal(char *s1, char *s2, bool include_null_char)
+bool	is_s_eq(char *s1, char *s2, bool include_null_char)
 {
 	int	len;
 

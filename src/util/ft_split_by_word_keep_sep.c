@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:40:33 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/04 13:29:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	split(int i, int *k, t_split_vars vars, char ***res_tmp)
 {
 	char	*tmp;
 
-	if (i - *k > 0 && (is_str_equal(vars.str + i, vars.word, false)
+	if (i - *k > 0 && (is_s_eq(vars.str + i, vars.word, false)
 			|| !vars.str[i]))
 	{
 		tmp = malloc(sizeof(char) * (i - *k + 1));
@@ -24,7 +24,7 @@ static void	split(int i, int *k, t_split_vars vars, char ***res_tmp)
 		**res_tmp = tmp;
 		(*res_tmp)++;
 	}
-	if (is_str_equal(vars.str + i, vars.word, false))
+	if (is_s_eq(vars.str + i, vars.word, false))
 	{
 		**res_tmp = ft_strdup(vars.word);
 		(*res_tmp)++;

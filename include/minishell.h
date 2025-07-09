@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 14:02:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ int							arrlen(char **arr);
 // str_util.c
 int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
-bool						is_str_equal(char *s1, char *s2,
+bool						is_s_eq(char *s1, char *s2,
 								bool include_null_char);
 
 // lst_util.c
