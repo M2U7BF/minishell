@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 12:27:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 13:40:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -70,7 +70,7 @@ typedef struct s_token
 typedef enum e_proc_unit_type
 {
 	CMD,
-  ONLY_PARENT,
+	ONLY_PARENT,
 	PIPE_LINE,
 }							t_proc_unit_type;
 
@@ -81,6 +81,7 @@ typedef struct s_proc_unit
 	char					**argv;
 	char					**redirs;
 	t_proc_unit_type		type;
+	int						status;
 	struct s_proc_unit		*next;
 	int						read_fd;
 	int						write_fd;
@@ -218,7 +219,7 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 // proc_unit_2.c
 int							proc_len(t_proc_unit *proc_list);
 t_proc_unit					*process_division(t_i_mode_vars *i_vars);
-void						set_argv(t_proc_unit *current_proc);
+int							set_argv(t_proc_unit *current_proc);
 void						update_proc(t_i_mode_vars *i_vars,
 								t_proc_unit *proc_list);
 
@@ -276,8 +277,7 @@ int							arrlen(char **arr);
 // str_util.c
 int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
-bool						is_s_eq(char *s1, char *s2,
-								bool include_null_char);
+bool						is_s_eq(char *s1, char *s2, bool include_null_char);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);
@@ -354,9 +354,10 @@ t_env						*create_env_var(const char *env_str);
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
 
-void	debug_put_token_list(t_token *token_list);
-int	debug_put_token_list_compare(t_token *t, t_token *t_e);
-void	debug_put_proc_list(t_proc_unit *proc_unit);
-void	debug_put_lst(t_list *lst);
+void						debug_put_token_list(t_token *token_list);
+int							debug_put_token_list_compare(t_token *t,
+								t_token *t_e);
+void						debug_put_proc_list(t_proc_unit *proc_unit);
+void						debug_put_lst(t_list *lst);
 
 #endif
