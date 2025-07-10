@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:35:11 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:24:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 		return (NULL);
 	proc_unit->next = NULL;
 	proc_unit->args = args;
-	proc_unit->argv = NULL;
+  // dprintf(STDERR_FILENO, "args->str:[%d]\n", args->str == NULL);
 	proc_unit->type = type;
+  // dprintf(STDERR_FILENO, "proc_unit->type:[%d]\n", proc_unit->type);
 	proc_unit->read_fd = in_fd;
 	proc_unit->write_fd = out_fd;
 	return (proc_unit);

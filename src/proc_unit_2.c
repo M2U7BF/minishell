@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:48:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 12:28:10 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_proc_unit	*process_division(t_i_mode_vars *i_vars)
 		if (tok->type == PIPE)
 		{
 			tok = tok->next;
+      set_argv(proc);
 			proc->next = new_proc(tok_dup(tok), PIPE_LINE, STDIN_FILENO,
 					STDOUT_FILENO);
 			proc = proc->next;
@@ -54,14 +55,23 @@ t_proc_unit	*process_division(t_i_mode_vars *i_vars)
 			append_token(&proc->args, tok_dup(tok));
 		tok = tok->next;
 	}
-	update_proc(i_vars, result);
+  set_argv(proc);
+  if (proc->argv && is_builtin(proc->argv[0]))
+    proc->type = ONLY_PARENT;
+  update_proc(i_vars, result);
 	return (result);
 }
 
 void	set_argv(t_proc_unit *current_proc)
 {
 	current_proc->argv = tokens_to_arr(current_proc->args);
+  // printf("current_proc->args:\n");
+  // debug_put_token_list(current_proc->args);
+  // printf("current_proc->argv:\n");
+  // put_strarr(current_proc->argv);
 	current_proc->argv = trim_redirection(&current_proc->argv);
+  // printf("current_proc->argv2:\n");
+  // put_strarr(current_proc->argv);
 	if (!current_proc->argv)
 		exit(EXIT_SUCCESS);
 	if (is_builtin(current_proc->argv[0]))

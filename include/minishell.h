@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:47:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 12:27:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -69,6 +70,7 @@ typedef struct s_token
 typedef enum e_proc_unit_type
 {
 	CMD,
+  ONLY_PARENT,
 	PIPE_LINE,
 }							t_proc_unit_type;
 
@@ -77,6 +79,7 @@ typedef struct s_proc_unit
 {
 	t_token					*args;
 	char					**argv;
+	char					**redirs;
 	t_proc_unit_type		type;
 	struct s_proc_unit		*next;
 	int						read_fd;
@@ -315,12 +318,25 @@ char						**remove_elem(char **arr, char **remove_list);
 int							is_builtin(char *cmd);
 int							handle_builtin_cmd(char **argv);
 
+// cd.c
 int							builtin_cd(char **argv);
+
+// echo.c
 int							builtin_echo(char **argv);
+
+// env.c
 int							builtin_env(void);
+
+// exit.c
 int							builtin_exit(char **argv);
+
+// export.c
 int							builtin_export(char **argv);
+
+// pwd.c
 int							builtin_pwd(void);
+
+// unset.c
 int							builtin_unset(char **argv);
 
 // env_util
@@ -337,5 +353,10 @@ t_env						*create_env_var(const char *env_str);
 // export_utils.c
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
+
+void	debug_put_token_list(t_token *token_list);
+int	debug_put_token_list_compare(t_token *t, t_token *t_e);
+void	debug_put_proc_list(t_proc_unit *proc_unit);
+void	debug_put_lst(t_list *lst);
 
 #endif

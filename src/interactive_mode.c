@@ -6,41 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 13:50:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:03:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 t_runtime_data	g_vars = {};
-
-void	wait_child_processes(int *child_pids, int pro_count)
-{
-	int	status;
-	int	i;
-
-	i = -1;
-	status = g_vars.exit_status;
-	while (++i < pro_count && child_pids[i] != -1)
-	{
-		if (waitpid(child_pids[i], &status, 0) == -1)
-			perror("waitpid");
-	}
-	if (WIFEXITED(status))
-		g_vars.exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_vars.exit_status = 128 + SIGQUIT;
-		}
-		else if (WTERMSIG(status) == SIGINT)
-			g_vars.exit_status = 128 + SIGINT;
-	}
-	else
-		put_error_exit("waitpid", EXIT_FAILURE);
-}
 
 int	exec_interactive(t_i_mode_vars *i_vars)
 {
@@ -62,8 +34,6 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 			continue ;
 		parse(i_vars);
 		exec(i_vars);
-		if (i_vars->child_pids != NULL)
-			wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
 	}
