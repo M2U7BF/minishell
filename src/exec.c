@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 17:24:26 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:27:20 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,7 @@ int	exec(t_i_mode_vars *i_vars)
 	{
 		redirect_fds = exec_redirection(&status, current);
 		if (current->type == ONLY_PARENT)
-		{
-			if (current->status != -1)
-				return (current->status);
 			exec_builtin(status, i_vars, current);
-		}
 		else
 		{
 			i_vars->child_pids[i] = fork();
