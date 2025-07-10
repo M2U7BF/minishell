@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 13:42:09 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:13:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_proc_unit	*process_division(t_i_mode_vars *i_vars)
 		tok = tok->next;
 	}
 	proc->status = set_argv(proc);
-	if (proc->argv && is_builtin(proc->argv[0]))
-		proc->type = ONLY_PARENT;
+	if (!result->next && result->argv && is_builtin(result->argv[0]))
+		result->type = ONLY_PARENT;
 	update_proc(i_vars, result);
 	return (result);
 }
