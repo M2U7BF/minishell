@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 18:01:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 18:03:16 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	quote_removal(t_token *token)
 	int		status;
 
 	current = token;
+	status = 0;
 	while (current && current->str)
 	{
 		if (current->type == WORD && (ft_strchr(current->str, '\'') != NULL
