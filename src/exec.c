@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 17:27:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:33:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 {
 	char	**envp_array;
 
+	if (proc->status != -1)
+		exit(proc->status);
 	if (status != 0)
 	{
 		destroy_i_vars(i_vars);
@@ -114,11 +116,7 @@ int	exec(t_i_mode_vars *i_vars)
 		{
 			i_vars->child_pids[i] = fork();
 			if (i_vars->child_pids[i] == 0)
-			{
-				if (current->status != -1)
-					exit(current->status);
 				exec_child_proc(status, i_vars, proc_list, current);
-			}
 			else if (i_vars->child_pids[i] == -1)
 				libc_error();
 		}
