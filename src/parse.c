@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:41:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:51:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,17 @@ void	variable_expansion(t_token **token_list)
 	}
 }
 
-void	parse(t_i_mode_vars *i_vars)
+int	parse(t_i_mode_vars *i_vars)
 {
 	if (is_syntax_error(i_vars->token_list))
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
-		exit(EXIT_SYNTAX_ERROR);
+		g_vars.exit_status = EXIT_SYNTAX_ERROR;
+		return (-1);
 	}
 	variable_expansion(&i_vars->token_list);
 	quote_removal(i_vars->token_list);
+	return (0);
 }
