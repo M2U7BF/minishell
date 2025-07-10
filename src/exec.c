@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 13:43:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:20:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 	int		pipe_fds[2];
 
 	redirect_fds = NULL;
-	if (current_proc->next && current_proc->next->type == PIPE_LINE)
+	if (current_proc->next && current_proc->next->type == PLINE)
 	{
 		if (pipe(pipe_fds) == -1)
 			libc_error();

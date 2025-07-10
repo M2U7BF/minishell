@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 13:52:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:20:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef enum e_proc_unit_type
 {
 	CMD,
 	ONLY_PARENT,
-	PIPE_LINE,
+	PLINE,
 }							t_proc_unit_type;
 
 // cmd + arg + arg ... を保存する連結リスト。

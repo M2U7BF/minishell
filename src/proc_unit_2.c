@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 14:13:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:41:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,35 +31,30 @@ int	proc_len(t_proc_unit *proc_list)
 
 t_proc_unit	*process_division(t_i_mode_vars *i_vars)
 {
-	t_token		*tok;
+	t_token		*t;
 	t_proc_unit	*result;
-	t_proc_unit	*proc;
+	t_proc_unit	*p;
 
-	if (!i_vars->token_list)
-		return (NULL);
-	proc = new_proc(tok_dup(i_vars->token_list), CMD, STDIN_FILENO,
-			STDOUT_FILENO);
-	result = proc;
-	tok = i_vars->token_list->next;
-	while (tok)
+	p = new_proc(tok_dup(i_vars->token_list), CMD, STDIN_FILENO, STDOUT_FILENO);
+	result = p;
+	t = i_vars->token_list->next;
+	while (t)
 	{
-		if (tok->type == PIPE)
+		if (t->type == PIPE)
 		{
-			tok = tok->next;
-			proc->status = set_argv(proc);
-			proc->next = new_proc(tok_dup(tok), PIPE_LINE, STDIN_FILENO,
-					STDOUT_FILENO);
-			proc = proc->next;
+			t = t->next;
+			p->status = set_argv(p);
+			p->next = new_proc(tok_dup(t), PLINE, STDIN_FILENO, STDOUT_FILENO);
+			p = p->next;
 		}
 		else
-			append_token(&proc->args, tok_dup(tok));
-		tok = tok->next;
+			append_token(&p->args, tok_dup(t));
+		t = t->next;
 	}
-	proc->status = set_argv(proc);
+	p->status = set_argv(p);
 	if (!result->next && result->argv && is_builtin(result->argv[0]))
 		result->type = ONLY_PARENT;
-	update_proc(i_vars, result);
-	return (result);
+	return (update_proc(i_vars, result), result);
 }
 
 int	set_argv(t_proc_unit *current_proc)
