@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 13:40:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 13:52:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ typedef struct s_proc_unit
 {
 	t_token					*args;
 	char					**argv;
-	char					**redirs;
 	t_proc_unit_type		type;
 	int						status;
 	struct s_proc_unit		*next;
