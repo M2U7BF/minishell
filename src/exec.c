@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 14:20:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 15:12:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,6 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 	redirect_fds = pipe_redirect(current_proc, redirect_fds);
 	*status = open_and_redirect_files(current_proc->args, &redirect_fds);
 	return (redirect_fds);
-}
-
-int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
-{
-	if (status != 0)
-	{
-		destroy_i_vars(i_vars);
-		free_env_list(&g_vars.env_list);
-		g_vars.exit_status = EXIT_FAILURE;
-		return (status);
-	}
-	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-		libc_error();
-	if (proc->next && proc->next->read_fd != STDIN_FILENO)
-	{
-		if (close(proc->next->read_fd) == -1)
-			libc_error();
-	}
-	status = handle_builtin_cmd(proc->argv);
-	g_vars.exit_status = status;
-	return (status);
 }
 
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 14:20:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 15:16:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,15 +192,11 @@ void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
-void						reset_redirection(t_list *redirect_fds);
-t_list						*pipe_redirect(t_proc_unit *proc,
-								t_list *redirect_fds);
+int							exec(t_i_mode_vars *i_vars);
+
+// exec_2.c
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
-char						**trim_redirection(char ***argv);
-int							get_command_path(char **cmd_name);
-int							exec(t_i_mode_vars *i_vars);
-void						handle_error(int status, char *cmd_path);
 
 // error.c
 void						put_error_exit(char *s, int status);
