@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 17:51:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 18:00:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int	parse(t_i_mode_vars *i_vars)
 		return (-1);
 	}
 	variable_expansion(&i_vars->token_list);
-	quote_removal(i_vars->token_list);
+	if (quote_removal(i_vars->token_list) == -1)
+		return (-1);
 	return (0);
 }

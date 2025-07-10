@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 17:50:42 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:59:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ bool						is_redirection(char *s);
 bool						is_blank(char *s);
 
 // quote.c
-void						quote_removal(t_token *token);
+int							quote_removal(t_token *token);
 bool						is_quote(char c);
 
 // parse.c
