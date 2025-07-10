@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 15:16:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:41:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,8 @@ void						parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
-int							exec(t_i_mode_vars *i_vars);
+void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
+								int status);
 
 // exec_2.c
 int							exec_builtin(int status, t_i_mode_vars *i_vars,

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 17:33:39 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 17:41:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,12 @@ static void	wait_child_processes(int *child_pids, int pro_count)
 		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
-int	exec(t_i_mode_vars *i_vars)
+void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 {
 	int			i;
-	t_proc_unit	*proc_list;
 	t_proc_unit	*current;
 	t_list		*redirect_fds;
-	int			status;
 
-	status = EXIT_SUCCESS;
-	proc_list = process_division(i_vars);
 	current = proc_list;
 	i = -1;
 	while (proc_list && ++i < i_vars->pro_count)
@@ -126,5 +122,4 @@ int	exec(t_i_mode_vars *i_vars)
 	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 	free_proc_list(&proc_list);
-	return (status);
 }
