@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:20:25 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 11:25:58 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 09:41:32 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	sort_env_array(char **env_array)
 		j = i + 1;
 		while (j < count)
 		{
-			if (ft_strncmp(env_array[i], env_array[j], -1) > 0)
+			if (ft_strncmp(env_array[i], env_array[j], SIZE_MAX) > 0)
 				swap_env_items(&env_array[i], &env_array[j]);
 			j++;
 		}
