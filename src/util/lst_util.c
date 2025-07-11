@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_util.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:50:45 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 11:00:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/07 14:01:18 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**lst_to_str_arr(t_list *lst)
 
 void	del_content(void *content)
 {
-	ft_free((void **)&content);
+	free(content);
 }
 
 t_list	*get_prev_lst(t_list **list, t_list *elem)

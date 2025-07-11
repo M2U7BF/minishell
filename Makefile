@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
+#    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/10 17:44:15 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/11 10:39:49 by atashiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						util/ft_split_by_words_keep_sep.c util/ft_split_leave_separator.c \
 						util/ft_strtrim_front.c util/lst_util.c util/remove_elem.c \
 						util/str_util.c util/token_util.c util/util.c \
-						util/env_utils2.c util/env_utils3.c exec_2.c
+						util/env_utils2.c util/env_utils3.c \
+						builtin/cd_utils.c exec_2.c 
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
