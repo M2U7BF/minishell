@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 18:00:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/11 16:24:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,23 @@ void	expand_question_mark(char **s)
 void	expand_variable(char **s)
 {
 	char	*env_var;
+	char	*name;
+	int		end;
+	char	*new;
 
-	env_var = get_env_value(g_vars.env_list, *s + 1);
+	end = 0;
+	name = get_var_name(*s + 1, &end);
+	env_var = get_env_value(g_vars.env_list, name);
+	ft_free((void **)&name);
 	if (env_var)
 	{
+		new = malloc(sizeof(char) * (ft_strlen(env_var) + ft_strlen(*s) - end
+					+ 1));
+		ft_strlcpy(new, env_var, ft_strlen(env_var) + 1);
+		ft_strlcpy(new + ft_strlen(env_var), *s + end + 1, ft_strlen(*s) - end
+			+ 1);
 		ft_free((void **)s);
-		*s = ft_strdup(env_var);
+		*s = new;
 	}
 	else
 		ft_free((void **)s);

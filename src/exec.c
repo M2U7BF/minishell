@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 10:38:29 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 17:04:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		t_proc_unit *proc_list, t_proc_unit *proc)
 {
-	char	**envp_array;
-
 	if (proc->status != -1)
 		exit(proc->status);
 	if (status != 0)
@@ -53,8 +51,8 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 	}
 	if (is_builtin(proc->argv[0]))
 		exit(handle_builtin_cmd(proc->argv));
-	envp_array = convert_env_list_to_array(g_vars.env_list);
-	execve(proc->argv[0], proc->argv, envp_array);
+	execve(proc->argv[0], proc->argv,
+		convert_env_list_to_array(g_vars.env_list));
 	perror("execve");
 	exit(EXIT_CMD_NOT_FOUND);
 }

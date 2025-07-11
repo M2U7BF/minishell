@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:37:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/11 17:18:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ int	get_command_path(char **cmd_name)
 	char	**path_env;
 	int		status;
 
-	path_env = ft_split(getenv("PATH"), ':');
+	path_env = ft_split(get_env_value(g_vars.env_list, "PATH"), ':');
 	status = 0;
-	if ((*cmd_name)[0] == '\0')
+	if (!path_env || (*cmd_name)[0] == '\0')
 		status = EXIT_CMD_NOT_FOUND;
 	else if (ft_strchr((*cmd_name), '/'))
 	{
