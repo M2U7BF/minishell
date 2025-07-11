@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 14:09:36 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 10:17:35 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		i_vars->input = readline("minishell$ ");
 		if (!i_vars->input)
 		{
+			ft_putendl_fd("exit", STDERR_FILENO);
 			free_env_list(&g_vars.env_list);
 			rl_clear_history();
 			exit(g_vars.exit_status);
