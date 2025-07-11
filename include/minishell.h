@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 10:40:14 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:20:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/signal.h>
@@ -28,7 +29,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <stdint.h>
 
 # define DEFAULT_BLANK " \t"
 # define EXIT_SYNTAX_ERROR 2
@@ -351,10 +351,10 @@ int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
 
 int							update_env_vars(t_list *env_list);
-int							change_dir_and_update_env(const char *path, t_list *env_list);
+int							change_dir_and_update_env(const char *path,
+								t_list *env_list);
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
 int							handle_cd_dotdot(void);
-
 
 #endif

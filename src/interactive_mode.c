@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 10:40:24 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 11:20:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 t_runtime_data	g_vars = {};
+
+static void	process_ctrl_d(void)
+{
+	ft_putendl_fd("exit", STDERR_FILENO);
+	free_env_list(&g_vars.env_list);
+	rl_clear_history();
+	exit(g_vars.exit_status);
+}
 
 int	exec_interactive(t_i_mode_vars *i_vars)
 {
@@ -24,12 +32,7 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		set_signal_handlers();
 		i_vars->input = readline("minishell$ ");
 		if (!i_vars->input)
-		{
-			ft_putendl_fd("exit", STDERR_FILENO);
-			free_env_list(&g_vars.env_list);
-			rl_clear_history();
-			exit(g_vars.exit_status);
-		}
+			process_ctrl_d();
 		else if (i_vars->input[0] == '\0')
 			continue ;
 		add_history(i_vars->input);
