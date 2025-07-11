@@ -6,13 +6,12 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 18:01:22 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 10:40:29 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// main関数に `char **envp` を追加
 int	main(int argc, char *argv[], char **envp)
 {
 	t_exec_vars	e_vars;
@@ -20,10 +19,10 @@ int	main(int argc, char *argv[], char **envp)
 	if (argc > 3)
 		return (EXIT_FAILURE);
 	init_e_vars(&e_vars);
-	init_env_list(&g_vars.env_list, envp); // <-- 環境変数リストを初期化
+	init_env_list(&g_vars.env_list, envp);
 	if (parse_exec_arg(argc, argv, &e_vars) == -1)
 	{
-		free_env_list(&g_vars.env_list); // <-- 失敗時も解放
+		free_env_list(&g_vars.env_list);
 		return (EXIT_FAILURE);
 	}
 	g_vars.signal = 0;

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:37:32 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/10 18:00:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 	}
 	if (*s[0] == '$')
 	{
-		if (is_str_equal(*s, "$", true))
+		if (is_s_eq(*s, "$", true))
 			return ;
 		if (*is_expand)
 		{
-			if (is_str_equal(*s, "$?", false))
+			if (is_s_eq(*s, "$?", false))
 				expand_question_mark(s);
 			else
 				expand_variable(s);
@@ -82,8 +82,7 @@ void	variable_expansion(t_token **token_list)
 	is_expand = true;
 	while (cur_tok)
 	{
-		if (!is_str_equal("$", cur_tok->str, true) && ft_strchr(cur_tok->str,
-				'$'))
+		if (!is_s_eq("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
 		{
 			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
 			j = -1;
@@ -98,15 +97,18 @@ void	variable_expansion(t_token **token_list)
 	}
 }
 
-void	parse(t_i_mode_vars *i_vars)
+int	parse(t_i_mode_vars *i_vars)
 {
 	if (is_syntax_error(i_vars->token_list))
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
-		exit(EXIT_SYNTAX_ERROR);
+		g_vars.exit_status = EXIT_SYNTAX_ERROR;
+		return (-1);
 	}
 	variable_expansion(&i_vars->token_list);
-	quote_removal(i_vars->token_list);
+	if (quote_removal(i_vars->token_list) == -1)
+		return (-1);
+	return (0);
 }

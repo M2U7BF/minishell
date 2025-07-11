@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 09:44:05 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/11 10:40:14 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ typedef struct s_token
 typedef enum e_proc_unit_type
 {
 	CMD,
-	PIPE_LINE,
+	ONLY_PARENT,
+	PLINE,
 }							t_proc_unit_type;
 
 // cmd + arg + arg ... を保存する連結リスト。
@@ -79,6 +80,7 @@ typedef struct s_proc_unit
 	t_token					*args;
 	char					**argv;
 	t_proc_unit_type		type;
+	int						status;
 	struct s_proc_unit		*next;
 	int						read_fd;
 	int						write_fd;
@@ -182,22 +184,20 @@ bool						is_redirection(char *s);
 bool						is_blank(char *s);
 
 // quote.c
-void						quote_removal(t_token *token);
+int							quote_removal(t_token *token);
 bool						is_quote(char c);
 
 // parse.c
-void						parse(t_i_mode_vars *i_vars);
+int							parse(t_i_mode_vars *i_vars);
 void						variable_expansion(t_token **token_list);
 
 // exec.c
-void						reset_redirection(t_list *redirect_fds);
-t_list						*pipe_redirect(t_proc_unit *proc,
-								t_list *redirect_fds);
-t_proc_unit					*process_division(t_token *token_list);
-char						**trim_redirection(char ***argv);
-int							get_command_path(char **cmd_name);
-int							exec(t_i_mode_vars *i_vars);
-void						handle_error(int status, char *cmd_path);
+void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
+								int status);
+
+// exec_2.c
+int							exec_builtin(int status, t_i_mode_vars *i_vars,
+								t_proc_unit *proc);
 
 // error.c
 void						put_error_exit(char *s, int status);
@@ -214,8 +214,10 @@ t_proc_unit					*get_prev_proc(t_proc_unit **proc_list,
 
 // proc_unit_2.c
 int							proc_len(t_proc_unit *proc_list);
-t_proc_unit					*process_division(t_token *token_list);
-void						set_argv(t_proc_unit *current_proc);
+t_proc_unit					*process_division(t_i_mode_vars *i_vars);
+int							set_argv(t_proc_unit *current_proc);
+void						update_proc(t_i_mode_vars *i_vars,
+								t_proc_unit *proc_list);
 
 // syntax.c
 bool						is_syntax_error(t_token *token_list);
@@ -271,8 +273,7 @@ int							arrlen(char **arr);
 // str_util.c
 int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
-bool						is_str_equal(char *s1, char *s2,
-								bool include_null_char);
+bool						is_s_eq(char *s1, char *s2, bool include_null_char);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);
@@ -309,14 +310,29 @@ char						**ft_splitarr_by_words_keep_sep(char **arr,
 // remove_elem.c
 char						**remove_elem(char **arr, char **remove_list);
 
+// builtin.c
 int							is_builtin(char *cmd);
-int							exec_builtin(char **argv);
+int							handle_builtin_cmd(char **argv);
+
+// cd.c
 int							builtin_cd(char **argv);
-int	builtin_echo(char **argv); // echoは環境変数不要?
+
+// echo.c
+int							builtin_echo(char **argv);
+
+// env.c
 int							builtin_env(void);
+
+// exit.c
 int							builtin_exit(char **argv);
+
+// export.c
 int							builtin_export(char **argv);
+
+// pwd.c
 int							builtin_pwd(void);
+
+// unset.c
 int							builtin_unset(char **argv);
 
 // env_util
@@ -330,7 +346,7 @@ void						free_env_list(t_list **env_list);
 void						del_env_var(void *content);
 t_env						*create_env_var(const char *env_str);
 
-//export_utils.c
+// export_utils.c
 int							is_valid_export(const char *s);
 void						sort_env_array(char **env_array);
 
