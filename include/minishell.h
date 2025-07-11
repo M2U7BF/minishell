@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 16:24:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/11 17:32:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -361,11 +360,5 @@ int							change_dir_and_update_env(const char *path,
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
 int							handle_cd_dotdot(void);
-
-void						debug_put_token_list(t_token *token_list);
-int							debug_put_token_list_compare(t_token *t,
-								t_token *t_e);
-void						debug_put_proc_list(t_proc_unit *proc_unit);
-void						debug_put_lst(t_list *lst);
 
 #endif
