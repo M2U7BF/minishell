@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 17:32:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:20:53 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ void						close_pipe(t_proc_unit *proc);
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds);
+								t_list **redirect_fds, int heredoc_count);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:25:33 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,15 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
+int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
+		int heredoc_count)
 {
 	int	fd;
 	int	status;
 	int	to_fd;
+	int	i;
 
+	i = 1;
 	fd = 0;
 	status = 0;
 	to_fd = STDIN_FILENO;
@@ -63,7 +66,10 @@ int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
 				return (handle_error(status, cur->next->str), status);
 			if (cur->str[0] == '>')
 				to_fd = STDOUT_FILENO;
-			redirect(&fd, to_fd, redirect_fds);
+			if (cur->next->type == DELIM && i != heredoc_count)
+				i++;
+			else
+				redirect(&fd, to_fd, redirect_fds);
 			cur = cur->next;
 		}
 		cur = cur->next;
