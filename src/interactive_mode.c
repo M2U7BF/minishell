@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 11:20:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 15:43:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 	{
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
-		set_signal_handlers();
+		set_signal_handlers(false);
 		i_vars->input = readline("minishell$ ");
+		if (g_vars.interrupted)
+		{
+			g_vars.interrupted = 0;
+			continue ;
+		}
 		if (!i_vars->input)
 			process_ctrl_d();
 		else if (i_vars->input[0] == '\0')

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:36:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 15:32:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct s_runtime_data
 	int						exit_status;
 	volatile sig_atomic_t	signal;
 	t_list					*env_list;
+	volatile sig_atomic_t	interrupted;
 }							t_runtime_data;
 
 typedef struct s_split_vars
@@ -137,7 +138,7 @@ extern t_runtime_data		g_vars;
 // src ============================================================
 
 // handle_keys.c
-void						set_signal_handlers(void);
+void						set_signal_handlers(bool is_exec);
 
 // i_mode_vars.c
 void						init_i_vars(t_i_mode_vars *i_vars);
