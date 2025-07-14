@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 17:32:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:36:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ t_token						*get_prev_token(t_token **token_list,
 // token_util.c
 char						**tokens_to_arr(t_token *token_list);
 t_token						*join_tokens(t_token *token_list);
+bool						is_redir_pair(t_token *token);
 
 // tokenize.c
 t_token						*tokenize(char *input_line);
@@ -202,6 +203,7 @@ void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
 // exec_2.c
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
+int							count_heredoc(t_token *token_list);
 
 // error.c
 void						put_error_exit(char *s, int status);
@@ -248,13 +250,14 @@ void						close_pipe(t_proc_unit *proc);
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds);
+								t_list **redirect_fds, int heredoc_count);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
 // redirection_2.c
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
+int							get_to_fd(char *redir);
 
 // command_path.c
 int							get_command_path(char **cmd_name);
