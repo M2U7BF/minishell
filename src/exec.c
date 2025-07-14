@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:28:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 15:54:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		t_proc_unit *proc_list, t_proc_unit *proc)
 {
+	set_signal_handlers(true);
 	if (proc->status != -1)
 		exit(proc->status);
 	if (status != 0)
@@ -60,8 +61,7 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 
 static void	exec_parent_proc(t_list **redirect_fds)
 {
-	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-		libc_error();
+	set_signal_handlers(true);
 	reset_redirection(*redirect_fds);
 	*redirect_fds = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 15:51:18 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 16:06:09 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,9 @@ bool	is_s_eq(char *s1, char *s2, bool include_null_char)
 	if (include_null_char)
 		len++;
 	return (ft_strncmp(s1, s2, len) == 0);
+}
+
+bool	is_quoted(char *s)
+{
+	return (ft_strchr(s, '"') != NULL || ft_strchr(s, '\'') != NULL);
 }
