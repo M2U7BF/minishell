@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:28:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:36:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ t_token						*get_prev_token(t_token **token_list,
 // token_util.c
 char						**tokens_to_arr(t_token *token_list);
 t_token						*join_tokens(t_token *token_list);
+bool						is_redir_pair(t_token *token);
 
 // tokenize.c
 t_token						*tokenize(char *input_line);
@@ -256,6 +257,7 @@ void						reset_redirection(t_list *redirect_fds);
 // redirection_2.c
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
+int							get_to_fd(char *redir);
 
 // command_path.c
 int							get_command_path(char **cmd_name);
