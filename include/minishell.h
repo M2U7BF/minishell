@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:20:53 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:28:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,7 @@ void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
 // exec_2.c
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
+int							count_heredoc(t_token *token_list);
 
 // error.c
 void						put_error_exit(char *s, int status);

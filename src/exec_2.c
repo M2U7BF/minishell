@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 11:12:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:28:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,20 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 	status = handle_builtin_cmd(proc->argv);
 	g_vars.exit_status = status;
 	return (status);
+}
+
+int	count_heredoc(t_token *token_list)
+{
+	t_token	*current;
+	int		heredoc_count;
+
+	heredoc_count = 0;
+	current = token_list;
+	while (current)
+	{
+		if (current->type == REDIR && ft_strncmp(current->str, "<<", 3) == 0)
+			heredoc_count++;
+		current = current->next;
+	}
+	return (heredoc_count);
 }

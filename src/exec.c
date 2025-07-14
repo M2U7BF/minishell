@@ -6,27 +6,11 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:20:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/14 11:28:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static int	count_heredoc(t_token *token_list)
-{
-	t_token	*current;
-	int		heredoc_count;
-
-	heredoc_count = 0;
-	current = token_list;
-	while (current)
-	{
-		if (current->type == REDIR && ft_strncmp(current->str, "<<", 3) == 0)
-			heredoc_count++;
-		current = current->next;
-	}
-	return (heredoc_count);
-}
 
 static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 {
