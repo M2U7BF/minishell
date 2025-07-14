@@ -6,14 +6,14 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/11 17:32:22 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/14 13:57:52 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						builtin/env.c builtin/exit.c builtin/export.c builtin/pwd.c \
 						builtin/unset.c command_path.c error.c exec.c exec_vars.c fd.c \
-						file.c handle_keys.c handle_keys_heredoc.c here_doc.c \
+						file.c signal.c signal_heredoc.c here_doc.c \
 						i_mode_vars.c interactive_mode.c main.c non_interactive_mode.c \
 						parse.c pipe.c proc_unit_2.c proc_unit.c quote.c redirection_2.c \
 						redirection.c syntax.c token_2.c token.c tokenize_2.c tokenize_3.c \
