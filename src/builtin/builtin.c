@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/09 14:01:08 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 16:25:47 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ int	is_builtin(char *cmd)
 		|| ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 4) == 0
 		|| ft_strncmp(cmd, "exit", 5) == 0)
 		return (1);
+	if (is_variable_assignment(cmd))
+		return (1);
 	return (0);
 }
 
-int	handle_builtin_cmd(char **argv)
+static int	exec_builtin_command(char **argv)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		return (builtin_echo(argv));
@@ -38,5 +40,36 @@ int	handle_builtin_cmd(char **argv)
 		return (builtin_env());
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 		return (builtin_exit(argv));
+	return (-1);
+}
+
+static int	handle_variable_assignment_command(char **argv)
+{
+	if (is_variable_assignment(argv[0]))
+	{
+		if (argv[1] != NULL)
+		{
+			ft_dprintf(STDERR_FILENO,
+				"minishell: %s: command not found\n", argv[1]);
+			return (127);
+		}
+		handle_variable_assignment(argv[0]);
+		return (g_vars.exit_status);
+	}
+	return (-1);
+}
+
+int	handle_builtin_cmd(char **argv)
+{
+	int	ret;
+
+	if (!argv || !argv[0])
+		return (127);
+	ret = exec_builtin_command(argv);
+	if (ret != -1)
+		return (ret);
+	ret = handle_variable_assignment_command(argv);
+	if (ret != -1)
+		return (ret);
 	return (127);
 }
