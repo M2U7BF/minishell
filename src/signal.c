@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:57:38 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 15:57:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 09:39:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	check_state(void)
 	else if (g_vars.signal == SIGINT)
 	{
 		g_vars.signal = 0;
-		g_vars.interrupted = true;
 		return (0);
 	}
 	return (0);

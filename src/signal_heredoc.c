@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:58:03 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 16:04:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 09:37:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	check_state(void)
 	else if (g_vars.signal == SIGINT)
 	{
 		g_vars.signal = 0;
-		g_vars.interrupted = true;
 		return (0);
 	}
 	return (0);
@@ -31,7 +30,7 @@ static void	signal_handler(int signum)
 	g_vars.exit_status = 128 + signum;
 	if (g_vars.signal == SIGINT)
 	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		g_vars.interrupted = 1;
 		rl_replace_line("", 0);
 		rl_done = 1;
 	}
