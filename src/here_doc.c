@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:05:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:24:16 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*str_quote_removal(char *s)
 	return (tmp_str);
 }
 
-static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
+static int	finish_here_doc(char **line, char **delim, int *pipe_fds, int *fd)
 {
 	ft_free((void **)line);
 	ft_free((void **)delim);
@@ -68,6 +68,15 @@ static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
 		libc_error();
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		libc_error();
+	if (g_vars.interrupted)
+	{
+		if (close(pipe_fds[0]) == -1)
+			libc_error();
+		g_vars.interrupted = 0;
+		return (128 + SIGINT);
+	}
+	*fd = pipe_fds[0];
+	return (EXIT_SUCCESS);
 }
 
 // ヒアドキュメントの処理。
@@ -97,14 +106,5 @@ int	here_doc(char *delim, int *fd)
 		ft_free((void **)&line);
 		i++;
 	}
-	finish_here_doc(&line, &delim, pipe_fds);
-	if (g_vars.interrupted)
-	{
-		if (close(pipe_fds[0]) == -1)
-			libc_error();
-		g_vars.interrupted = 0;
-		return (128 + SIGINT);
-	}
-	*fd = pipe_fds[0];
-	return (EXIT_SUCCESS);
+	return (finish_here_doc(&line, &delim, pipe_fds, fd));
 }

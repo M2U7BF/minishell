@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:18:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:32:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,5 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 		exec_parent_proc(&redirect_fds);
 		current = current->next;
 	}
-	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-	free_proc_list(&proc_list);
+	finish_exec(i_vars, proc_list);
 }

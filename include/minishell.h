@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:03:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@
 // エラー文の定義
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 # define ERR_QUOTE_1 "Unclosed quote"
-# define WARN_HEREDOC_1                           \
-	"minishell: warning: here-document at line " \
-	"%d delimited by end-of-file (wanted `%s')\n"
+# define WARN_HEREDOC_1 \
+	"minishell: warning: here-document at line \
+	%d delimited by end-of-file (wanted `%s')\n"
 
 // 起動モード
 typedef enum e_mode
@@ -208,6 +208,8 @@ void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
 int							count_heredoc(t_token *token_list);
+void						finish_exec(t_i_mode_vars *i_vars,
+								t_proc_unit *proc_list);
 
 // error.c
 void						put_error_exit(char *s, int status);

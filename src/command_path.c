@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:19:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:23:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ void	handle_error(int status, char *cmd_path)
 			strerror(status));
 		g_vars.exit_status = EXIT_PERMISSION_DENIED;
 	}
-  else if (status > 128)
-    g_vars.exit_status = status;
+	else if (status > 128)
+		g_vars.exit_status = status;
 	else
 		perror("minishell");
 }
