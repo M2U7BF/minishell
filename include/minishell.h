@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 11:20:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:56:56 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,5 +356,13 @@ int							change_dir_and_update_env(const char *path,
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
 int							handle_cd_dotdot(void);
+
+// get_prompt.c
+char						*get_prompt(void);
+char						*get_hostname(t_list *env_list);
+char						*get_display_path(char *cwd, char *home);
+char						*build_user_host(char *user, char *hostname);
+char						*get_display_path_str(void);
+char						*assemble_prompt(char *user, char *path);
 
 #endif
