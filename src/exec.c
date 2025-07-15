@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 15:54:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,34 +66,6 @@ static void	exec_parent_proc(t_list **redirect_fds)
 	*redirect_fds = NULL;
 }
 
-static void	wait_child_processes(int *child_pids, int pro_count)
-{
-	int	status;
-	int	i;
-
-	i = -1;
-	status = g_vars.exit_status;
-	while (++i < pro_count)
-	{
-		if (waitpid(child_pids[i], &status, 0) == -1)
-			perror("waitpid");
-	}
-	if (WIFEXITED(status))
-		g_vars.exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_vars.exit_status = 128 + SIGQUIT;
-		}
-		else if (WTERMSIG(status) == SIGINT)
-			g_vars.exit_status = 128 + SIGINT;
-	}
-	else
-		put_error_exit("waitpid", EXIT_FAILURE);
-}
-
 void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 {
 	int			i;
@@ -105,6 +77,8 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 	while (proc_list && ++i < i_vars->pro_count)
 	{
 		redirect_fds = exec_redirection(&status, current);
+		if (status > 128)
+			return ;
 		if (current->type == ONLY_PARENT)
 			exec_builtin(status, i_vars, current);
 		else
@@ -118,7 +92,5 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 		exec_parent_proc(&redirect_fds);
 		current = current->next;
 	}
-	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-	free_proc_list(&proc_list);
+	finish_exec(i_vars, proc_list);
 }

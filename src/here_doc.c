@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 09:36:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:40:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*str_quote_removal(char *s)
 	return (tmp_str);
 }
 
-static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
+static int	finish_here_doc(char **line, char **delim, int *pipe_fds, int *fd)
 {
 	ft_free((void **)line);
 	ft_free((void **)delim);
@@ -68,15 +68,26 @@ static void	finish_here_doc(char **line, char **delim, int *pipe_fds)
 		libc_error();
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		libc_error();
+	if (g_vars.interrupted)
+	{
+		if (close(pipe_fds[0]) == -1)
+			libc_error();
+		g_vars.interrupted = 0;
+		return (128 + SIGINT);
+	}
+	*fd = pipe_fds[0];
+	return (EXIT_SUCCESS);
 }
 
 // ヒアドキュメントの処理。
 // 入力データはパイプによって、カーネルにバッファリングされる。
-int	here_doc(char *delim)
+int	here_doc(char *delim, int *fd)
 {
 	char	*line;
 	int		pipe_fds[2];
+	int		i;
 
+	i = 1;
 	set_heredoc_signal_handlers();
 	if (is_quoted(delim))
 		delim = str_quote_removal(delim);
@@ -85,18 +96,15 @@ int	here_doc(char *delim)
 	while (1)
 	{
 		line = readline("> ");
-		if (g_vars.interrupted)
-		{
-			g_vars.interrupted = 0;
-      break;
-		}
-		if (!line || is_s_eq(line, delim, true))
+		if (!line)
+			ft_dprintf(STDERR_FILENO, WARN_HEREDOC_1, i, delim);
+		if (g_vars.interrupted || !line || is_s_eq(line, delim, true))
 			break ;
 		if (!is_quoted(delim))
 			line = expand_heredoc_line(line);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free((void **)&line);
+		i++;
 	}
-	finish_here_doc(&line, &delim, pipe_fds);
-	return (pipe_fds[0]);
+	return (finish_here_doc(&line, &delim, pipe_fds, fd));
 }

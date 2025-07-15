@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:38:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:02:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	open_files(t_token *current, int *status, int *fd)
 	else if (is_s_eq(current->str, ">>", true))
 		*status = open_additionalfile(current->next->str, fd);
 	else if (is_s_eq(current->str, "<<", true))
-		*fd = here_doc(ft_strdup(current->next->str));
+		*status = here_doc(ft_strdup(current->next->str), fd);
 }
 
 void	redirect(int *fd, int to_fd, t_list **redirect_fds)
