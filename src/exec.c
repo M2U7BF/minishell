@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 15:54:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:18:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 	while (proc_list && ++i < i_vars->pro_count)
 	{
 		redirect_fds = exec_redirection(&status, current);
+		if (status > 128)
+			return ;
 		if (current->type == ONLY_PARENT)
 			exec_builtin(status, i_vars, current);
 		else

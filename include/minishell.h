@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 16:06:25 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:03:16 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@
 // エラー文の定義
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 # define ERR_QUOTE_1 "Unclosed quote"
+# define WARN_HEREDOC_1                           \
+	"minishell: warning: here-document at line " \
+	"%d delimited by end-of-file (wanted `%s')\n"
 
 // 起動モード
 typedef enum e_mode
@@ -230,7 +233,7 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter);
+int							here_doc(char *delimiter, int *fd);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
