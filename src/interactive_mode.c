@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 15:00:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:23:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 	while (1)
 	{
 		g_vars.interrupted = 0;
-    i_vars->prompt = get_prompt();
+		if (i_vars->prompt)
+			ft_free((void **)&i_vars->prompt);
+		i_vars->prompt = get_prompt();
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
