@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 11:23:52 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 11:29:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,6 @@ int							parse_exec_arg(int argc, char *argv[],
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);
-
-// non_interactive_mode.c
-int							exec_non_interactive(t_exec_vars *e_vars);
 
 // token.c
 t_token						*create_token(char *str, t_token_type type);
