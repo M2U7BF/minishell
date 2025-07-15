@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitarr_by_words_keep_sep.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 11:03:25 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:38:27 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:09:00 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static char	**inner_process(char **arr, char **separators)
 	return (new);
 }
 
-// char **arr: 文字列の配列
-// char **separators: 分割文字の配列
-// 複数の文字列にマッチして、配列を更新する。
+// char **arr: Array of strings
+// char **separators: Array of delimiter strings
+// Updates the array by splitting based on multiple delimiter strings.
 char	**ft_splitarr_by_words_keep_sep(char **arr,
 		char **separators)
 {

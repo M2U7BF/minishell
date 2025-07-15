@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 16:24:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:10:58 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 	}
 }
 
-// words: free可能なcharの2重配列のポインタ
-// $から始まる環境変数があれば、展開を行う。
-// シングルクォートに囲まれている場合、展開は行わない。
+// words: A pointer to a double array of char that can be freed
+// Expands environment variables starting with $
+// No expansion is performed if enclosed in single quotes
 void	variable_expansion(t_token **token_list)
 {
 	int		j;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 08:31:55 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/07 13:18:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:12:20 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_token	*create_token(char *str, t_token_type type)
 	return (token);
 }
 
-// トークンのリストにトークンを追加する。
-// リストがNULLの場合は、与えられたトークンが先頭になる。
+// Add a token to the list of tokens
+// If the list is NULL, the given token becomes the head
 void	append_token(t_token **token_list, t_token *token)
 {
 	t_token	*current_token;

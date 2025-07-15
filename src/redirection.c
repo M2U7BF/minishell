@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:02:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:11:45 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 	ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 }
 
-// 必要なfileをopenし、リダイレクトを行う。
+// Open the required files and perform redirection
 int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
 		int heredoc_count)
 {

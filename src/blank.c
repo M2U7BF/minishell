@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   blank.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:36:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/30 14:30:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:09:52 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	remove_blank(t_token *token_list)
 	}
 }
 
-// クォートに囲まれた文字列をwordタイプにする。
+// Convert strings enclosed in quotes to WORD type
 void	process_str_quoted(t_token *token_list)
 {
 	t_token	*current_token;

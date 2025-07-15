@@ -66,9 +66,9 @@ static char	**init_str_arr(int elem_count)
 	return (str);
 }
 
-// char *s: 分割対象の文字列
-// char *separator: 分割文字の配列
-// 複数の文字にマッチして、文字列を分割する。
+// char *s: The string to be split
+// char *separator: An array of delimiter characters
+// Splits the string by matching multiple delimiter characters.
 char	**ft_multi_split_keep_sep(char *s, char *separator)
 {
 	size_t	i;

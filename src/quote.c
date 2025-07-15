@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:40:49 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 18:03:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:11:27 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*remove_quotes(char *s, int *status)
 	return (result);
 }
 
-// （bashの定義と同様に）クォーテーションを削除する。
+// Remove quotations (as defined in bash)
 int	quote_removal(t_token *token)
 {
 	t_token	*current;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 12:48:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:39:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:09:28 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	token_list_len(t_token *token_list)
 	return (i);
 }
 
-// 隣接するWORDタイプのトークンを結合する
+// Merge adjacent tokens of type WORD
 t_token	*join_tokens(t_token *token_list)
 {
 	t_token	*cur;
