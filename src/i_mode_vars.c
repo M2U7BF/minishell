@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   i_mode_vars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:04:39 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_i_vars(t_i_mode_vars *i_vars)
 void	destroy_i_vars(t_i_mode_vars *vars)
 {
 	ft_free((void **)&vars->input);
-	ft_free((void **)&vars->prompt);
+	// ft_free((void **)&vars->prompt);
 	free_token_list(&vars->token_list);
 	ft_free((void **)&vars->child_pids);
 }
