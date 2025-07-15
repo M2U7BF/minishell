@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:01:07 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:11:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,6 @@ typedef struct s_proc_unit
 	int						write_fd;
 }							t_proc_unit;
 
-// 非対話的モードで変数を保持する構造体
-typedef struct s_ni_mode_vars
-{
-	char					*input_line;
-	char					**words;
-}							t_ni_mode_vars;
-
 // 対話的モードで変数を保持する構造体
 typedef struct s_i_mode_vars
 {
@@ -103,6 +96,7 @@ typedef struct s_i_mode_vars
 	t_token					*token_list;
 	int						pro_count;
 	pid_t					*child_pids;
+	char					*prompt;
 }							t_i_mode_vars;
 
 // 環境変数のキーとバリューを保持する構造体
@@ -117,7 +111,6 @@ typedef struct s_exec_vars
 {
 	t_mode					mode;
 	struct s_i_mode_vars	i_vars;
-	struct s_ni_mode_vars	ni_vars;
 	char					*script;
 }							t_exec_vars;
 
@@ -149,8 +142,7 @@ void						destroy_i_vars(t_i_mode_vars *vars);
 
 // exec_vars.c
 void						init_e_vars(t_exec_vars *e_vars);
-int							parse_exec_arg(int argc, char *argv[],
-								t_exec_vars *e_vars);
+int							parse_exec_arg(int argc);
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);
