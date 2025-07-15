@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interactive_mode.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 16:07:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 11:45:57 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static void	process_ctrl_d(void)
 
 int	exec_interactive(t_i_mode_vars *i_vars)
 {
+	char	*prompt;
+
 	rl_outstream = stderr;
 	while (1)
 	{
@@ -31,7 +33,9 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
-		i_vars->input = readline("minishell$ ");
+		prompt = get_prompt();
+		i_vars->input = readline(prompt);
+		ft_free((void **)&prompt);
 		if (g_vars.interrupted)
 			continue ;
 		if (!i_vars->input)
