@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:36:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 11:23:52 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,10 @@ bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
 int							here_doc(char *delimiter, int *fd);
+char						*str_quote_removal(char *s);
+
+// here_doc_2.c
+void						update_delim(char **delim, bool is_delim_quoted);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);

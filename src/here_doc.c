@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:40:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 11:20:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,12 @@ int	here_doc(char *delim, int *fd)
 	char	*line;
 	int		pipe_fds[2];
 	int		i;
+	bool	is_delim_quoted;
 
 	i = 1;
 	set_heredoc_signal_handlers();
-	if (is_quoted(delim))
-		delim = str_quote_removal(delim);
+	is_delim_quoted = is_quoted(delim);
+	update_delim(&delim, is_delim_quoted);
 	if (pipe(pipe_fds) == -1)
 		libc_error();
 	while (1)
@@ -100,7 +101,7 @@ int	here_doc(char *delim, int *fd)
 			ft_dprintf(STDERR_FILENO, WARN_HEREDOC_1, i, delim);
 		if (g_vars.interrupted || !line || is_s_eq(line, delim, true))
 			break ;
-		if (!is_quoted(delim))
+		if (!is_delim_quoted)
 			line = expand_heredoc_line(line);
 		ft_dprintf(pipe_fds[1], "%s\n", line);
 		ft_free((void **)&line);
