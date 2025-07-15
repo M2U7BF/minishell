@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:56:56 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:44:16 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@
 // エラー文の定義
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 # define ERR_QUOTE_1 "Unclosed quote"
+# define WARN_HEREDOC_1 \
+	"minishell: warning: here-document at line \
+	%d delimited by end-of-file (wanted `%s')\n"
 
 // 起動モード
 typedef enum e_mode
@@ -124,6 +127,7 @@ typedef struct s_runtime_data
 	int						exit_status;
 	volatile sig_atomic_t	signal;
 	t_list					*env_list;
+	volatile sig_atomic_t	interrupted;
 }							t_runtime_data;
 
 typedef struct s_split_vars
@@ -137,7 +141,7 @@ extern t_runtime_data		g_vars;
 // src ============================================================
 
 // handle_keys.c
-void						set_signal_handlers(void);
+void						set_signal_handlers(bool is_exec);
 
 // i_mode_vars.c
 void						init_i_vars(t_i_mode_vars *i_vars);
@@ -170,6 +174,7 @@ t_token						*get_prev_token(t_token **token_list,
 // token_util.c
 char						**tokens_to_arr(t_token *token_list);
 t_token						*join_tokens(t_token *token_list);
+bool						is_redir_pair(t_token *token);
 
 // tokenize.c
 t_token						*tokenize(char *input_line);
@@ -189,7 +194,11 @@ bool						is_quote(char c);
 
 // parse.c
 int							parse(t_i_mode_vars *i_vars);
+void						expand_variable(char **s);
 void						variable_expansion(t_token **token_list);
+
+// parse_2.c
+char						*get_var_name(char *s, int *end);
 
 // exec.c
 void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
@@ -198,6 +207,9 @@ void						exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list,
 // exec_2.c
 int							exec_builtin(int status, t_i_mode_vars *i_vars,
 								t_proc_unit *proc);
+int							count_heredoc(t_token *token_list);
+void						finish_exec(t_i_mode_vars *i_vars,
+								t_proc_unit *proc_list);
 
 // error.c
 void						put_error_exit(char *s, int status);
@@ -223,7 +235,11 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter);
+int							here_doc(char *delimiter, int *fd);
+char						*str_quote_removal(char *s);
+
+// here_doc_2.c
+void						update_delim(char **delim, bool is_delim_quoted);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
@@ -244,13 +260,14 @@ void						close_pipe(t_proc_unit *proc);
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds);
+								t_list **redirect_fds, int heredoc_count);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
 // redirection_2.c
 t_list						*pipe_redirect(t_proc_unit *proc,
 								t_list *redirect_fds);
+int							get_to_fd(char *redir);
 
 // command_path.c
 int							get_command_path(char **cmd_name);
@@ -274,6 +291,7 @@ int							arrlen(char **arr);
 int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
 bool						is_s_eq(char *s1, char *s2, bool include_null_char);
+bool						is_quoted(char *s);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/09 17:41:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:02:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	open_files(t_token *current, int *status, int *fd)
 	else if (is_s_eq(current->str, ">>", true))
 		*status = open_additionalfile(current->next->str, fd);
 	else if (is_s_eq(current->str, "<<", true))
-		*fd = here_doc(ft_strdup(current->next->str));
+		*status = here_doc(ft_strdup(current->next->str), fd);
 }
 
 void	redirect(int *fd, int to_fd, t_list **redirect_fds)
@@ -42,28 +42,29 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 }
 
 // 必要なfileをopenし、リダイレクトを行う。
-int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
+int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
+		int heredoc_count)
 {
 	int	fd;
 	int	status;
-	int	to_fd;
+	int	i;
 
+	i = 1;
 	fd = 0;
 	status = 0;
-	to_fd = STDIN_FILENO;
 	while (cur && cur->next)
 	{
-		if (cur->type == REDIR && (cur->next->type == WORD
-				|| cur->next->type == DELIM))
+		if (is_redir_pair(cur))
 		{
 			if (!cur->next->str)
 				return (ft_dprintf(STDERR_FILENO, ERR_REDIR_1), EXIT_FAILURE);
 			open_files(cur, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);
-			if (cur->str[0] == '>')
-				to_fd = STDOUT_FILENO;
-			redirect(&fd, to_fd, redirect_fds);
+			if (cur->next->type == DELIM && i != heredoc_count)
+				i++;
+			else
+				redirect(&fd, get_to_fd(cur->str), redirect_fds);
 			cur = cur->next;
 		}
 		cur = cur->next;

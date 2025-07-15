@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 10:38:29 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ static t_list	*exec_redirection(int *status, t_proc_unit *current_proc)
 		current_proc->next->read_fd = pipe_fds[0];
 	}
 	redirect_fds = pipe_redirect(current_proc, redirect_fds);
-	*status = open_and_redirect_files(current_proc->args, &redirect_fds);
+	*status = open_and_redirect_files(current_proc->args, &redirect_fds,
+			count_heredoc(current_proc->args));
 	return (redirect_fds);
 }
 
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		t_proc_unit *proc_list, t_proc_unit *proc)
 {
-	char	**envp_array;
-
+	set_signal_handlers(true);
 	if (proc->status != -1)
 		exit(proc->status);
 	if (status != 0)
@@ -53,46 +53,17 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 	}
 	if (is_builtin(proc->argv[0]))
 		exit(handle_builtin_cmd(proc->argv));
-	envp_array = convert_env_list_to_array(g_vars.env_list);
-	execve(proc->argv[0], proc->argv, envp_array);
+	execve(proc->argv[0], proc->argv,
+		convert_env_list_to_array(g_vars.env_list));
 	perror("execve");
 	exit(EXIT_CMD_NOT_FOUND);
 }
 
 static void	exec_parent_proc(t_list **redirect_fds)
 {
-	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-		libc_error();
+	set_signal_handlers(true);
 	reset_redirection(*redirect_fds);
 	*redirect_fds = NULL;
-}
-
-static void	wait_child_processes(int *child_pids, int pro_count)
-{
-	int	status;
-	int	i;
-
-	i = -1;
-	status = g_vars.exit_status;
-	while (++i < pro_count)
-	{
-		if (waitpid(child_pids[i], &status, 0) == -1)
-			perror("waitpid");
-	}
-	if (WIFEXITED(status))
-		g_vars.exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_vars.exit_status = 128 + SIGQUIT;
-		}
-		else if (WTERMSIG(status) == SIGINT)
-			g_vars.exit_status = 128 + SIGINT;
-	}
-	else
-		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
 void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
@@ -106,6 +77,8 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 	while (proc_list && ++i < i_vars->pro_count)
 	{
 		redirect_fds = exec_redirection(&status, current);
+		if (status > 128)
+			return ;
 		if (current->type == ONLY_PARENT)
 			exec_builtin(status, i_vars, current);
 		else
@@ -119,7 +92,5 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 		exec_parent_proc(&redirect_fds);
 		current = current->next;
 	}
-	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
-		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
-	free_proc_list(&proc_list);
+	finish_exec(i_vars, proc_list);
 }

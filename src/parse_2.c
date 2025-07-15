@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirection_2.c                                    :+:      :+:    :+:   */
+/*   parse_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/03 10:26:41 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/14 11:38:40 by kkamei           ###   ########.fr       */
+/*   Created: 2025/07/11 16:24:14 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/11 16:24:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_list	*pipe_redirect(t_proc_unit *proc, t_list *redirect_fds)
+char	*get_var_name(char *s, int *end)
 {
-	if (!proc)
-		return (redirect_fds);
-	if (proc->read_fd != STDIN_FILENO)
-		redirect(&proc->read_fd, STDIN_FILENO, &redirect_fds);
-	if (proc->write_fd != STDOUT_FILENO)
-		redirect(&proc->write_fd, STDOUT_FILENO, &redirect_fds);
-	return (redirect_fds);
-}
+	int		i;
+	char	*name;
 
-int	get_to_fd(char *str)
-{
-	if (str[0] == '>')
-		return (STDOUT_FILENO);
-	return (STDIN_FILENO);
+	i = 0;
+	name = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	while (ft_isalnum(s[i]) || s[i] == '_')
+		i++;
+	*end = i;
+	ft_strlcpy(name, s, i + 1);
+	return (name);
 }

@@ -27,7 +27,7 @@ char	**ft_split(char const *s, char c)
 	j = 0;
 	s_count = 0;
 	str = (char **)malloc(sizeof(char *) * (get_elem_count(s, c) + 1));
-	if (!str)
+	if (!s || !str)
 		return (NULL);
 	while (i <= ft_strlen(s))
 	{
@@ -54,6 +54,8 @@ static int	get_elem_count(char const *s, char c)
 	i = 0;
 	elem_count = 0;
 	s_count = 0;
+	if (!s)
+		return (0);
 	while (i < ft_strlen(s) + 1)
 	{
 		if (s_count > 0 && (s[i] == c || s[i] == '\0'))

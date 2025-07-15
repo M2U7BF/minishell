@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 11:12:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,55 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 	status = handle_builtin_cmd(proc->argv);
 	g_vars.exit_status = status;
 	return (status);
+}
+
+int	count_heredoc(t_token *token_list)
+{
+	t_token	*current;
+	int		heredoc_count;
+
+	heredoc_count = 0;
+	current = token_list;
+	while (current)
+	{
+		if (current->type == REDIR && ft_strncmp(current->str, "<<", 3) == 0)
+			heredoc_count++;
+		current = current->next;
+	}
+	return (heredoc_count);
+}
+
+static void	wait_child_processes(int *child_pids, int pro_count)
+{
+	int	status;
+	int	i;
+
+	i = -1;
+	status = g_vars.exit_status;
+	while (++i < pro_count)
+	{
+		if (waitpid(child_pids[i], &status, 0) == -1)
+			perror("waitpid");
+	}
+	if (WIFEXITED(status))
+		g_vars.exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+			g_vars.exit_status = 128 + SIGQUIT;
+		}
+		else if (WTERMSIG(status) == SIGINT)
+			g_vars.exit_status = 128 + SIGINT;
+	}
+	else
+		put_error_exit("waitpid", EXIT_FAILURE);
+}
+
+void	finish_exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
+{
+	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
+		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
+	free_proc_list(&proc_list);
 }

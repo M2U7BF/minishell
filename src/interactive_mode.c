@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:40:01 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:45:57 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 	rl_outstream = stderr;
 	while (1)
 	{
+		g_vars.interrupted = 0;
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
-		set_signal_handlers();
+		set_signal_handlers(false);
 		prompt = get_prompt();
 		i_vars->input = readline(prompt);
 		ft_free((void **)&prompt);
+		if (g_vars.interrupted)
+			continue ;
 		if (!i_vars->input)
 			process_ctrl_d();
 		else if (i_vars->input[0] == '\0')
