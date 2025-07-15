@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/04 11:54:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:45:36 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin_env(void)
 	while (current)
 	{
 		env_var = (t_env *)current->content;
-		if (env_var->value != NULL && *(env_var->value) != '\0')
+		if (env_var->value != NULL)
 		{
 			ft_putstr_fd(env_var->key, STDOUT_FILENO);
 			ft_putchar_fd('=', STDOUT_FILENO);
