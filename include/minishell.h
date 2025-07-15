@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:20:19 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_PERMISSION_DENIED 126
 
-// エラー文の定義
+// Definition of error messages
 # define ERR_REDIR_1 "minishell: ambiguous redirect\n"
 # define ERR_QUOTE_1 "Unclosed quote"
 # define WARN_HEREDOC_1 \
 	"minishell: warning: here-document at line \
 	%d delimited by end-of-file (wanted `%s')\n"
 
-// 起動モード
+// Startup mode
 typedef enum e_mode
 {
 	INTERACTIVE,
 	NON_INTERACTIVE
 }							t_mode;
 
-// トークン種別
+// Token type
 typedef enum e_token_type
 {
 	WORD,
@@ -77,7 +77,7 @@ typedef enum e_proc_unit_type
 	PLINE,
 }							t_proc_unit_type;
 
-// cmd + arg + arg ... を保存する連結リスト。
+// Linked list that stores cmd + arg + arg ...
 typedef struct s_proc_unit
 {
 	t_token					*args;
@@ -89,7 +89,7 @@ typedef struct s_proc_unit
 	int						write_fd;
 }							t_proc_unit;
 
-// 対話的モードで変数を保持する構造体
+// Structure that holds variables in interactive mode
 typedef struct s_i_mode_vars
 {
 	char					*input;
@@ -99,14 +99,14 @@ typedef struct s_i_mode_vars
 	char					*prompt;
 }							t_i_mode_vars;
 
-// 環境変数のキーとバリューを保持する構造体
+// Structure that holds the key and value of an environment variable
 typedef struct s_env
 {
 	char					*key;
 	char					*value;
 }							t_env;
 
-// 起動情報などを保持する構造体
+// Structure that holds startup information and related data
 typedef struct s_exec_vars
 {
 	t_mode					mode;
@@ -114,7 +114,7 @@ typedef struct s_exec_vars
 	char					*script;
 }							t_exec_vars;
 
-// グローバル変数を保持する構造体
+// Structure that holds global variables
 typedef struct s_runtime_data
 {
 	int						exit_status;

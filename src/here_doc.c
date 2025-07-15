@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 11:20:54 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:10:28 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ static int	finish_here_doc(char **line, char **delim, int *pipe_fds, int *fd)
 	return (EXIT_SUCCESS);
 }
 
-// ヒアドキュメントの処理。
-// 入力データはパイプによって、カーネルにバッファリングされる。
+// Processing of here-document.
+// Input data is buffered by the kernel through a pipe.
 int	here_doc(char *delim, int *fd)
 {
 	char	*line;

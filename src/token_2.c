@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   token_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 13:23:36 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/27 13:24:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 12:12:09 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// tokenの次の要素にaddを挿入する。
-// tokenがNULLなら、addが先頭になる。
+// Insert 'add' after the current token
+// If token is NULL, 'add' becomes the first element
 void	insert_token(t_token **first_token, t_token *token, t_token *add)
 {
 	t_token	*next_token;
