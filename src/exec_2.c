@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:32:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,34 @@ int	count_heredoc(t_token *token_list)
 		current = current->next;
 	}
 	return (heredoc_count);
+}
+
+static void	wait_child_processes(int *child_pids, int pro_count)
+{
+	int	status;
+	int	i;
+
+	i = -1;
+	status = g_vars.exit_status;
+	while (++i < pro_count)
+	{
+		if (waitpid(child_pids[i], &status, 0) == -1)
+			perror("waitpid");
+	}
+	if (WIFEXITED(status))
+		g_vars.exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+			g_vars.exit_status = 128 + SIGQUIT;
+		}
+		else if (WTERMSIG(status) == SIGINT)
+			g_vars.exit_status = 128 + SIGINT;
+	}
+	else
+		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
 void	finish_exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list)

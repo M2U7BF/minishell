@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:32:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:36:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,34 +64,6 @@ static void	exec_parent_proc(t_list **redirect_fds)
 	set_signal_handlers(true);
 	reset_redirection(*redirect_fds);
 	*redirect_fds = NULL;
-}
-
-static void	wait_child_processes(int *child_pids, int pro_count)
-{
-	int	status;
-	int	i;
-
-	i = -1;
-	status = g_vars.exit_status;
-	while (++i < pro_count)
-	{
-		if (waitpid(child_pids[i], &status, 0) == -1)
-			perror("waitpid");
-	}
-	if (WIFEXITED(status))
-		g_vars.exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGQUIT)
-		{
-			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_vars.exit_status = 128 + SIGQUIT;
-		}
-		else if (WTERMSIG(status) == SIGINT)
-			g_vars.exit_status = 128 + SIGINT;
-	}
-	else
-		put_error_exit("waitpid", EXIT_FAILURE);
 }
 
 void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)

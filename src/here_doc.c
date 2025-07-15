@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:24:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 10:40:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	here_doc(char *delim, int *fd)
 	int		pipe_fds[2];
 	int		i;
 
-	i = 0;
+	i = 1;
 	set_heredoc_signal_handlers();
 	if (is_quoted(delim))
 		delim = str_quote_removal(delim);
