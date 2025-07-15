@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:15:04 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:17:18 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,6 @@ int							parse_exec_arg(int argc, char *argv[],
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);
-
-// non_interactive_mode.c
-int							exec_non_interactive(t_exec_vars *e_vars);
 
 // token.c
 t_token						*create_token(char *str, t_token_type type);
@@ -374,5 +371,13 @@ int							change_dir_and_update_env(const char *path,
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
 int							handle_cd_dotdot(void);
+
+// get_prompt.c
+char						*get_prompt(void);
+char						*get_hostname(t_list *env_list);
+char						*get_display_path(char *cwd, char *home);
+char						*build_user_host(char *user, char *hostname);
+char						*get_display_path_str(void);
+char						*assemble_prompt(char *user, char *path);
 
 #endif
