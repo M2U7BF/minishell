@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:17:43 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:47 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 14:59:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_i_vars(t_i_mode_vars *i_vars)
 {
 	i_vars->input = NULL;
-	i_vars->prompt = get_prompt();
+	i_vars->prompt = NULL;
 	i_vars->token_list = NULL;
 	i_vars->child_pids = NULL;
 }
