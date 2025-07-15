@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:17:18 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:20:19 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,6 @@ typedef struct s_proc_unit
 	int						write_fd;
 }							t_proc_unit;
 
-// Structure that holds variables in non-interactive mode
-typedef struct s_ni_mode_vars
-{
-	char					*input_line;
-	char					**words;
-}							t_ni_mode_vars;
-
 // Structure that holds variables in interactive mode
 typedef struct s_i_mode_vars
 {
@@ -103,6 +96,7 @@ typedef struct s_i_mode_vars
 	t_token					*token_list;
 	int						pro_count;
 	pid_t					*child_pids;
+	char					*prompt;
 }							t_i_mode_vars;
 
 // Structure that holds the key and value of an environment variable
@@ -117,7 +111,6 @@ typedef struct s_exec_vars
 {
 	t_mode					mode;
 	struct s_i_mode_vars	i_vars;
-	struct s_ni_mode_vars	ni_vars;
 	char					*script;
 }							t_exec_vars;
 
@@ -149,8 +142,7 @@ void						destroy_i_vars(t_i_mode_vars *vars);
 
 // exec_vars.c
 void						init_e_vars(t_exec_vars *e_vars);
-int							parse_exec_arg(int argc, char *argv[],
-								t_exec_vars *e_vars);
+int							parse_exec_arg(int argc);
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);

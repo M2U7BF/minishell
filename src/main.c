@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 10:40:29 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:11:49 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ int	main(int argc, char *argv[], char **envp)
 {
 	t_exec_vars	e_vars;
 
+	(void)argv;
 	if (argc > 3)
 		return (EXIT_FAILURE);
 	init_e_vars(&e_vars);
 	init_env_list(&g_vars.env_list, envp);
-	if (parse_exec_arg(argc, argv, &e_vars) == -1)
+	if (parse_exec_arg(argc) == -1)
 	{
 		free_env_list(&g_vars.env_list);
 		return (EXIT_FAILURE);
