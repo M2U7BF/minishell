@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:21:03 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 10:51:16 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_prompt(void)
 		return (ft_strdup("minishell$ "));
 	user_host = build_user_host(user, hostname);
 	if (!user_host)
-		libc_error();
+		libc_error("1");
 	prompt = assemble_prompt(user_host, display_path);
 	ft_free((void **)&user_host);
 	ft_free((void **)&display_path);

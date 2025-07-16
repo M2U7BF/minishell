@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 14:41:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ void	update_proc(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
 	if (!i_vars->child_pids)
 	{
 		free_proc_list(&proc_list);
-		libc_error();
+		libc_error("17");
 	}
 }

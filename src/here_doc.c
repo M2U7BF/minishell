@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:10:28 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ static int	finish_here_doc(char **line, char **delim, int *pipe_fds, int *fd)
 	ft_free((void **)line);
 	ft_free((void **)delim);
 	if (close(pipe_fds[1]) == -1)
-		libc_error();
+		libc_error("11");
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-		libc_error();
+		libc_error("12");
 	if (g_vars.interrupted)
 	{
 		if (close(pipe_fds[0]) == -1)
-			libc_error();
+			libc_error("13");
 		g_vars.interrupted = 0;
 		return (128 + SIGINT);
 	}
@@ -93,10 +93,11 @@ int	here_doc(char *delim, int *fd)
 	is_delim_quoted = is_quoted(delim);
 	update_delim(&delim, is_delim_quoted);
 	if (pipe(pipe_fds) == -1)
-		libc_error();
+		libc_error("14");
 	while (1)
 	{
 		line = readline("> ");
+    ft_dprintf(STDERR_FILENO, "line:[%s]\n", line);
 		if (!line)
 			ft_dprintf(STDERR_FILENO, WARN_HEREDOC_1, i, delim);
 		if (g_vars.interrupted || !line || is_s_eq(line, delim, true))

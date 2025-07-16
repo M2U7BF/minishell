@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:50:35 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 15:10:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_hostname(t_list *env_list)
 		return (NULL);
 	hostname = ft_substr(hostname_start, 0, hostname_end - hostname_start);
 	if (!hostname)
-		libc_error();
+		libc_error("1");
 	return (hostname);
 }
 
@@ -44,7 +44,7 @@ char	*get_display_path(char *cwd, char *home)
 	{
 		display_path = ft_strjoin("~", cwd + ft_strlen(home));
 		if (!display_path)
-			libc_error();
+			libc_error("1");
 		return (display_path);
 	}
 	return (ft_strdup(cwd));
@@ -59,18 +59,18 @@ char	*build_user_host(char *user, char *hostname)
 	{
 		tmp = ft_strjoin(user, "@");
 		if (!tmp)
-			libc_error();
+			libc_error("1");
 		user_host = ft_strjoin(tmp, hostname);
 		ft_free((void **)&tmp);
 		ft_free((void **)&hostname);
 		if (!user_host)
-			libc_error();
+			libc_error("1");
 	}
 	else
 	{
 		user_host = ft_strdup(user);
 		if (!user_host)
-			libc_error();
+			libc_error("1");
 	}
 	return (user_host);
 }
@@ -97,15 +97,15 @@ char	*assemble_prompt(char *user, char *path)
 
 	tmp = ft_strjoin(user, ":");
 	if (!tmp)
-		libc_error();
+		libc_error("1");
 	prompt = ft_strjoin(tmp, path);
 	ft_free((void **)&tmp);
 	if (!prompt)
-		libc_error();
+		libc_error("1");
 	tmp = prompt;
 	prompt = ft_strjoin(tmp, "$> ");
 	ft_free((void **)&tmp);
 	if (!prompt)
-		libc_error();
+		libc_error("1");
 	return (prompt);
 }

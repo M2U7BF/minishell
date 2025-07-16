@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:50:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/25 17:25:57 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:56:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	put_error_exit(char *s, int status)
 	exit(status);
 }
 
-void	libc_error(void)
+void	libc_error(char *s)
 {
+  dprintf(STDERR_FILENO, "libc_error: %s:", s);
 	put_error_exit(strerror(errno), EXIT_FAILURE);
 }

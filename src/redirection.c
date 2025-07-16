@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:45 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:03:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ static void	open_files(t_token *current, int *status, int *fd)
 		*status = open_infile(current->next->str, fd);
 	else if (is_s_eq(current->str, ">>", true))
 		*status = open_additionalfile(current->next->str, fd);
-	else if (is_s_eq(current->str, "<<", true))
-		*status = here_doc(ft_strdup(current->next->str), fd);
+  // TODO ヒアドキュメントの処理は移動
+	// else if (is_s_eq(current->str, "<<", true))
+	// 	*status = here_doc(ft_strdup(current->next->str), fd);
 }
 
 void	redirect(int *fd, int to_fd, t_list **redirect_fds)
@@ -29,21 +30,21 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 	int	*content;
 	int	stashed_to_fd;
 
+	ft_dprintf(STDERR_FILENO, "*from_fd:[%d], to_fd:[%d]\n", *fd, to_fd);
 	*fd = stashfd(*fd);
 	stashed_to_fd = stashfd(to_fd);
 	if (*fd != to_fd && (dup2(*fd, to_fd) == -1 || close(*fd) == -1))
-		libc_error();
+		libc_error("1");
 	content = malloc(sizeof(int) * 2);
 	if (!content)
-		libc_error();
+		libc_error("1");
 	content[0] = stashed_to_fd;
 	content[1] = to_fd;
 	ft_lstadd_back(redirect_fds, ft_lstnew((void *)content));
 }
 
 // Open the required files and perform redirection
-int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
-		int heredoc_count)
+int	open_and_redirect_files(t_token *cur, t_list **redirect_fds)
 {
 	int	fd;
 	int	status;
@@ -54,17 +55,17 @@ int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
 	status = 0;
 	while (cur && cur->next)
 	{
-		if (is_redir_pair(cur))
+		if (is_redir_pair(cur) && !is_s_eq(cur->str, "<<", true))
 		{
 			if (!cur->next->str)
 				return (ft_dprintf(STDERR_FILENO, ERR_REDIR_1), EXIT_FAILURE);
 			open_files(cur, &status, &fd);
 			if (status != 0)
 				return (handle_error(status, cur->next->str), status);
-			if (cur->next->type == DELIM && i != heredoc_count)
-				i++;
-			else
-				redirect(&fd, get_to_fd(cur->str), redirect_fds);
+      // TODO ヒアドキュメントの個数計算
+			// if (cur->next->type == DELIM && i != heredoc_count)
+			// 	i++;
+      redirect(&fd, get_to_fd(cur->str), redirect_fds);
 			cur = cur->next;
 		}
 		cur = cur->next;
@@ -114,9 +115,9 @@ void	reset_redirection(t_list *redirect_fds)
 	{
 		content = (int *)current->content;
 		if (dup2(content[0], content[1]) == -1)
-			libc_error();
+			libc_error("1");
 		if (close(content[0]) == -1)
-			libc_error();
+			libc_error("1");
 		if (current == redirect_fds)
 			break ;
 		current = get_prev_lst(&redirect_fds, current);

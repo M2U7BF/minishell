@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:57:38 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 15:17:21 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ void	set_signal_handlers(bool is_exec)
 		sa.sa_handler = sigint_handler_prompt;
 	sigaction(SIGINT, &sa, NULL);
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		libc_error();
+		libc_error("1");
 	g_vars.signal = 0;
 }

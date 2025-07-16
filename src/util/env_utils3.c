@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:41:32 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 11:54:05 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	update_env_var(t_list *env_list, const char *key, const char *value)
 			free(env_var->value);
 			env_var->value = ft_strdup(value);
 			if (!env_var->value)
-				libc_error();
+				libc_error("1");
 			return (1);
 		}
 		env_list = env_list->next;
@@ -71,11 +71,11 @@ void	set_env_var(t_list **env_list, const char *key, const char *value)
 		return ;
 	new_var = ft_calloc(1, sizeof(t_env));
 	if (!new_var)
-		libc_error();
+		libc_error("1");
 	new_var->key = ft_strdup(key);
 	new_var->value = ft_strdup(value);
 	if (!new_var->key || !new_var->value)
-		libc_error();
+		libc_error("1");
 	ft_lstadd_back(env_list, ft_lstnew(new_var));
 }
 

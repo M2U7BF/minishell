@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 11:45:39 by kkamei            #+#    #+#             */
-/*   Updated: 2025/06/26 12:43:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:56:57 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ bool	is_readable_file(char *pathname)
 	if (bytes == -1)
 	{
 		if (close(fd) == -1)
-			libc_error();
+			libc_error("9");
 		return (false);
 	}
 	if (close(fd) == -1)
-		libc_error();
+		libc_error("10");
 	return (true);
 }
 

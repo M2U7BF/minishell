@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 13:42:04 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 17:58:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*env_to_string(t_env *env_var)
 	{
 		tmp = ft_strjoin(env_var->key, "=");
 		if (!tmp)
-			libc_error();
+			libc_error("1");
 		result = ft_strjoin(tmp, env_var->value);
 		free(tmp);
 	}
@@ -30,7 +30,7 @@ static char	*env_to_string(t_env *env_var)
 		result = ft_strdup(env_var->key);
 	}
 	if (!result)
-		libc_error();
+		libc_error("1");
 	return (result);
 }
 
@@ -43,7 +43,7 @@ char	**convert_env_list_to_array(t_list *env_list)
 
 	array = ft_calloc(ft_lstsize(env_list) + 1, sizeof(char *));
 	if (!array)
-		libc_error();
+		libc_error("1");
 	current = env_list;
 	i = 0;
 	while (current)

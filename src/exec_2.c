@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 14:59:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 11:04:05 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 		return (status);
 	}
 	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-		libc_error();
+		libc_error("1");
 	if (proc->next && proc->next->read_fd != STDIN_FILENO)
 	{
 		if (close(proc->next->read_fd) == -1)
-			libc_error();
+			libc_error("2");
 	}
 	if (is_s_eq(proc->argv[0], "exit", 1))
 		ft_putendl_fd("exit", STDERR_FILENO);

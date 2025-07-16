@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:39:29 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 17:58:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 17:57:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*create_env_var(const char *env_str)
 
 	env_var = ft_calloc(1, sizeof(t_env));
 	if (!env_var)
-		libc_error();
+		libc_error("1");
 	eq_ptr = ft_strchr(env_str, '=');
 	if (eq_ptr)
 	{
@@ -32,7 +32,7 @@ t_env	*create_env_var(const char *env_str)
 		env_var->value = NULL;
 	}
 	if (!env_var->key || (eq_ptr && !env_var->value))
-		libc_error();
+		libc_error("1");
 	return (env_var);
 }
 

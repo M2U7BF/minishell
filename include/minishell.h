@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:20:19 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/16 11:03:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -202,7 +203,7 @@ void						finish_exec(t_i_mode_vars *i_vars,
 
 // error.c
 void						put_error_exit(char *s, int status);
-void						libc_error(void);
+void						libc_error(char *s);
 
 // proc_unit.c
 void						free_proc_list(t_proc_unit **proc_list);
@@ -249,7 +250,7 @@ void						close_pipe(t_proc_unit *proc);
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
 int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds, int heredoc_count);
+								t_list **redirect_fds);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
@@ -371,5 +372,12 @@ char						*get_display_path(char *cwd, char *home);
 char						*build_user_host(char *user, char *hostname);
 char						*get_display_path_str(void);
 char						*assemble_prompt(char *user, char *path);
+
+void	debug_put_token_list(t_token *token_list);
+int	debug_put_token_list_compare(t_token *t, t_token *t_e);
+void	debug_put_proc_list(t_proc_unit *proc_unit);
+void	debug_put_lst(t_list *lst);
+void print_stdin_source();
+void print_backtrace(void);
 
 #endif
