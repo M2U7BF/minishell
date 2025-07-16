@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 16:04:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:54:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 static void	exec_parent_proc(t_list **redirect_fds)
 {
 	set_signal_handlers(true);
-	reset_redirection(*redirect_fds);
-	*redirect_fds = NULL;
+	reset_redirection(redirect_fds);
 }
 
 void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)

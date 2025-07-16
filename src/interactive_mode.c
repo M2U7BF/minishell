@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 14:58:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:54:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ void	process_heredoc(t_proc_unit *proc_list)
 				//     1. 配列とかで保持するようにするか...
 				cur_p->heredoc_tmp_paths[j] = tmp_file_path;
 				//   5. 標準入力をリセット
-				reset_redirection(cur_p->redirect_fds);
-        cur_p->redirect_fds = NULL;
+				reset_redirection(&cur_p->redirect_fds);
 				cur_t = cur_t->next;
         j++;
 			}
