@@ -35,6 +35,7 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
 		i_vars->input = readline(i_vars->prompt);
+		ft_free((void **)&i_vars->prompt);
 		if (g_vars.interrupted)
 			continue ;
 		if (!i_vars->input)
