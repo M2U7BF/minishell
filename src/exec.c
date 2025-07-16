@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 13:28:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 14:35:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static t_list	*exec_redirection(int *status, t_proc_unit *cur_proc)
 		cur_proc->next->read_fd = pipe_fds[0];
 	}
 	cur_proc->redirect_fds = pipe_redirect(cur_proc);
-	*status = open_and_redirect_files(cur_proc->args, &cur_proc->redirect_fds,
-			count_heredoc(cur_proc->args));
+	*status = open_and_redirect_files(cur_proc->args, cur_proc);
 	return (cur_proc->redirect_fds);
 }
 

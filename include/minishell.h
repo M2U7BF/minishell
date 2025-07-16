@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 13:29:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 14:31:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -41,6 +42,7 @@
 # define WARN_HEREDOC_1 \
 	"minishell: warning: here-document at line \
 	%d delimited by end-of-file (wanted `%s')\n"
+# define TMP_PATH "/tmp/tmp_minishell_heredoc_"
 
 // Startup mode
 typedef enum e_mode
@@ -88,6 +90,7 @@ typedef struct s_proc_unit
 	int						read_fd;
 	int						write_fd;
 	t_list					*redirect_fds;
+	char					**heredoc_tmp_paths;
 }							t_proc_unit;
 
 // Structure that holds variables in interactive mode
@@ -225,7 +228,7 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter, int *fd);
+int							here_doc(char *delim, int out_fd);
 char						*str_quote_removal(char *s);
 
 // here_doc_2.c
@@ -249,8 +252,7 @@ void						close_pipe(t_proc_unit *proc);
 
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
-int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds, int heredoc_count);
+int							open_and_redirect_files(t_token *cur_t, t_proc_unit *cur_p);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
@@ -371,5 +373,12 @@ char						*get_display_path(char *cwd, char *home);
 char						*build_user_host(char *user, char *hostname);
 char						*get_display_path_str(void);
 char						*assemble_prompt(char *user, char *path);
+
+void	debug_put_token_list(t_token *token_list);
+int	debug_put_token_list_compare(t_token *t, t_token *t_e);
+void	debug_put_proc_list(t_proc_unit *proc_unit);
+void	debug_put_lst(t_list *lst);
+void print_stdin_source();
+void print_backtrace(void);
 
 #endif
