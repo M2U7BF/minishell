@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 14:35:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:04:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_list	*exec_redirection(int *status, t_proc_unit *cur_proc)
+static void	exec_redirection(int *status, t_proc_unit *cur_proc)
 {
 	int	pipe_fds[2];
 
@@ -23,9 +23,8 @@ static t_list	*exec_redirection(int *status, t_proc_unit *cur_proc)
 		cur_proc->write_fd = pipe_fds[1];
 		cur_proc->next->read_fd = pipe_fds[0];
 	}
-	cur_proc->redirect_fds = pipe_redirect(cur_proc);
+	pipe_redirect(cur_proc);
 	*status = open_and_redirect_files(cur_proc->args, cur_proc);
-	return (cur_proc->redirect_fds);
 }
 
 static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
@@ -72,7 +71,7 @@ void	exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list, int status)
 	i = -1;
 	while (proc_list && ++i < i_vars->pro_count)
 	{
-		current->redirect_fds = exec_redirection(&status, current);
+		exec_redirection(&status, current);
 		if (status > 128)
 			return ;
 		if (current->type == ONLY_PARENT)

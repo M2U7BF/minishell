@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 14:31:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 16:05:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include "../lib/libft/libft.h"
+# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -252,12 +252,13 @@ void						close_pipe(t_proc_unit *proc);
 
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
-int							open_and_redirect_files(t_token *cur_t, t_proc_unit *cur_p);
+int							open_and_redirect_files(t_token *cur_t,
+								t_proc_unit *cur_p);
 char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
 // redirection_2.c
-t_list						*pipe_redirect(t_proc_unit *proc);
+void						pipe_redirect(t_proc_unit *proc);
 int							get_to_fd(char *redir);
 
 // command_path.c
@@ -374,11 +375,12 @@ char						*build_user_host(char *user, char *hostname);
 char						*get_display_path_str(void);
 char						*assemble_prompt(char *user, char *path);
 
-void	debug_put_token_list(t_token *token_list);
-int	debug_put_token_list_compare(t_token *t, t_token *t_e);
-void	debug_put_proc_list(t_proc_unit *proc_unit);
-void	debug_put_lst(t_list *lst);
-void print_stdin_source();
-void print_backtrace(void);
+void						debug_put_token_list(t_token *token_list);
+int							debug_put_token_list_compare(t_token *t,
+								t_token *t_e);
+void						debug_put_proc_list(t_proc_unit *proc_unit);
+void						debug_put_lst(t_list *lst);
+void						print_stdin_source(void);
+void						print_backtrace(void);
 
 #endif
