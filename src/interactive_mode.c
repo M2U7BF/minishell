@@ -28,8 +28,6 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 	while (1)
 	{
 		g_vars.interrupted = 0;
-		if (i_vars->prompt)
-			ft_free((void **)&i_vars->prompt);
 		i_vars->prompt = get_prompt();
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
