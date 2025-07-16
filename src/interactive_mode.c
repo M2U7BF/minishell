@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 14:22:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 14:58:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	process_heredoc(t_proc_unit *proc_list)
 				//   1. 一時ファイル作成（>fileのイメージで）
 				//     1. tmp_<プロセス番号>_<ヒアドキュメント番号> とかで
 				tmp_file_path = ft_strjoin_all(pathname_arr);
+        ft_free((void **)&pathname_arr[1]);
+        ft_free((void **)&pathname_arr[3]);
 				open_outfile(tmp_file_path, &fd);
 				//   2. 標準入力を一時ファイルへ向ける
 				redirect(&fd, STDOUT_FILENO, &cur_p->redirect_fds);
@@ -67,6 +69,7 @@ void	process_heredoc(t_proc_unit *proc_list)
 			}
 			cur_t = cur_t->next;
 		}
+    cur_p->heredoc_tmp_paths[j] = NULL;
 		cur_p = cur_p->next;
 		i++;
 	}

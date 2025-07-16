@@ -6,11 +6,20 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 13:32:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 14:45:19 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	delete_tmp_files(char **paths)
+{
+	int	i;
+
+	i = -1;
+	while (paths[++i])
+		unlink(paths[i]);
+}
 
 void	free_proc_list(t_proc_unit **proc_list)
 {
@@ -26,6 +35,8 @@ void	free_proc_list(t_proc_unit **proc_list)
 		current = tmp->next;
 		free_token_list(&tmp->args);
 		free_str_array(&tmp->argv);
+		delete_tmp_files(tmp->heredoc_tmp_paths);
+		free_str_array(&tmp->heredoc_tmp_paths);
 		ft_free((void **)&tmp);
 	}
 	*proc_list = NULL;
@@ -48,6 +59,7 @@ t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 	proc_unit->read_fd = in_fd;
 	proc_unit->write_fd = out_fd;
 	proc_unit->redirect_fds = NULL;
+	proc_unit->heredoc_tmp_paths = NULL;
 	return (proc_unit);
 }
 
