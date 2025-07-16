@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:41:44 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 13:44:04 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/16 13:32:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_proc_unit	*new_proc(t_token *args, t_proc_unit_type type, int in_fd,
 	proc_unit->status = -1;
 	proc_unit->read_fd = in_fd;
 	proc_unit->write_fd = out_fd;
+	proc_unit->redirect_fds = NULL;
 	return (proc_unit);
 }
 

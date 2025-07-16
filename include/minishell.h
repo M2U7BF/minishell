@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:20:19 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:29:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_proc_unit
 	struct s_proc_unit		*next;
 	int						read_fd;
 	int						write_fd;
+	t_list					*redirect_fds;
 }							t_proc_unit;
 
 // Structure that holds variables in interactive mode
@@ -254,8 +255,7 @@ char						**trim_redirection(char ***argv);
 void						reset_redirection(t_list *redirect_fds);
 
 // redirection_2.c
-t_list						*pipe_redirect(t_proc_unit *proc,
-								t_list *redirect_fds);
+t_list						*pipe_redirect(t_proc_unit *proc);
 int							get_to_fd(char *redir);
 
 // command_path.c
