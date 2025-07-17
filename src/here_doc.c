@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 13:40:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 13:13:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,6 @@ static int	finish_here_doc(char **line, char **delim, int out_fd)
 		libc_error();
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		libc_error();
-	if (g_vars.interrupted)
-	{
-		g_vars.interrupted = 0;
-		return (128 + SIGINT);
-	}
 	return (EXIT_SUCCESS);
 }
 

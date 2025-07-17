@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 12:48:29 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 13:16:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 		if (parse(i_vars) == -1)
 			continue ;
 		proc_list = process_division(i_vars);
-		process_heredoc(proc_list);
+		if (process_heredoc(proc_list) == -1)
+			continue ;
 		exec(i_vars, proc_list, EXIT_SUCCESS);
 		destroy_i_vars(i_vars);
 	}

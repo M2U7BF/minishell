@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 12:26:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 13:16:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ char						*str_quote_removal(char *s);
 
 // here_doc_2.c
 void						update_delim(char **delim, bool is_delim_quoted);
-void						process_heredoc(t_proc_unit *proc_list);
+int							process_heredoc(t_proc_unit *proc_list);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
