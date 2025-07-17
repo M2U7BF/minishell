@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:10:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 14:59:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,4 @@ void	finish_exec(t_i_mode_vars *i_vars, t_proc_unit *proc_list)
 	if (i_vars->child_pids != NULL && proc_list->type != ONLY_PARENT)
 		wait_child_processes(i_vars->child_pids, i_vars->pro_count);
 	free_proc_list(&proc_list);
-	ft_free((void **)&i_vars->prompt);
-	i_vars->prompt = get_prompt();
 }

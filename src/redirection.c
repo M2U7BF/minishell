@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:45 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/17 12:24:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	open_files(t_token *current, int *status, int *fd)
+static void	open_files(t_token *current, int *status, int *fd, char *tmp_path)
 {
 	if (is_s_eq(current->str, ">", true))
 		*status = open_outfile(current->next->str, fd);
@@ -21,7 +21,7 @@ static void	open_files(t_token *current, int *status, int *fd)
 	else if (is_s_eq(current->str, ">>", true))
 		*status = open_additionalfile(current->next->str, fd);
 	else if (is_s_eq(current->str, "<<", true))
-		*status = here_doc(ft_strdup(current->next->str), fd);
+		*status = open_infile(tmp_path, fd);
 }
 
 void	redirect(int *fd, int to_fd, t_list **redirect_fds)
@@ -42,32 +42,31 @@ void	redirect(int *fd, int to_fd, t_list **redirect_fds)
 }
 
 // Open the required files and perform redirection
-int	open_and_redirect_files(t_token *cur, t_list **redirect_fds,
-		int heredoc_count)
+int	open_and_redirect_files(t_token *cur_t, t_proc_unit *cur_p)
 {
 	int	fd;
 	int	status;
-	int	i;
+	int	heredoc_ind;
 
-	i = 1;
+	heredoc_ind = 0;
 	fd = 0;
 	status = 0;
-	while (cur && cur->next)
+	while (cur_t && cur_t->next)
 	{
-		if (is_redir_pair(cur))
+		if (is_redir_pair(cur_t))
 		{
-			if (!cur->next->str)
+			if (!cur_t->next->str)
 				return (ft_dprintf(STDERR_FILENO, ERR_REDIR_1), EXIT_FAILURE);
-			open_files(cur, &status, &fd);
+			open_files(cur_t, &status, &fd,
+				cur_p->heredoc_tmp_paths[heredoc_ind]);
 			if (status != 0)
-				return (handle_error(status, cur->next->str), status);
-			if (cur->next->type == DELIM && i != heredoc_count)
-				i++;
-			else
-				redirect(&fd, get_to_fd(cur->str), redirect_fds);
-			cur = cur->next;
+				return (handle_error(status, cur_t->next->str), status);
+			if (cur_t->next->type == DELIM)
+				heredoc_ind++;
+			redirect(&fd, get_to_fd(cur_t->str), &cur_p->redirect_fds);
+			cur_t = cur_t->next;
 		}
-		cur = cur->next;
+		cur_t = cur_t->next;
 	}
 	return (status);
 }
@@ -100,14 +99,14 @@ char	**trim_redirection(char ***argv)
 	return (new);
 }
 
-void	reset_redirection(t_list *redirect_fds)
+void	reset_redirection(t_list **redirect_fds)
 {
 	t_list	*current;
 	int		*content;
 
-	if (!redirect_fds)
+	if (!redirect_fds || !*redirect_fds)
 		return ;
-	current = redirect_fds;
+	current = *redirect_fds;
 	while (current->next)
 		current = current->next;
 	while (1)
@@ -117,9 +116,9 @@ void	reset_redirection(t_list *redirect_fds)
 			libc_error();
 		if (close(content[0]) == -1)
 			libc_error();
-		if (current == redirect_fds)
+		if (current == *redirect_fds)
 			break ;
-		current = get_prev_lst(&redirect_fds, current);
+		current = get_prev_lst(redirect_fds, current);
 	}
-	ft_lstclear(&redirect_fds, del_content);
+	ft_lstclear(redirect_fds, del_content);
 }

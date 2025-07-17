@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:10:28 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/17 13:13:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,31 +60,22 @@ char	*str_quote_removal(char *s)
 	return (tmp_str);
 }
 
-static int	finish_here_doc(char **line, char **delim, int *pipe_fds, int *fd)
+static int	finish_here_doc(char **line, char **delim, int out_fd)
 {
 	ft_free((void **)line);
 	ft_free((void **)delim);
-	if (close(pipe_fds[1]) == -1)
+	if (close(out_fd) == -1)
 		libc_error();
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		libc_error();
-	if (g_vars.interrupted)
-	{
-		if (close(pipe_fds[0]) == -1)
-			libc_error();
-		g_vars.interrupted = 0;
-		return (128 + SIGINT);
-	}
-	*fd = pipe_fds[0];
 	return (EXIT_SUCCESS);
 }
 
 // Processing of here-document.
 // Input data is buffered by the kernel through a pipe.
-int	here_doc(char *delim, int *fd)
+int	here_doc(char *delim, int out_fd)
 {
 	char	*line;
-	int		pipe_fds[2];
 	int		i;
 	bool	is_delim_quoted;
 
@@ -92,8 +83,6 @@ int	here_doc(char *delim, int *fd)
 	set_heredoc_signal_handlers();
 	is_delim_quoted = is_quoted(delim);
 	update_delim(&delim, is_delim_quoted);
-	if (pipe(pipe_fds) == -1)
-		libc_error();
 	while (1)
 	{
 		line = readline("> ");
@@ -103,9 +92,9 @@ int	here_doc(char *delim, int *fd)
 			break ;
 		if (!is_delim_quoted)
 			line = expand_heredoc_line(line);
-		ft_dprintf(pipe_fds[1], "%s\n", line);
+		ft_dprintf(out_fd, "%s\n", line);
 		ft_free((void **)&line);
 		i++;
 	}
-	return (finish_here_doc(&line, &delim, pipe_fds, fd));
+	return (finish_here_doc(&line, &delim, out_fd));
 }

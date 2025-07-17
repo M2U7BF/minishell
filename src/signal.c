@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:57:38 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 09:39:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:17:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	set_signal_handlers(bool is_exec)
 {
 	struct sigaction	sa;
 
-	rl_event_hook = check_state;
+	if (isatty(STDIN_FILENO))
+		rl_event_hook = check_state;
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
 	if (is_exec)

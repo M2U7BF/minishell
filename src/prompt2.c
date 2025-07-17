@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:50:35 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 10:57:29 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:10:03 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	*assemble_prompt(char *user, char *path)
 	if (!prompt)
 		libc_error();
 	tmp = prompt;
-	prompt = ft_strjoin(tmp, "$ ");
+	prompt = ft_strjoin(tmp, "$> ");
 	ft_free((void **)&tmp);
 	if (!prompt)
 		libc_error();

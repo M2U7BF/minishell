@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 15:55:37 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/18 08:57:39 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define WARN_HEREDOC_1 \
 	"minishell: warning: here-document at line \
 	%d delimited by end-of-file (wanted `%s')\n"
+# define TMP_PATH "/tmp/tmp_minishell_heredoc_"
 
 // Startup mode
 typedef enum e_mode
@@ -87,6 +88,8 @@ typedef struct s_proc_unit
 	struct s_proc_unit		*next;
 	int						read_fd;
 	int						write_fd;
+	t_list					*redirect_fds;
+	char					**heredoc_tmp_paths;
 }							t_proc_unit;
 
 // Structure that holds variables in interactive mode
@@ -224,11 +227,12 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
-int							here_doc(char *delimiter, int *fd);
+int							here_doc(char *delim, int out_fd);
 char						*str_quote_removal(char *s);
 
 // here_doc_2.c
 void						update_delim(char **delim, bool is_delim_quoted);
+int							process_heredoc(t_proc_unit *proc_list);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
@@ -248,14 +252,13 @@ void						close_pipe(t_proc_unit *proc);
 
 // redirection.c
 void						redirect(int *fd, int to_fd, t_list **redirect_fds);
-int							open_and_redirect_files(t_token *cur,
-								t_list **redirect_fds, int heredoc_count);
+int							open_and_redirect_files(t_token *cur_t,
+								t_proc_unit *cur_p);
 char						**trim_redirection(char ***argv);
-void						reset_redirection(t_list *redirect_fds);
+void						reset_redirection(t_list **redirect_fds);
 
 // redirection_2.c
-t_list						*pipe_redirect(t_proc_unit *proc,
-								t_list *redirect_fds);
+void						pipe_redirect(t_proc_unit *proc);
 int							get_to_fd(char *redir);
 
 // command_path.c
