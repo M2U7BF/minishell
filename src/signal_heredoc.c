@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:58:03 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 09:37:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:17:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static void	set_signal_handler(int signum, void (*handler)(int))
 
 void	set_heredoc_signal_handlers(void)
 {
-	rl_event_hook = check_state;
+	if (isatty(STDIN_FILENO))
+		rl_event_hook = check_state;
 	set_signal_handler(SIGINT, signal_handler);
 	g_vars.signal = 0;
 }
