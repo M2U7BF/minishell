@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 16:54:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 16:11:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 	if (status != 0)
 	{
 		destroy_i_vars(i_vars);
+		reset_redirection(&proc->redirect_fds);
 		free_proc_list(&proc_list);
 		free_env_list(&g_vars.env_list);
 		exit(EXIT_FAILURE);
