@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 12:19:41 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 12:25:38 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,51 +20,6 @@ static void	process_ctrl_d(void)
 	free_env_list(&g_vars.env_list);
 	rl_clear_history();
 	exit(g_vars.exit_status);
-}
-
-void	process_heredoc(t_proc_unit *proc_list)
-{
-	t_proc_unit	*cur_p;
-	t_token		*cur_t;
-	int			i;
-	int			j;
-	int			fd;
-	int			status;
-	static char	*pathname_arr[] = {TMP_PATH, "", "_", "", NULL};
-	char		*tmp_file_path;
-
-	i = 0;
-	cur_p = proc_list;
-	while (cur_p)
-	{
-		j = 0;
-		cur_t = cur_p->args;
-		cur_p->heredoc_tmp_paths = malloc(sizeof(char *)
-				* (count_heredoc(cur_p->args) + 1));
-		while (cur_t && cur_t->next)
-		{
-			fd = -1;
-			if (is_redir_pair(cur_t) && is_s_eq(cur_t->str, "<<", true))
-			{
-				pathname_arr[1] = ft_itoa(i);
-				pathname_arr[3] = ft_itoa(j);
-				tmp_file_path = ft_strjoin_all(pathname_arr);
-				ft_free((void **)&pathname_arr[1]);
-				ft_free((void **)&pathname_arr[3]);
-				open_outfile(tmp_file_path, &fd);
-				redirect(&fd, STDOUT_FILENO, &cur_p->redirect_fds);
-				status = here_doc(ft_strdup(cur_t->next->str), STDOUT_FILENO);
-				cur_p->heredoc_tmp_paths[j] = tmp_file_path;
-				reset_redirection(&cur_p->redirect_fds);
-				cur_t = cur_t->next;
-				j++;
-			}
-			cur_t = cur_t->next;
-		}
-		cur_p->heredoc_tmp_paths[j] = NULL;
-		cur_p = cur_p->next;
-		i++;
-	}
 }
 
 int	exec_interactive(t_i_mode_vars *i_vars)
