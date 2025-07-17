@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 16:54:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 12:19:41 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,20 @@ void	process_heredoc(t_proc_unit *proc_list)
 			{
 				pathname_arr[1] = ft_itoa(i);
 				pathname_arr[3] = ft_itoa(j);
-				//   1. 一時ファイル作成（>fileのイメージで）
-				//     1. tmp_<プロセス番号>_<ヒアドキュメント番号> とかで
 				tmp_file_path = ft_strjoin_all(pathname_arr);
-        ft_free((void **)&pathname_arr[1]);
-        ft_free((void **)&pathname_arr[3]);
+				ft_free((void **)&pathname_arr[1]);
+				ft_free((void **)&pathname_arr[3]);
 				open_outfile(tmp_file_path, &fd);
-				//   2. 標準入力を一時ファイルへ向ける
 				redirect(&fd, STDOUT_FILENO, &cur_p->redirect_fds);
 				status = here_doc(ft_strdup(cur_t->next->str), STDOUT_FILENO);
-				//   3. 入力完了
-				//   4. プロセスの構造体にファイルパスを保持
-				//     1. 配列とかで保持するようにするか...
 				cur_p->heredoc_tmp_paths[j] = tmp_file_path;
-				//   5. 標準入力をリセット
 				reset_redirection(&cur_p->redirect_fds);
 				cur_t = cur_t->next;
-        j++;
+				j++;
 			}
 			cur_t = cur_t->next;
 		}
-    cur_p->heredoc_tmp_paths[j] = NULL;
+		cur_p->heredoc_tmp_paths[j] = NULL;
 		cur_p = cur_p->next;
 		i++;
 	}

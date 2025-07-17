@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:19:10 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/16 16:57:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 12:24:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	open_and_redirect_files(t_token *cur_t, t_proc_unit *cur_p)
 				return (handle_error(status, cur_t->next->str), status);
 			if (cur_t->next->type == DELIM)
 				heredoc_ind++;
-      redirect(&fd, get_to_fd(cur_t->str), &cur_p->redirect_fds);
+			redirect(&fd, get_to_fd(cur_t->str), &cur_p->redirect_fds);
 			cur_t = cur_t->next;
 		}
 		cur_t = cur_t->next;
