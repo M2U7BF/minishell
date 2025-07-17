@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 13:16:21 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 16:25:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
 # include "../lib/libft/libft.h"
-# include "../minishell_test/ft_libdebug/libdebug.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -375,13 +374,5 @@ char						*get_display_path(char *cwd, char *home);
 char						*build_user_host(char *user, char *hostname);
 char						*get_display_path_str(void);
 char						*assemble_prompt(char *user, char *path);
-
-void						debug_put_token_list(t_token *token_list);
-int							debug_put_token_list_compare(t_token *t,
-								t_token *t_e);
-void						debug_put_proc_list(t_proc_unit *proc_unit);
-void						debug_put_lst(t_list *lst);
-void						print_stdin_source(void);
-void						print_backtrace(void);
 
 #endif
