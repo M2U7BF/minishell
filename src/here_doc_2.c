@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:20:37 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 13:28:38 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/17 13:37:13 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,27 @@ char	*get_tmp_file_path(int i, int *j)
 
 static int	inner_process(t_proc_unit *cur_p, t_token *cur_t, int i, int *j)
 {
-	int	status;
-	int	fd;
+	char	*tmp_file_path;
+	int		status;
+	int		fd;
 
-	while (cur_t && cur_t->next)
+	fd = -1;
+	if (is_redir_pair(cur_t) && is_s_eq(cur_t->str, "<<", true))
 	{
-		fd = -1;
-		if (is_redir_pair(cur_t) && is_s_eq(cur_t->str, "<<", true))
-		{
-			open_outfile(get_tmp_file_path(i, j), &fd);
-			redirect(&fd, STDOUT_FILENO, &cur_p->redirect_fds);
-			status = here_doc(ft_strdup(cur_t->next->str), STDOUT_FILENO);
-			cur_p->heredoc_tmp_paths[*j] = get_tmp_file_path(i, j);
-			reset_redirection(&cur_p->redirect_fds);
-			cur_t = cur_t->next;
-			*j += 1;
-			if (g_vars.interrupted)
-			{
-				g_vars.interrupted = 0;
-				g_vars.exit_status = 128 + SIGINT;
-				return (-1);
-			}
-		}
+		tmp_file_path = get_tmp_file_path(i, j);
+		open_outfile(tmp_file_path, &fd);
+		redirect(&fd, STDOUT_FILENO, &cur_p->redirect_fds);
+		status = here_doc(ft_strdup(cur_t->next->str), STDOUT_FILENO);
+		cur_p->heredoc_tmp_paths[*j] = tmp_file_path;
+		reset_redirection(&cur_p->redirect_fds);
 		cur_t = cur_t->next;
+		*j += 1;
+		if (g_vars.interrupted)
+		{
+			g_vars.interrupted = 0;
+			g_vars.exit_status = 128 + SIGINT;
+			return (-1);
+		}
 	}
 	return (0);
 }
@@ -75,8 +73,12 @@ int	process_heredoc(t_proc_unit *proc_list)
 		cur_t = cur_p->args;
 		cur_p->heredoc_tmp_paths = malloc(sizeof(char *)
 				* (count_heredoc(cur_p->args) + 1));
-		if (inner_process(cur_p, cur_t, i, &j) == -1)
-			return (-1);
+		while (cur_t && cur_t->next)
+		{
+			if (inner_process(cur_p, cur_t, i, &j) == -1)
+				return (-1);
+			cur_t = cur_t->next;
+		}
 		cur_p->heredoc_tmp_paths[j] = NULL;
 		cur_p = cur_p->next;
 		i++;
