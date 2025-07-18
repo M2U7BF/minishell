@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:23:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/18 10:51:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,31 @@ static int	search_command_path(char **cmd_name, char **path_env)
 	return (EXIT_CMD_NOT_FOUND);
 }
 
+void	search_command_without_path_env(char **cmd_name, int *status)
+{
+	char	*new_cmd;
+
+	{
+		if (access(*cmd_name, X_OK) == 0)
+		{
+			new_cmd = ft_strjoin("./", *cmd_name);
+			ft_free((void **)cmd_name);
+			*cmd_name = new_cmd;
+			*status = 0;
+		}
+		else
+			*status = EXIT_CMD_NOT_FOUND;
+	}
+}
+
+static void	search_command_abs_path(char **cmd_name, int *status)
+{
+	if (access(*cmd_name, X_OK) != 0)
+		*status = errno;
+	else if (!is_readable_file(*cmd_name))
+		*status = EISDIR;
+}
+
 int	get_command_path(char **cmd_name)
 {
 	char	**path_env;
@@ -48,21 +73,21 @@ int	get_command_path(char **cmd_name)
 
 	path_env = ft_split(get_env_value(g_vars.env_list, "PATH"), ':');
 	status = 0;
-	if (!path_env || (*cmd_name)[0] == '\0')
+	if ((*cmd_name)[0] == '\0')
 		status = EXIT_CMD_NOT_FOUND;
 	else if (ft_strchr((*cmd_name), '/'))
-	{
-		if (access(*cmd_name, X_OK) != 0)
-			status = errno;
-		else if (!is_readable_file(*cmd_name))
-			status = EISDIR;
-	}
-	else if (ft_strncmp(*cmd_name, ".", 2) == 0)
-		status = EISDIR;
-	else if (ft_strncmp(*cmd_name, "..", 3) == 0)
-		status = EISDIR;
+		search_command_abs_path(cmd_name, &status);
+	else if (!path_env)
+		search_command_without_path_env(cmd_name, &status);
 	else
-		status = search_command_path(cmd_name, path_env);
+	{
+		if (ft_strncmp(*cmd_name, ".", 2) == 0)
+			status = EISDIR;
+		else if (ft_strncmp(*cmd_name, "..", 3) == 0)
+			status = EISDIR;
+		else
+			status = search_command_path(cmd_name, path_env);
+	}
 	free_str_array(&path_env);
 	return (status);
 }
