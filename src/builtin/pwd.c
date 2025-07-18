@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 10:46:39 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:26:50 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 int	builtin_pwd(void)
 {
+	char	*pwd;
 	char	cwd[1024];
 
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
+	pwd = get_env_value(g_vars.env_list, "PWD");
+	if (pwd)
+		ft_putendl_fd(pwd, STDOUT_FILENO);
+	else if (getcwd(cwd, sizeof(cwd)) != NULL)
 		ft_putendl_fd(cwd, STDOUT_FILENO);
-	}
 	else
 	{
 		perror("minishell: pwd");

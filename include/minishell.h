@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/18 08:57:39 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:45:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ void						process_str_quoted(t_token *token_list);
 
 // util.c
 void						ft_free(void **p);
+bool						is_symlink(const char *path);
+const char					*get_abs_path(const char *path, char *buf);
 
 // arr_util.c
 char						*ft_strjoin_all(char **words);
@@ -362,7 +364,7 @@ void						sort_env_array(char **env_array);
 bool						is_variable_assignment(const char *arg);
 void						handle_variable_assignment(const char *arg);
 
-int							update_env_vars(t_list *env_list);
+int							update_env_vars(t_list *env_list, const char *path);
 int							change_dir_and_update_env(const char *path,
 								t_list *env_list);
 int							handle_cd_home(void);

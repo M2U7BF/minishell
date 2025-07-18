@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:57:51 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/09 17:10:34 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:41:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	update_env_vars(t_list *env_list)
+int	update_env_vars(t_list *env_list, const char *abs_path)
 {
 	char	cwd[1024];
 	char	*old_pwd;
@@ -22,7 +22,9 @@ int	update_env_vars(t_list *env_list)
 	{
 		set_env_var(&env_list, "OLDPWD", old_pwd);
 	}
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	if (abs_path)
+		ft_strlcpy(cwd, abs_path, ft_strlen(abs_path) + 1);
+	else if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		perror("minishell: cd");
 		return (1);
@@ -33,13 +35,16 @@ int	update_env_vars(t_list *env_list)
 
 int	change_dir_and_update_env(const char *path, t_list *env_list)
 {
+	char	abs_path[1024];
+
+	get_abs_path(path, abs_path);
 	if (chdir(path) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path,
 			strerror(errno));
 		return (1);
 	}
-	return (update_env_vars(env_list));
+	return (update_env_vars(env_list, abs_path));
 }
 
 int	handle_cd_home(void)

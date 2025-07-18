@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:50:35 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 15:10:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/18 12:27:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char	*get_hostname(t_list *env_list)
 	session_manager = get_env_value(env_list, "SESSION_MANAGER");
 	if (!session_manager)
 		return (NULL);
-	hostname_start = ft_strnstr(session_manager,
-			"local/", ft_strlen(session_manager));
+	hostname_start = ft_strnstr(session_manager, "local/",
+			ft_strlen(session_manager));
 	if (!hostname_start)
 		return (NULL);
 	hostname_start += ft_strlen("local/");
@@ -79,10 +79,16 @@ char	*get_display_path_str(void)
 {
 	char	cwd_buf[1024];
 	char	*cwd;
+	char	*pwd;
 	char	*home;
 	char	*display_path;
 
-	cwd = getcwd(cwd_buf, sizeof(cwd_buf));
+	cwd = NULL;
+	pwd = get_env_value(g_vars.env_list, "PWD");
+	if (pwd)
+		cwd = pwd;
+	else
+		cwd = getcwd(cwd_buf, sizeof(cwd_buf));
 	if (!cwd)
 		return (NULL);
 	home = get_env_value(g_vars.env_list, "HOME");
