@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 10:23:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/18 10:37:45 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	get_command_path(char **cmd_name)
 
 	path_env = ft_split(get_env_value(g_vars.env_list, "PATH"), ':');
 	status = 0;
-	if (!path_env || (*cmd_name)[0] == '\0')
+	if ((*cmd_name)[0] == '\0')
 		status = EXIT_CMD_NOT_FOUND;
 	else if (ft_strchr((*cmd_name), '/'))
 	{
@@ -57,12 +57,27 @@ int	get_command_path(char **cmd_name)
 		else if (!is_readable_file(*cmd_name))
 			status = EISDIR;
 	}
-	else if (ft_strncmp(*cmd_name, ".", 2) == 0)
-		status = EISDIR;
-	else if (ft_strncmp(*cmd_name, "..", 3) == 0)
-		status = EISDIR;
+	else if(!path_env)
+	{
+		if(access(*cmd_name, X_OK) == 0)
+		{
+			char *new_cmd = ft_strjoin("./", *cmd_name);
+			ft_free((void **)cmd_name);
+			*cmd_name = new_cmd;
+			status = 0;
+		}
+		else
+			status = EXIT_CMD_NOT_FOUND;
+	}
 	else
-		status = search_command_path(cmd_name, path_env);
+	{
+		if (ft_strncmp(*cmd_name, ".", 2) == 0)
+			status = EISDIR;
+		else if (ft_strncmp(*cmd_name, "..", 3) == 0)
+			status = EISDIR;
+		else
+			status = search_command_path(cmd_name, path_env);
+	}
 	free_str_array(&path_env);
 	return (status);
 }
