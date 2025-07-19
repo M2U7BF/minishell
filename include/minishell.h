@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/18 08:57:39 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:02:42 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,7 +367,8 @@ int							change_dir_and_update_env(const char *path,
 								t_list *env_list);
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
-int							handle_cd_dotdot(void);
+char						*resolve_path(const char *rel_path, t_list *env_list);
+
 
 // get_prompt.c
 char						*get_prompt(void);
