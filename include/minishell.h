@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/18 08:57:39 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 08:30:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ void						process_str_quoted(t_token *token_list);
 
 // util.c
 void						ft_free(void **p);
+int							access_exit_status(bool is_update, int value);
+t_list						*access_env_list(bool is_update, t_list *value);
 
 // arr_util.c
 char						*ft_strjoin_all(char **words);

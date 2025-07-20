@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 14:59:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 	{
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
-		g_vars.exit_status = EXIT_FAILURE;
+		access_exit_status(true, EXIT_FAILURE);
 		return (status);
 	}
 	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
@@ -31,7 +31,7 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 	if (is_s_eq(proc->argv[0], "exit", 1))
 		ft_putendl_fd("exit", STDERR_FILENO);
 	status = handle_builtin_cmd(proc->argv);
-	g_vars.exit_status = status;
+	access_exit_status(true, status);
 	return (status);
 }
 
@@ -57,23 +57,23 @@ static void	wait_child_processes(int *child_pids, int pro_count)
 	int	i;
 
 	i = -1;
-	status = g_vars.exit_status;
+	status = access_exit_status(false, 0);
 	while (++i < pro_count)
 	{
 		if (waitpid(child_pids[i], &status, 0) == -1)
 			perror("waitpid");
 	}
 	if (WIFEXITED(status))
-		g_vars.exit_status = WEXITSTATUS(status);
+		access_exit_status(true, WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
-			g_vars.exit_status = 128 + SIGQUIT;
+			access_exit_status(true, 128 + SIGQUIT);
 		}
 		else if (WTERMSIG(status) == SIGINT)
-			g_vars.exit_status = 128 + SIGINT;
+			access_exit_status(true, 128 + SIGINT);
 	}
 	else
 		put_error_exit("waitpid", EXIT_FAILURE);

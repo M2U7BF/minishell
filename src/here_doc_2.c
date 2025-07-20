@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:20:37 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 13:37:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	inner_process(t_proc_unit *cur_p, t_token *cur_t, int i, int *j)
 		if (g_vars.interrupted)
 		{
 			g_vars.interrupted = 0;
-			g_vars.exit_status = 128 + SIGINT;
+			access_exit_status(true, 128 + SIGINT);
 			return (-1);
 		}
 	}

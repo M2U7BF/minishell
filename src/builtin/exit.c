@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/11 11:07:16 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:47:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ static int	is_within_llong_range(const char *s)
 
 	len = ft_strlen(s);
 	if (*s == '-')
-		return ((len - 1 < 19)
-			|| (len - 1 == 19 && ft_strncmp(s + 1, llong_min, 19) <= 0));
+		return ((len - 1 < 19) || (len - 1 == 19 && ft_strncmp(s + 1, llong_min,
+					19) <= 0));
 	if (*s == '+')
-		return ((len - 1 < 19)
-			|| (len - 1 == 19 && ft_strncmp(s + 1, llong_max, 19) <= 0));
+		return ((len - 1 < 19) || (len - 1 == 19 && ft_strncmp(s + 1, llong_max,
+					19) <= 0));
 	return ((len < 19) || (len == 19 && ft_strncmp(s, llong_max, 19) <= 0));
 }
 
@@ -69,7 +69,7 @@ int	builtin_exit(char **argv)
 	argc = arrlen(argv);
 	if (argc == 1)
 	{
-		finalize_and_exit(g_vars.exit_status);
+		finalize_and_exit(access_exit_status(false, 0));
 	}
 	if (!is_numeric_argument(argv[1]))
 	{

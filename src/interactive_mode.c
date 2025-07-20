@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 13:16:00 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:42:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	process_ctrl_d(void)
 	ft_putendl_fd("exit", STDERR_FILENO);
 	free_env_list(&g_vars.env_list);
 	rl_clear_history();
-	exit(g_vars.exit_status);
+	exit(access_exit_status(false, 0));
 }
 
 static int	handle_input_value(t_i_mode_vars *i_vars)

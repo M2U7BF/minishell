@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:10:58 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	expand_question_mark(char **s)
 
 	tmp = ft_split_by_word_keep_sep(*s, "$?");
 	ft_free((void **)&tmp[0]);
-	tmp[0] = ft_itoa(g_vars.exit_status);
+	tmp[0] = ft_itoa(access_exit_status(false, 0));
 	ft_free((void **)s);
 	*s = ft_strjoin_all(tmp);
 	free_str_array(&tmp);
@@ -115,7 +115,7 @@ int	parse(t_i_mode_vars *i_vars)
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
-		g_vars.exit_status = EXIT_SYNTAX_ERROR;
+		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}
 	variable_expansion(&i_vars->token_list);

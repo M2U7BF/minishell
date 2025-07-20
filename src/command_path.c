@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 14:22:05 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/18 10:51:50 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,16 @@ void	handle_error(int status, char *cmd_path)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
 			strerror(status));
-		g_vars.exit_status = EXIT_CMD_NOT_FOUND;
+		access_exit_status(true, EXIT_CMD_NOT_FOUND);
 	}
 	else if (status == EACCES || status == EISDIR)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd_path,
 			strerror(status));
-		g_vars.exit_status = EXIT_PERMISSION_DENIED;
+		access_exit_status(true, EXIT_PERMISSION_DENIED);
 	}
 	else if (status > 128)
-		g_vars.exit_status = status;
+		access_exit_status(true, status);
 	else
 		perror("minishell");
 }
