@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:58:03 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 15:17:15 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	check_state(void)
 static void	signal_handler(int signum)
 {
 	g_vars.signal = signum;
-	g_vars.exit_status = 128 + signum;
+	access_exit_status(true, 128 + signum);
 	if (g_vars.signal == SIGINT)
 	{
 		g_vars.interrupted = 1;
