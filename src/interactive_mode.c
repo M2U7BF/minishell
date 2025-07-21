@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 10:15:30 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 10:30:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_runtime_data	g_vars = {};
 
-static void	process_ctrl_d(void)
+void	process_ctrl_d(void)
 {
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", STDERR_FILENO);
@@ -23,7 +23,7 @@ static void	process_ctrl_d(void)
 	exit(access_exit_status(false, 0));
 }
 
-int	handle_input_value(t_i_mode_vars *i_vars)
+static int	handle_input_value(t_i_mode_vars *i_vars)
 {
 	ft_free((void **)&i_vars->prompt);
 	if (g_vars.interrupted)
