@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:58:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/10 14:41:05 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 09:21:55 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,6 @@ int	set_argv(t_proc_unit *current_proc)
 	current_proc->argv = trim_redirection(&current_proc->argv);
 	if (!current_proc->argv)
 		return (EXIT_SUCCESS);
-	if (!is_builtin(current_proc->argv[0]))
-	{
-		g_vars.exit_status = get_command_path(&current_proc->argv[0]);
-		if (g_vars.exit_status != 0)
-		{
-			handle_error(g_vars.exit_status, current_proc->argv[0]);
-			return (g_vars.exit_status);
-		}
-	}
 	return (current_proc->status);
 }
 

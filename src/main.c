@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:11:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char *argv[], char **envp)
 		return (EXIT_FAILURE);
 	}
 	g_vars.signal = 0;
-	g_vars.exit_status = EXIT_SUCCESS;
+	access_exit_status(true, EXIT_SUCCESS);
 	if (e_vars.mode == INTERACTIVE)
 	{
 		init_i_vars(&e_vars.i_vars);

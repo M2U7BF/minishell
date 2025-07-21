@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:09:08 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 16:25:47 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 08:46:11 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ static int	handle_variable_assignment_command(char **argv)
 	{
 		if (argv[1] != NULL)
 		{
-			ft_dprintf(STDERR_FILENO,
-				"minishell: %s: command not found\n", argv[1]);
+			ft_dprintf(STDERR_FILENO, "minishell: %s: command not found\n",
+				argv[1]);
 			return (127);
 		}
 		handle_variable_assignment(argv[0]);
-		return (g_vars.exit_status);
+		return (access_exit_status(false, 0));
 	}
 	return (-1);
 }

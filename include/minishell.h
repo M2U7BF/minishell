@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/19 16:02:42 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 12:33:57 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ void						process_str_quoted(t_token *token_list);
 
 // util.c
 void						ft_free(void **p);
+int							access_exit_status(bool is_update, int value);
+t_list						*access_env_list(bool is_update, t_list *value);
 
 // arr_util.c
 char						*ft_strjoin_all(char **words);

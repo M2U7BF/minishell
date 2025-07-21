@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/15 12:10:58 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 12:05:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	expand_question_mark(char **s)
 
 	tmp = ft_split_by_word_keep_sep(*s, "$?");
 	ft_free((void **)&tmp[0]);
-	tmp[0] = ft_itoa(g_vars.exit_status);
+	tmp[0] = ft_itoa(access_exit_status(false, 0));
 	ft_free((void **)s);
 	*s = ft_strjoin_all(tmp);
 	free_str_array(&tmp);
@@ -26,27 +26,31 @@ void	expand_question_mark(char **s)
 
 void	expand_variable(char **s)
 {
-	char	*env_var;
+	char	*var;
 	char	*name;
 	int		end;
 	char	*new;
 
 	end = 0;
 	name = get_var_name(*s + 1, &end);
-	env_var = get_env_value(g_vars.env_list, name);
-	ft_free((void **)&name);
-	if (env_var)
+	var = get_env_value(g_vars.env_list, name);
+	new = NULL;
+	if (!name[0])
+		new = ft_strdup(*s);
+	else if (var)
 	{
-		new = malloc(sizeof(char) * (ft_strlen(env_var) + ft_strlen(*s) - end
-					+ 1));
-		ft_strlcpy(new, env_var, ft_strlen(env_var) + 1);
-		ft_strlcpy(new + ft_strlen(env_var), *s + end + 1, ft_strlen(*s) - end
-			+ 1);
-		ft_free((void **)s);
-		*s = new;
+		new = malloc(sizeof(char) * (ft_strlen(var) + ft_strlen(*s) - end + 1));
+		ft_strlcpy(new, var, ft_strlen(var) + 1);
+		ft_strlcpy(new + ft_strlen(var), *s + end + 1, ft_strlen(*s) - end + 1);
 	}
 	else
-		ft_free((void **)s);
+	{
+		new = malloc(sizeof(char) * (ft_strlen(*s) - end + 1));
+		ft_strlcpy(new, *s + end + 1, ft_strlen(*s) - end + 1);
+	}
+	ft_free((void **)s);
+	*s = new;
+	ft_free((void **)&name);
 }
 
 void	inner_process(char *current_quote, char **s, bool *is_expand)
@@ -115,7 +119,7 @@ int	parse(t_i_mode_vars *i_vars)
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
 		free_env_list(&g_vars.env_list);
-		g_vars.exit_status = EXIT_SYNTAX_ERROR;
+		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}
 	variable_expansion(&i_vars->token_list);

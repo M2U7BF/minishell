@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:07:31 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 16:21:22 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 08:45:23 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,5 @@ void	handle_variable_assignment(const char *arg)
 	else
 		set_env_var(&g_vars.env_list, key, value);
 	free(key);
-	g_vars.exit_status = 0;
+	access_exit_status(true, EXIT_SUCCESS);
 }
