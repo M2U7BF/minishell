@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 10:06:07 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 10:15:30 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_runtime_data	g_vars = {};
 
 static void	process_ctrl_d(void)
 {
-	ft_putendl_fd("exit", STDERR_FILENO);
+	if (isatty(STDIN_FILENO))
+		ft_putendl_fd("exit", STDERR_FILENO);
 	free_env_list(&g_vars.env_list);
 	rl_clear_history();
 	exit(access_exit_status(false, 0));
