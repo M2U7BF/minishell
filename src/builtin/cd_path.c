@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 15:57:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/19 16:13:44 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 12:02:06 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,38 @@ static void	append_path(char **resolved, const char *component)
 	free(temp);
 }
 
-char	*resolve_path(const char *rel_path, t_list *env_list)
+static char	*get_resolved_base_path(t_list *env_list)
 {
 	char	*pwd;
-	char	*resolved;
-	char	**components;
-	int		i;
 
 	pwd = get_env_value(env_list, "PWD");
-	resolved = NULL;
-	if (pwd)
-		resolved = ft_strdup(pwd);
+	if (!pwd)
+		return (NULL);
+	return (ft_strdup(pwd));
+}
+
+static int	process_components(char **components, char **resolved)
+{
+	int	i;
+
+	i = 0;
+	while (components[i])
+	{
+		if (!ft_strncmp(components[i], "..", 3))
+			handle_dotdot(*resolved);
+		else if (ft_strncmp(components[i], ".", 2) && *components[i])
+			append_path(resolved, components[i]);
+		i++;
+	}
+	return (0);
+}
+
+char	*resolve_path(const char *rel_path, t_list *env_list)
+{
+	char	*resolved;
+	char	**components;
+
+	resolved = get_resolved_base_path(env_list);
 	if (!resolved)
 		return (NULL);
 	components = ft_split(rel_path, '/');
@@ -57,14 +78,7 @@ char	*resolve_path(const char *rel_path, t_list *env_list)
 		free(resolved);
 		return (NULL);
 	}
-	i = -1;
-	while (components[++i])
-	{
-		if (!ft_strncmp(components[i], "..", 3))
-			handle_dotdot(resolved);
-		else if (ft_strncmp(components[i], ".", 2) && *components[i])
-			append_path(&resolved, components[i]);
-	}
+	process_components(components, &resolved);
 	free_str_array(&components);
 	return (resolved);
 }
