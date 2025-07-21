@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 09:50:06 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 15:13:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 15:23:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,6 @@ static int	handle_input_value(t_i_mode_vars *i_vars)
 	ft_strtrim_front(&i_vars->input, DEFAULT_BLANK);
 	i_vars->token_list = tokenize(i_vars->input);
 	return (0);
-}
-
-static void	trim_endl(char **s)
-{
-	char	*old;
-	char	*new;
-
-	if (!s || !s[0])
-		return ;
-	old = *s;
-	if ((*s)[ft_strlen(*s) - 1] == '\n')
-	{
-		new = malloc(sizeof(char) * (ft_strlen(*s) + 1));
-		ft_strlcpy(new, old, (ft_strlen(*s)));
-		ft_free((void **)&old);
-		*s = new;
-	}
 }
 
 int	exec_noninteractive(t_i_mode_vars *i_vars)

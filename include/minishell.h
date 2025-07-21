@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 12:17:13 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 15:24:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,7 @@ int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
 bool						is_s_eq(char *s1, char *s2, bool include_null_char);
 bool						is_quoted(char *s);
+void						trim_endl(char **s);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);
