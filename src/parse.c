@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 08:45:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 11:38:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	expand_variable(char **s)
 	end = 0;
 	name = get_var_name(*s + 1, &end);
 	env_var = get_env_value(g_vars.env_list, name);
-	ft_free((void **)&name);
+	new = NULL;
 	if (env_var)
 	{
 		new = malloc(sizeof(char) * (ft_strlen(env_var) + ft_strlen(*s) - end
@@ -42,11 +42,15 @@ void	expand_variable(char **s)
 		ft_strlcpy(new, env_var, ft_strlen(env_var) + 1);
 		ft_strlcpy(new + ft_strlen(env_var), *s + end + 1, ft_strlen(*s) - end
 			+ 1);
-		ft_free((void **)s);
-		*s = new;
 	}
 	else
-		ft_free((void **)s);
+	{
+		new = malloc(sizeof(char) * (ft_strlen(*s) - end + 1));
+		ft_strlcpy(new, *s + end + 1, ft_strlen(*s) - end + 1);
+	}
+	ft_free((void **)s);
+	*s = new;
+	ft_free((void **)&name);
 }
 
 void	inner_process(char *current_quote, char **s, bool *is_expand)
