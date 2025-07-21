@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 09:50:06 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 11:10:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 15:13:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	trim_endl(char **s)
 	{
 		new = malloc(sizeof(char) * (ft_strlen(*s) + 1));
 		ft_strlcpy(new, old, (ft_strlen(*s)));
+		ft_free((void **)&old);
 		*s = new;
 	}
 }
@@ -55,6 +56,7 @@ int	exec_noninteractive(t_i_mode_vars *i_vars)
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
+		i_vars->input = get_next_line(STDIN_FILENO);
 		trim_endl(&i_vars->input);
 		if (handle_input_value(i_vars) == -1)
 			continue ;
