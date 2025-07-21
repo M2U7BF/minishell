@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 08:45:45 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 12:05:43 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,31 @@ void	expand_question_mark(char **s)
 
 void	expand_variable(char **s)
 {
-	char	*env_var;
+	char	*var;
 	char	*name;
 	int		end;
 	char	*new;
 
 	end = 0;
 	name = get_var_name(*s + 1, &end);
-	env_var = get_env_value(g_vars.env_list, name);
-	ft_free((void **)&name);
-	if (env_var)
+	var = get_env_value(g_vars.env_list, name);
+	new = NULL;
+	if (!name[0])
+		new = ft_strdup(*s);
+	else if (var)
 	{
-		new = malloc(sizeof(char) * (ft_strlen(env_var) + ft_strlen(*s) - end
-					+ 1));
-		ft_strlcpy(new, env_var, ft_strlen(env_var) + 1);
-		ft_strlcpy(new + ft_strlen(env_var), *s + end + 1, ft_strlen(*s) - end
-			+ 1);
-		ft_free((void **)s);
-		*s = new;
+		new = malloc(sizeof(char) * (ft_strlen(var) + ft_strlen(*s) - end + 1));
+		ft_strlcpy(new, var, ft_strlen(var) + 1);
+		ft_strlcpy(new + ft_strlen(var), *s + end + 1, ft_strlen(*s) - end + 1);
 	}
 	else
-		ft_free((void **)s);
+	{
+		new = malloc(sizeof(char) * (ft_strlen(*s) - end + 1));
+		ft_strlcpy(new, *s + end + 1, ft_strlen(*s) - end + 1);
+	}
+	ft_free((void **)s);
+	*s = new;
+	ft_free((void **)&name);
 }
 
 void	inner_process(char *current_quote, char **s, bool *is_expand)
