@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 08:30:12 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 10:06:21 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../lib/get_next_line/get_next_line.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -149,6 +150,7 @@ int							parse_exec_arg(int argc);
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);
+int							handle_input_value(t_i_mode_vars *i_vars);
 
 // token.c
 t_token						*create_token(char *str, t_token_type type);
@@ -202,6 +204,9 @@ int							exec_builtin(int status, t_i_mode_vars *i_vars,
 int							count_heredoc(t_token *token_list);
 void						finish_exec(t_i_mode_vars *i_vars,
 								t_proc_unit *proc_list);
+
+// exec_noninteractive.c
+int							exec_noninteractive(t_i_mode_vars *i_vars);
 
 // error.c
 void						put_error_exit(char *s, int status);
