@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 13:13:59 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:01:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	null_to_empty(t_token *token)
+void	null_to_empty(t_token *token)
 {
 	t_token	*current_token;
 
@@ -23,25 +23,6 @@ static void	null_to_empty(t_token *token)
 			current_token->str = ft_strdup("");
 		current_token = current_token->next;
 	}
-}
-
-char	*expand_heredoc_line(char *line)
-{
-	t_token	*token;
-	char	**tmp_arr;
-	char	*tmp_str;
-
-	if (line && line[0] == '\0')
-		return (line);
-	token = tokenize(line);
-	variable_expansion(&token);
-	quote_removal(token);
-	null_to_empty(token);
-	tmp_arr = tokens_to_arr(token);
-	free_token_list(&token);
-	tmp_str = ft_strjoin_all(tmp_arr);
-	free_str_array(&tmp_arr);
-	return (tmp_str);
 }
 
 char	*str_quote_removal(char *s)
@@ -71,6 +52,20 @@ static int	finish_here_doc(char **line, char **delim, int out_fd)
 	return (EXIT_SUCCESS);
 }
 
+static char	*input_line(void)
+{
+	char	*line;
+
+	if (isatty(STDIN_FILENO))
+		line = readline("> ");
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		trim_endl(&line);
+	}
+	return (line);
+}
+
 // Processing of here-document.
 // Input data is buffered by the kernel through a pipe.
 int	here_doc(char *delim, int out_fd)
@@ -85,7 +80,7 @@ int	here_doc(char *delim, int out_fd)
 	update_delim(&delim, is_delim_quoted);
 	while (1)
 	{
-		line = readline("> ");
+		line = input_line();
 		if (!line)
 			ft_dprintf(STDERR_FILENO, WARN_HEREDOC_1, i, delim);
 		if (g_vars.interrupted || !line || is_s_eq(line, delim, true))
@@ -93,7 +88,8 @@ int	here_doc(char *delim, int out_fd)
 		if (!is_delim_quoted)
 			line = expand_heredoc_line(line);
 		ft_dprintf(out_fd, "%s\n", line);
-		ft_free((void **)&line);
+		if (line)
+			ft_free((void **)&line);
 		i++;
 	}
 	return (finish_here_doc(&line, &delim, out_fd));

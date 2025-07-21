@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:20:37 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 08:45:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 15:58:39 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,27 @@ int	process_heredoc(t_proc_unit *proc_list)
 		i++;
 	}
 	return (0);
+}
+
+char	*expand_heredoc_line(char *line)
+{
+	t_token	*token;
+	char	**tmp_arr;
+	char	*tmp_str;
+	char	*old;
+
+	old = line;
+	if (line && line[0] == '\0')
+		return (line);
+	token = tokenize(line);
+	variable_expansion(&token);
+	quote_removal(token);
+	null_to_empty(token);
+	tmp_arr = tokens_to_arr(token);
+	free_token_list(&token);
+	tmp_str = ft_strjoin_all(tmp_arr);
+	free_str_array(&tmp_arr);
+	if (tmp_str != old)
+		ft_free((void **)&old);
+	return (tmp_str);
 }

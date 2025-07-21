@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 12:33:57 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:27:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/ft_dprintf/include/ft_dprintf.h"
+# include "../lib/get_next_line/get_next_line.h"
 # include "../lib/libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -149,6 +150,7 @@ int							parse_exec_arg(int argc);
 
 // interactive_mode.c
 int							exec_interactive(t_i_mode_vars *i_vars);
+void						process_ctrl_d(void);
 
 // token.c
 t_token						*create_token(char *str, t_token_type type);
@@ -203,6 +205,9 @@ int							count_heredoc(t_token *token_list);
 void						finish_exec(t_i_mode_vars *i_vars,
 								t_proc_unit *proc_list);
 
+// exec_noninteractive.c
+int							exec_noninteractive(t_i_mode_vars *i_vars);
+
 // error.c
 void						put_error_exit(char *s, int status);
 void						libc_error(void);
@@ -227,12 +232,14 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
+void						null_to_empty(t_token *token);
 int							here_doc(char *delim, int out_fd);
 char						*str_quote_removal(char *s);
 
 // here_doc_2.c
 void						update_delim(char **delim, bool is_delim_quoted);
 int							process_heredoc(t_proc_unit *proc_list);
+char						*expand_heredoc_line(char *line);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
@@ -286,6 +293,7 @@ int							count_chr(char *s, char c);
 bool						is_include(char *s, char **words);
 bool						is_s_eq(char *s1, char *s2, bool include_null_char);
 bool						is_quoted(char *s);
+void						trim_endl(char **s);
 
 // lst_util.c
 char						**lst_to_str_arr(t_list *lst);

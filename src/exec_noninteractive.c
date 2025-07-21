@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   interactive_mode.c                                 :+:      :+:    :+:   */
+/*   exec_noninteractive.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 10:30:24 by kkamei           ###   ########.fr       */
+/*   Created: 2025/07/21 09:50:06 by kkamei            #+#    #+#             */
+/*   Updated: 2025/07/21 15:23:24 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-t_runtime_data	g_vars = {};
-
-void	process_ctrl_d(void)
-{
-	if (isatty(STDIN_FILENO))
-		ft_putendl_fd("exit", STDERR_FILENO);
-	free_env_list(&g_vars.env_list);
-	rl_clear_history();
-	exit(access_exit_status(false, 0));
-}
 
 static int	handle_input_value(t_i_mode_vars *i_vars)
 {
@@ -30,6 +19,8 @@ static int	handle_input_value(t_i_mode_vars *i_vars)
 		return (-1);
 	if (!i_vars->input)
 		process_ctrl_d();
+	else if (i_vars->input[0] == '\n')
+		return (-1);
 	else if (i_vars->input[0] == '\0')
 		return (-1);
 	add_history(i_vars->input);
@@ -38,19 +29,18 @@ static int	handle_input_value(t_i_mode_vars *i_vars)
 	return (0);
 }
 
-int	exec_interactive(t_i_mode_vars *i_vars)
+int	exec_noninteractive(t_i_mode_vars *i_vars)
 {
 	t_proc_unit	*proc_list;
 
-	rl_outstream = stderr;
 	while (1)
 	{
 		g_vars.interrupted = 0;
-		i_vars->prompt = get_prompt();
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
-		i_vars->input = readline(i_vars->prompt);
+		i_vars->input = get_next_line(STDIN_FILENO);
+		trim_endl(&i_vars->input);
 		if (handle_input_value(i_vars) == -1)
 			continue ;
 		if (!i_vars->token_list)

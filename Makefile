@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+         #
+#    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/21 14:43:30 by atashiro         ###   ########.fr        #
+#    Updated: 2025/07/21 16:27:26 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						util/str_util.c util/token_util.c util/util.c builtin/cd_path.c \
 						util/env_utils2.c util/env_utils3.c builtin/export_utils2.c \
 						builtin/cd_utils.c exec_2.c prompt.c prompt2.c parse_2.c here_doc_2.c \
-						builtin/cd_utils2.c 
+						exec_noninteractive.c builtin/cd_utils2.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
@@ -37,6 +37,7 @@ NAME = minishell
 # Additional Libraries
 LIBFT_DIR = lib/libft/
 FT_DPRINTF_DIR = lib/ft_dprintf
+GNL_DIR = lib/get_next_line
 LIBDEBUG_DIR = $(NAME)_test/ft_libdebug
 LIBTEST_DIR = $(NAME)_test/ft_libtest
 
@@ -46,11 +47,14 @@ all:			$(NAME)
 $(NAME): $(OBJS)
 	make libft
 	make ft_dprintf
+	make get_next_line
 	$(CC) $(CFLAG) $(OBJS) \
 	-I$(LIBFT_DIR) \
 	-I$(FT_DPRINTF_DIR)/include \
+	-I$(GNL_DIR) \
 	-L$(LIBFT_DIR) -lft \
 	-L$(FT_DPRINTF_DIR) -lftdprintf \
+	-L$(GNL_DIR) -lgnl \
 	-lreadline \
 	-o $(NAME)
 
@@ -59,6 +63,9 @@ libft:
 
 ft_dprintf:
 	make -C $(FT_DPRINTF_DIR)
+
+get_next_line:
+	make -C $(GNL_DIR)
 
 libdebug:
 	make -C $(LIBDEBUG_DIR)
@@ -105,9 +112,10 @@ debug: $(OBJS) $(OBJS_NO_MAIN)
 	$(CC) $(CFLAG) $(OBJS) \
 		-I$(LIBFT_DIR) \
 		-I$(FT_DPRINTF_DIR)/include \
+		-I$(GNL_DIR) \
 		-L$(LIBFT_DIR) -lft \
 		-L$(FT_DPRINTF_DIR) -lftdprintf \
-		-L$(FT_DPRINTF_DIR) -lftdprintf \
+		-L$(GNL_DIR) -lgnl \
 		-L$(LIBDEBUG_DIR) -ldebug \
 		-lreadline \
 		-o $(NAME)
