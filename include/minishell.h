@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:01:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:27:35 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,8 @@ int							change_dir_and_update_env(const char *path,
 								t_list *env_list);
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
-int							handle_cd_dotdot(void);
+char						*resolve_path(const char *rel_path, t_list *env_list);
+
 
 // get_prompt.c
 char						*get_prompt(void);

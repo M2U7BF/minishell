@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:50:35 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 15:10:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 13:38:15 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,14 @@ char	*get_display_path_str(void)
 	char	*home;
 	char	*display_path;
 
-	cwd = getcwd(cwd_buf, sizeof(cwd_buf));
+	cwd = get_env_value(g_vars.env_list, "PWD");
 	if (!cwd)
-		return (NULL);
+	{
+		if (getcwd(cwd_buf, sizeof(cwd_buf)))
+			cwd = cwd_buf;
+		else
+			return (NULL);
+	}
 	home = get_env_value(g_vars.env_list, "HOME");
 	display_path = get_display_path(cwd, home);
 	return (display_path);

@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:57:51 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/09 17:10:34 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:47:48 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,6 @@ int	update_env_vars(t_list *env_list)
 	}
 	set_env_var(&env_list, "PWD", cwd);
 	return (0);
-}
-
-int	change_dir_and_update_env(const char *path, t_list *env_list)
-{
-	if (chdir(path) != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path,
-			strerror(errno));
-		return (1);
-	}
-	return (update_env_vars(env_list));
 }
 
 int	handle_cd_home(void)
