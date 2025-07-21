@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:57:51 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 13:40:38 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:47:48 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,6 @@ int	update_env_vars(t_list *env_list)
 		return (1);
 	}
 	set_env_var(&env_list, "PWD", cwd);
-	return (0);
-}
-
-int	change_dir_and_update_env(const char *path, t_list *env_list)
-{
-	char	*old_pwd;
-	char	*new_pwd;
-
-	if (chdir(path) != 0)
-	{
-		ft_dprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", path,
-			strerror(errno));
-		return (1);
-	}
-	old_pwd = get_env_value(env_list, "PWD");
-	if (old_pwd != NULL)
-		set_env_var(&env_list, "OLDPWD", old_pwd);
-	if (path[0] == '/')
-		new_pwd = ft_strdup(path);
-	else
-		new_pwd = resolve_path(path, env_list);
-	if (!new_pwd)
-	{
-		char cwd_buf[1024];
-		if (getcwd(cwd_buf, sizeof(cwd_buf)) != NULL)
-			set_env_var(&env_list, "PWD", cwd_buf);
-		return (1);
-	}
-	set_env_var(&env_list, "PWD", new_pwd);
-	free(new_pwd);
 	return (0);
 }
 
