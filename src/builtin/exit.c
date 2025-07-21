@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 08:47:55 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:55:47 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ static int	is_numeric_argument(const char *s)
 
 static void	finalize_and_exit(int status)
 {
-	free_env_list(&g_vars.env_list);
+  t_list *env_list;
+
+  env_list = access_env_list(false, NULL);
+	free_env_list(&env_list);
 	rl_clear_history();
 	exit(status);
 }

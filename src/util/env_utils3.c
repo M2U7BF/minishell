@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:41:32 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 11:54:05 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 17:28:15 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_env_list(t_list **env_list, char **environ)
 	int		i;
 	t_env	*env_var;
 
-	*env_list = NULL;
+	*env_list = access_env_list(true, NULL);
 	i = 0;
 	while (environ[i])
 	{

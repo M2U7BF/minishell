@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:57:51 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 13:47:48 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:51:28 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,27 @@ int	handle_cd_home(void)
 {
 	char	*path;
 
-	path = get_env_value(g_vars.env_list, "HOME");
+	path = get_env_value(access_env_list(false, NULL), "HOME");
 	if (path == NULL || *path == '\0')
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
 		return (1);
 	}
-	return (change_dir_and_update_env(path, g_vars.env_list));
+	return (change_dir_and_update_env(path, access_env_list(false, NULL)));
 }
 
 int	handle_cd_dash(void)
 {
 	char	*path;
 
-	path = get_env_value(g_vars.env_list, "OLDPWD");
+	path = get_env_value(access_env_list(false, NULL), "OLDPWD");
 	if (path == NULL)
 	{
 		ft_dprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
 		return (1);
 	}
 	ft_putendl_fd(path, STDOUT_FILENO);
-	return (change_dir_and_update_env(path, g_vars.env_list));
+	return (change_dir_and_update_env(path, access_env_list(false, NULL)));
 }
 
 int	handle_cd_dotdot(void)
@@ -65,19 +65,19 @@ int	handle_cd_dotdot(void)
 	char	*last_slash;
 	int		ret;
 
-	pwd = get_env_value(g_vars.env_list, "PWD");
+	pwd = get_env_value(access_env_list(false, NULL), "PWD");
 	if (pwd == NULL)
-		return (change_dir_and_update_env("..", g_vars.env_list));
+		return (change_dir_and_update_env("..", access_env_list(false, NULL)));
 	last_slash = ft_strrchr(pwd, '/');
 	if (last_slash == pwd)
 		parent_path = ft_strdup("/");
 	else if (last_slash != NULL)
 		parent_path = ft_substr(pwd, 0, last_slash - pwd);
 	else
-		return (change_dir_and_update_env("..", g_vars.env_list));
+		return (change_dir_and_update_env("..", access_env_list(false, NULL)));
 	if (parent_path == NULL)
 		return (1);
-	ret = change_dir_and_update_env(parent_path, g_vars.env_list);
+	ret = change_dir_and_update_env(parent_path, access_env_list(false, NULL));
 	free(parent_path);
 	return (ret);
 }

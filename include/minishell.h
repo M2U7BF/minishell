@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:27:35 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:46:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,22 +118,13 @@ typedef struct s_exec_vars
 	char					*script;
 }							t_exec_vars;
 
-// Structure that holds global variables
-typedef struct s_runtime_data
-{
-	int						exit_status;
-	volatile sig_atomic_t	signal;
-	t_list					*env_list;
-	volatile sig_atomic_t	interrupted;
-}							t_runtime_data;
-
 typedef struct s_split_vars
 {
 	char					*str;
 	char					*word;
 }							t_split_vars;
 
-extern t_runtime_data		g_vars;
+extern volatile sig_atomic_t	signum;
 
 // src ============================================================
 
@@ -377,8 +368,8 @@ int							change_dir_and_update_env(const char *path,
 								t_list *env_list);
 int							handle_cd_home(void);
 int							handle_cd_dash(void);
-char						*resolve_path(const char *rel_path, t_list *env_list);
-
+char						*resolve_path(const char *rel_path,
+								t_list *env_list);
 
 // get_prompt.c
 char						*get_prompt(void);

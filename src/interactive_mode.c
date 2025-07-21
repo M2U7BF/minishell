@@ -6,19 +6,20 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:39:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 10:30:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 17:00:07 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_runtime_data	g_vars = {};
-
 void	process_ctrl_d(void)
 {
+	t_list	*env_list;
+
+	env_list = access_env_list(false, NULL);
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", STDERR_FILENO);
-	free_env_list(&g_vars.env_list);
+	free_env_list(&env_list);
 	rl_clear_history();
 	exit(access_exit_status(false, 0));
 }
@@ -26,7 +27,7 @@ void	process_ctrl_d(void)
 static int	handle_input_value(t_i_mode_vars *i_vars)
 {
 	ft_free((void **)&i_vars->prompt);
-	if (g_vars.interrupted)
+	if (signum == SIGINT)
 		return (-1);
 	if (!i_vars->input)
 		process_ctrl_d();
@@ -45,7 +46,7 @@ int	exec_interactive(t_i_mode_vars *i_vars)
 	rl_outstream = stderr;
 	while (1)
 	{
-		g_vars.interrupted = 0;
+		signum = 0;
 		i_vars->prompt = get_prompt();
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:21:03 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 10:51:16 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:53:22 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ char	*get_prompt(void)
 	char	*user_host;
 	char	*prompt;
 
-	user = get_env_value(g_vars.env_list, "USER");
+	user = get_env_value(access_env_list(false, NULL), "USER");
 	if (!user)
 		user = "user";
-	hostname = get_hostname(g_vars.env_list);
+	hostname = get_hostname(access_env_list(false, NULL));
 	display_path = get_display_path_str();
 	if (!display_path)
 		return (ft_strdup("minishell$ "));

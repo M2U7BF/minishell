@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:44 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 12:00:55 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:53:04 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ static int	handle_relative_path_cd(const char *path)
 	char	*resolved_path;
 	int		status;
 
-	resolved_path = resolve_path(path, g_vars.env_list);
+	resolved_path = resolve_path(path, access_env_list(false, NULL));
 	if (!resolved_path)
 		return (1);
-	status = change_dir_and_update_env(resolved_path, g_vars.env_list);
+	status = change_dir_and_update_env(resolved_path, access_env_list(false, NULL));
 	free(resolved_path);
 	return (status);
 }
@@ -59,5 +59,5 @@ int	builtin_cd(char **argv)
 	path = argv[1];
 	if (path[0] != '/' && ft_strnstr(path, "..", ft_strlen(path)))
 		return (handle_relative_path_cd(path));
-	return (change_dir_and_update_env(path, g_vars.env_list));
+	return (change_dir_and_update_env(path, access_env_list(false, NULL)));
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 13:58:03 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 08:45:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:59:56 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,22 @@
 
 static int	check_state(void)
 {
-	if (g_vars.signal == 0)
+	if (signum == 0)
 		return (0);
-	else if (g_vars.signal == SIGINT)
+	else if (signum == SIGINT)
 	{
-		g_vars.signal = 0;
+		signum = 0;
 		return (0);
 	}
 	return (0);
 }
 
-static void	signal_handler(int signum)
+static void	signal_handler(int val)
 {
-	g_vars.signal = signum;
+	signum = val;
 	access_exit_status(true, 128 + signum);
-	if (g_vars.signal == SIGINT)
+	if (signum == SIGINT)
 	{
-		g_vars.interrupted = 1;
 		rl_replace_line("", 0);
 		rl_done = 1;
 	}
@@ -53,5 +52,5 @@ void	set_heredoc_signal_handlers(void)
 	if (isatty(STDIN_FILENO))
 		rl_event_hook = check_state;
 	set_signal_handler(SIGINT, signal_handler);
-	g_vars.signal = 0;
+	signum = 0;
 }

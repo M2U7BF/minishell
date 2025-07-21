@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:47:09 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:01:37 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:53:42 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	here_doc(char *delim, int out_fd)
 		line = input_line();
 		if (!line)
 			ft_dprintf(STDERR_FILENO, WARN_HEREDOC_1, i, delim);
-		if (g_vars.interrupted || !line || is_s_eq(line, delim, true))
+		if (signum == SIGINT || !line || is_s_eq(line, delim, true))
 			break ;
 		if (!is_delim_quoted)
 			line = expand_heredoc_line(line);

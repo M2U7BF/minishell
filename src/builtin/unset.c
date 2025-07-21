@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:57 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/09 14:53:17 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:54:51 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int	builtin_unset(char **argv)
 {
 	int	i;
 	int	status;
+  t_list *env_list;
 
+  env_list = access_env_list(false, NULL);
 	status = 0;
 	i = 1;
 	while (argv[i])
@@ -47,7 +49,7 @@ int	builtin_unset(char **argv)
 		}
 		else
 		{
-			unset_env_var(&g_vars.env_list, argv[i]);
+			unset_env_var(&env_list, argv[i]);
 		}
 		i++;
 	}
