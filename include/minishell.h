@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 15:24:00 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:01:48 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,12 +232,14 @@ void						update_proc(t_i_mode_vars *i_vars,
 bool						is_syntax_error(t_token *token_list);
 
 // here_doc.c
+void						null_to_empty(t_token *token);
 int							here_doc(char *delim, int out_fd);
 char						*str_quote_removal(char *s);
 
 // here_doc_2.c
 void						update_delim(char **delim, bool is_delim_quoted);
 int							process_heredoc(t_proc_unit *proc_list);
+char						*expand_heredoc_line(char *line);
 
 // handle_signal_heredoc.c
 void						set_heredoc_signal_handlers(void);
