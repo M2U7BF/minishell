@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 10:04:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 12:16:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ int	main(int argc, char *argv[], char **envp)
 	}
 	g_vars.signal = 0;
 	access_exit_status(true, EXIT_SUCCESS);
-  if (!isatty(STDIN_FILENO))
-  {
-    init_i_vars(&e_vars.i_vars);
-    exec_noninteractive(&e_vars.i_vars);
-  }
+	if (!isatty(STDIN_FILENO))
+	{
+		init_i_vars(&e_vars.i_vars);
+		exec_noninteractive(&e_vars.i_vars);
+	}
 	else if (e_vars.mode == INTERACTIVE)
 	{
 		init_i_vars(&e_vars.i_vars);
