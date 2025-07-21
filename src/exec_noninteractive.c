@@ -29,6 +29,22 @@ static int	handle_input_value(t_i_mode_vars *i_vars)
 	return (0);
 }
 
+static void	trim_endl(char **s)
+{
+	char	*old;
+	char	*new;
+
+	if (!s || !s[0])
+		return ;
+	old = *s;
+	if ((*s)[ft_strlen(*s) - 1] == '\n')
+	{
+		new = malloc(sizeof(char) * (ft_strlen(*s) + 1));
+		ft_strlcpy(new, old, (ft_strlen(*s)));
+		*s = new;
+	}
+}
+
 int	exec_noninteractive(t_i_mode_vars *i_vars)
 {
 	t_proc_unit	*proc_list;
@@ -39,7 +55,7 @@ int	exec_noninteractive(t_i_mode_vars *i_vars)
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);
-		i_vars->input = get_next_line(STDIN_FILENO);
+		trim_endl(&i_vars->input);
 		if (handle_input_value(i_vars) == -1)
 			continue ;
 		if (!i_vars->token_list)
