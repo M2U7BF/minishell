@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/17 16:11:56 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 09:40:37 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,17 @@ static void	exec_redirection(int *status, t_proc_unit *cur_proc)
 		cur_proc->next->read_fd = pipe_fds[0];
 	}
 	pipe_redirect(cur_proc);
+	if (cur_proc->argv && !is_builtin(cur_proc->argv[0]))
+	{
+		access_exit_status(true, get_command_path(&cur_proc->argv[0]));
+		if (access_exit_status(false, 0) != 0)
+		{
+			handle_error(access_exit_status(false, 0), cur_proc->argv[0]);
+			*status = access_exit_status(false, 0);
+			cur_proc->status = access_exit_status(false, 0);
+			return ;
+		}
+	}
 	*status = open_and_redirect_files(cur_proc->args, cur_proc);
 }
 
