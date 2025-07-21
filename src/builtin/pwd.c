@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:55 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 14:59:42 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 15:01:25 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	builtin_pwd(void)
 	else
 	{
 		if (getcwd(physical_cwd, sizeof(physical_cwd)) != NULL)
-		{
 			ft_putendl_fd(physical_cwd, STDOUT_FILENO);
-		}
 		else
 		{
 			perror("minishell: pwd");
