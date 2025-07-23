@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 17:03:03 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 15:04:34 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	main(int argc, char *argv[], char **envp)
 	t_list		*env_list;
 
 	(void)argv;
-	env_list = access_env_list(false, NULL);
+  init_env_list(&env_list, envp);
 	if (argc > 3)
 		return (EXIT_FAILURE);
 	init_e_vars(&e_vars);
-	init_env_list(&env_list, envp);
+	env_list = access_env_list(true, env_list);
 	if (parse_exec_arg(argc) == -1)
 	{
 		free_env_list(&env_list);
