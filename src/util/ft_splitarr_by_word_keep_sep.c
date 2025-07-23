@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_splitarr_by_word_leave_separator.c              :+:      :+:    :+:   */
+/*   ft_splitarr_by_word_keep_sep.c              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -29,7 +29,7 @@ static void	split(char *s, char *separator, t_list **new_lst)
 		ft_lstadd_back(new_lst, ft_lstnew((void *)ft_strdup(s)));
 }
 
-char	**ft_splitarr_by_word_leave_separator(char **arr, char *separator)
+char	**ft_splitarr_by_word_keep_sep(char **arr, char *separator)
 {
 	int		i;
 	char	**new;

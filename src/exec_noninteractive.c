@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 09:50:06 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 15:23:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:41:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	handle_input_value(t_i_mode_vars *i_vars)
 {
 	ft_free((void **)&i_vars->prompt);
-	if (g_vars.interrupted)
+	if (g_signum == SIGINT)
 		return (-1);
 	if (!i_vars->input)
 		process_ctrl_d();
@@ -35,7 +35,7 @@ int	exec_noninteractive(t_i_mode_vars *i_vars)
 
 	while (1)
 	{
-		g_vars.interrupted = 0;
+		g_signum = 0;
 		if (i_vars->input)
 			ft_free((void **)&i_vars->input);
 		set_signal_handlers(false);

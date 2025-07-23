@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 12:05:43 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:26:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	expand_variable(char **s)
 
 	end = 0;
 	name = get_var_name(*s + 1, &end);
-	var = get_env_value(g_vars.env_list, name);
+	var = get_env_value(access_env_list(false, NULL), name);
 	new = NULL;
 	if (!name[0])
 		new = ft_strdup(*s);
@@ -114,11 +114,14 @@ void	variable_expansion(t_token **token_list)
 
 int	parse(t_i_mode_vars *i_vars)
 {
+	t_list	*env_list;
+
+	env_list = access_env_list(false, NULL);
 	if (is_syntax_error(i_vars->token_list))
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
-		free_env_list(&g_vars.env_list);
+		free_env_list(&env_list);
 		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}

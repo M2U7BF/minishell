@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:07:31 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 08:45:23 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/21 16:56:16 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,18 @@ static void	handle_plus_assignment(const char *key, const char *value)
 {
 	char	*old_value;
 	char	*new_value;
+	t_list	*env_list;
 
-	old_value = get_env_value(g_vars.env_list, key);
+	env_list = access_env_list(false, NULL);
+	old_value = get_env_value(env_list, key);
 	if (old_value)
 	{
 		new_value = ft_strjoin(old_value, value);
-		set_env_var(&g_vars.env_list, key, new_value);
+		set_env_var(&env_list, key, new_value);
 		free(new_value);
 	}
 	else
-		set_env_var(&g_vars.env_list, key, value);
+		set_env_var(&env_list, key, value);
 }
 
 void	handle_variable_assignment(const char *arg)
@@ -70,7 +72,9 @@ void	handle_variable_assignment(const char *arg)
 	char		*plus_eq_ptr;
 	char		*key;
 	const char	*value;
+	t_list		*env_list;
 
+	env_list = access_env_list(false, NULL);
 	eq_ptr = ft_strchr(arg, '=');
 	plus_eq_ptr = ft_strnstr(arg, "+=", ft_strlen(arg));
 	value = eq_ptr + 1;
@@ -83,7 +87,7 @@ void	handle_variable_assignment(const char *arg)
 	if (plus_eq_ptr != NULL && plus_eq_ptr + 1 == eq_ptr)
 		handle_plus_assignment(key, value);
 	else
-		set_env_var(&g_vars.env_list, key, value);
+		set_env_var(&env_list, key, value);
 	free(key);
 	access_exit_status(true, EXIT_SUCCESS);
 }

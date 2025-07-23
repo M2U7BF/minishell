@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:39:29 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/07 17:58:44 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:26:00 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ void	del_env_var(void *content)
 void	free_env_list(t_list **env_list)
 {
 	ft_lstclear(env_list, del_env_var);
-	*env_list = NULL;
+	access_env_list(true, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:24:14 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/11 16:24:24 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 15:34:59 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ char	*get_var_name(char *s, int *end)
 
 	i = 0;
 	name = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	while (ft_isalnum(s[i]) || s[i] == '_')
-		i++;
+	if (ft_isalpha(s[0]) || s[0] == '_')
+	{
+		while (ft_isalnum(s[i]) || s[i] == '_')
+			i++;
+	}
 	*end = i;
 	ft_strlcpy(name, s, i + 1);
 	return (name);

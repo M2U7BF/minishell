@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:47 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/15 15:45:36 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/21 16:52:26 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	builtin_env(void)
 	t_list	*current;
 	t_env	*env_var;
 
-	current = g_vars.env_list;
+	current = access_env_list(false, NULL);
 	while (current)
 	{
 		env_var = (t_env *)current->content;
