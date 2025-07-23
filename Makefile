@@ -6,7 +6,7 @@
 #    By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/26 12:57:26 by kkamei            #+#    #+#              #
-#    Updated: 2025/07/21 16:27:26 by kkamei           ###   ########.fr        #
+#    Updated: 2025/07/23 09:11:48 by kkamei           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_NAMES = blank.c builtin/builtin.c builtin/cd.c builtin/echo.c \
 						util/str_util.c util/token_util.c util/util.c builtin/cd_path.c \
 						util/env_utils2.c util/env_utils3.c builtin/export_utils2.c \
 						builtin/cd_utils.c exec_2.c prompt.c prompt2.c parse_2.c here_doc_2.c \
-						exec_noninteractive.c builtin/cd_utils2.c
+						exec_noninteractive.c builtin/cd_utils2.c debug.c
 SRCS = $(addprefix src/, $(SRC_NAMES))
 OBJS = $(SRCS:.c=.o)
 OBJS_NO_MAIN := $(filter-out src/main.o, $(OBJS))
@@ -107,6 +107,7 @@ debug: $(OBJS) $(OBJS_NO_MAIN)
 	rm -f $(NAME).a
 	make libft
 	make ft_dprintf
+	make get_next_line
 	make libdebug
 	make libtest
 	$(CC) $(CFLAG) $(OBJS) \
