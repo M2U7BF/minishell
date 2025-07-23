@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 09:10:49 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 15:59:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef enum e_token_type
 	WORD,
 	RESERVED_WORD,
 	BLANK,
-	VARIABLE,
 	CONTROL_OPERATOR,
 	REDIR,
 	PIPE,

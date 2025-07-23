@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/03 10:38:48 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:20:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,39 @@ bool	is_redirection_syntax_error(t_token *token_list)
 	}
 	return (false);
 }
+bool	is_pipe_syntax_error(t_token *token_list)
+{
+	t_token	*cur_word;
+	t_token	*cur_pipe;
+	t_token	*cur;
+
+	cur_word = NULL;
+	cur_pipe = NULL;
+	cur = token_list;
+	while (cur)
+	{
+		if (cur->type == PIPE)
+		{
+			if ((!cur_pipe && !cur_word) || (cur_pipe && !cur_word)
+				|| !cur->next)
+				return (true);
+			cur_word = NULL;
+			cur_pipe = cur;
+		}
+		if (cur->type == WORD)
+			cur_word = cur;
+		cur = cur->next;
+	}
+	return (false);
+}
 
 bool	is_syntax_error(t_token *token_list)
 {
 	if (!token_list)
 		return (true);
 	if (is_redirection_syntax_error(token_list))
+		return (true);
+	if (is_pipe_syntax_error(token_list))
 		return (true);
 	return (false);
 }
