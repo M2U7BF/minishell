@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 15:04:34 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:27:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t signum = 0;
+volatile sig_atomic_t	signum = 0;
 
 int	main(int argc, char *argv[], char **envp)
 {
@@ -20,7 +20,7 @@ int	main(int argc, char *argv[], char **envp)
 	t_list		*env_list;
 
 	(void)argv;
-  init_env_list(&env_list, envp);
+	init_env_list(&env_list, envp);
 	if (argc > 3)
 		return (EXIT_FAILURE);
 	init_e_vars(&e_vars);

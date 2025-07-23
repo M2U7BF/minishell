@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:43:40 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:27:06 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 {
-  t_list *env_list;
+	t_list	*env_list;
 
-  env_list = access_env_list(false, NULL);
+	env_list = access_env_list(false, NULL);
 	if (status != 0)
 	{
 		destroy_i_vars(i_vars);

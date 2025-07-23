@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:57 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 16:54:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:26:12 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static int	is_valid_identifier(const char *s)
 
 int	builtin_unset(char **argv)
 {
-	int	i;
-	int	status;
-  t_list *env_list;
+	int		i;
+	int		status;
+	t_list	*env_list;
 
-  env_list = access_env_list(false, NULL);
+	env_list = access_env_list(false, NULL);
 	status = 0;
 	i = 1;
 	while (argv[i])

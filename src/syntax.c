@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 09:24:48 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:20:17 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:26:46 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ bool	is_redirection_syntax_error(t_token *token_list)
 	}
 	return (false);
 }
+
 bool	is_pipe_syntax_error(t_token *token_list)
 {
 	t_token	*cur_word;

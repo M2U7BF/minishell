@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:55:14 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:26:54 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,9 @@ void	variable_expansion(t_token **token_list)
 
 int	parse(t_i_mode_vars *i_vars)
 {
-  t_list *env_list;
+	t_list	*env_list;
 
-  env_list = access_env_list(false, NULL);
+	env_list = access_env_list(false, NULL);
 	if (is_syntax_error(i_vars->token_list))
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
