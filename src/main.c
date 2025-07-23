@@ -6,13 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 11:39:07 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:27:01 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:41:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t	signum = 0;
+volatile sig_atomic_t	g_signum = 0;
 
 int	main(int argc, char *argv[], char **envp)
 {
@@ -30,7 +30,7 @@ int	main(int argc, char *argv[], char **envp)
 		free_env_list(&env_list);
 		return (EXIT_FAILURE);
 	}
-	signum = 0;
+	g_signum = 0;
 	access_exit_status(true, EXIT_SUCCESS);
 	init_i_vars(&e_vars.i_vars);
 	if (!isatty(STDIN_FILENO))

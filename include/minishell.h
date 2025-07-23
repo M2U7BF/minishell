@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 15:59:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:41:25 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ typedef struct s_split_vars
 	char					*word;
 }							t_split_vars;
 
-extern volatile sig_atomic_t	signum;
+extern volatile sig_atomic_t	g_signum;
 
 // src ============================================================
 

@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:57:04 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/21 16:45:28 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:39:14 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,12 @@ static void	exec_redirection(int *status, t_proc_unit *cur_proc)
 	*status = open_and_redirect_files(cur_proc->args, cur_proc);
 }
 
-static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
+static void	handle_before_exec_error(int status, t_i_mode_vars *i_vars,
 		t_proc_unit *proc_list, t_proc_unit *proc)
 {
 	t_list	*env_list;
 
 	env_list = access_env_list(false, NULL);
-	set_signal_handlers(true);
 	if (proc->status != -1)
 		exit(proc->status);
 	if (status != 0)
@@ -55,6 +54,13 @@ static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
 		free_env_list(&env_list);
 		exit(EXIT_FAILURE);
 	}
+}
+
+static void	exec_child_proc(int status, t_i_mode_vars *i_vars,
+		t_proc_unit *proc_list, t_proc_unit *proc)
+{
+	set_signal_handlers(true);
+	handle_before_exec_error(status, i_vars, proc_list, proc);
 	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
 		libc_error();
 	if (proc->next && proc->next->read_fd != STDIN_FILENO)

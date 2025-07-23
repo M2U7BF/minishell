@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 15:44:50 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/23 16:26:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/23 16:40:40 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ int	builtin_exit(char **argv)
 	}
 	if (!is_numeric_argument(argv[1]))
 	{
-		ft_dprintf(STDERR_FILENO, "minishell: exit:
-			%s: numeric argument required\n", argv[1]);
+		ft_dprintf(STDERR_FILENO, \
+			"minishell: exit: %s: numeric argument required\n", argv[1]);
 		finalize_and_exit(2);
 	}
 	if (argc > 2)
