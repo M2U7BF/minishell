@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:26:54 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:22:20 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	variable_expansion(t_token **token_list)
 	t_token	*cur_tok;
 	char	cur_quote;
 	bool	is_expand;
+	t_token	*old;
 
 	if (!token_list || !(*token_list))
 		return ;
@@ -107,8 +108,15 @@ void	variable_expansion(t_token **token_list)
 			ft_free((void **)&cur_tok->str);
 			cur_tok->str = ft_strjoin_all(splited_words);
 			free_str_array(&splited_words);
+			if (!cur_tok->str[0])
+			{
+				old = cur_tok;
+				cur_tok = cur_tok->next;
+				del_token(token_list, old);
+			}
 		}
-		cur_tok = cur_tok->next;
+		if (cur_tok)
+			cur_tok = cur_tok->next;
 	}
 }
 
