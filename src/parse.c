@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/28 10:22:20 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:31:45 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	expand_variable(char **s)
 	ft_free((void **)&name);
 }
 
-void	inner_process(char *current_quote, char **s, bool *is_expand)
+void	expand(char *current_quote, char **s, bool *is_expand)
 {
 	if (*current_quote && ft_strchr(*s, *current_quote))
 	{
@@ -80,17 +80,36 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 	}
 }
 
+void	inner_process(t_token *cur_tok, bool *is_expand, t_token **token_list)
+{
+	int		j;
+	char	**splited_words;
+	char	cur_quote;
+	t_token	*old;
+
+	splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
+	j = -1;
+	cur_quote = '\0';
+	while (splited_words[++j])
+		expand(&cur_quote, &splited_words[j], is_expand);
+	ft_free((void **)&cur_tok->str);
+	cur_tok->str = ft_strjoin_all(splited_words);
+	free_str_array(&splited_words);
+	if (!cur_tok->str[0])
+	{
+		old = cur_tok;
+		cur_tok = cur_tok->next;
+		del_token(token_list, old);
+	}
+}
+
 // words: A pointer to a double array of char that can be freed
 // Expands environment variables starting with $
 // No expansion is performed if enclosed in single quotes
 void	variable_expansion(t_token **token_list)
 {
-	int		j;
-	char	**splited_words;
 	t_token	*cur_tok;
-	char	cur_quote;
 	bool	is_expand;
-	t_token	*old;
 
 	if (!token_list || !(*token_list))
 		return ;
@@ -99,22 +118,7 @@ void	variable_expansion(t_token **token_list)
 	while (cur_tok)
 	{
 		if (!is_s_eq("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
-		{
-			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
-			j = -1;
-			cur_quote = '\0';
-			while (splited_words[++j])
-				inner_process(&cur_quote, &splited_words[j], &is_expand);
-			ft_free((void **)&cur_tok->str);
-			cur_tok->str = ft_strjoin_all(splited_words);
-			free_str_array(&splited_words);
-			if (!cur_tok->str[0])
-			{
-				old = cur_tok;
-				cur_tok = cur_tok->next;
-				del_token(token_list, old);
-			}
-		}
+			inner_process(cur_tok, &is_expand, token_list);
 		if (cur_tok)
 			cur_tok = cur_tok->next;
 	}
