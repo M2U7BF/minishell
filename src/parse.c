@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/28 10:44:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/29 08:02:44 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ int	parse(t_i_mode_vars *i_vars)
 	{
 		ft_dprintf(STDERR_FILENO, "syntax_error\n");
 		destroy_i_vars(i_vars);
-		free_env_list(&env_list);
 		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}
