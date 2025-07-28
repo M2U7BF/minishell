@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:57:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:44:36 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,13 @@ bool							is_quote(char c);
 // parse.c
 int								parse(t_i_mode_vars *i_vars);
 void							expand_variable(char **s);
-void							variable_expansion(t_token **token_list);
+void							variable_expansion(t_token **token_list,
+									bool is_heredoc);
 
 // parse_2.c
 char							*get_var_name(char *s, int *end);
+void							expand_question_mark(char **s);
+void							expand_variable(char **s);
 
 // exec.c
 void							exec(t_i_mode_vars *i_vars,

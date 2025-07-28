@@ -6,54 +6,13 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:26:54 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:44:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	expand_question_mark(char **s)
-{
-	char	**tmp;
-
-	tmp = ft_split_by_word_keep_sep(*s, "$?");
-	ft_free((void **)&tmp[0]);
-	tmp[0] = ft_itoa(access_exit_status(false, 0));
-	ft_free((void **)s);
-	*s = ft_strjoin_all(tmp);
-	free_str_array(&tmp);
-}
-
-void	expand_variable(char **s)
-{
-	char	*var;
-	char	*name;
-	int		end;
-	char	*new;
-
-	end = 0;
-	name = get_var_name(*s + 1, &end);
-	var = get_env_value(access_env_list(false, NULL), name);
-	new = NULL;
-	if (!name[0])
-		new = ft_strdup(*s);
-	else if (var)
-	{
-		new = malloc(sizeof(char) * (ft_strlen(var) + ft_strlen(*s) - end + 1));
-		ft_strlcpy(new, var, ft_strlen(var) + 1);
-		ft_strlcpy(new + ft_strlen(var), *s + end + 1, ft_strlen(*s) - end + 1);
-	}
-	else
-	{
-		new = malloc(sizeof(char) * (ft_strlen(*s) - end + 1));
-		ft_strlcpy(new, *s + end + 1, ft_strlen(*s) - end + 1);
-	}
-	ft_free((void **)s);
-	*s = new;
-	ft_free((void **)&name);
-}
-
-void	inner_process(char *current_quote, char **s, bool *is_expand)
+void	expand(char *current_quote, char **s, bool *is_expand)
 {
 	if (*current_quote && ft_strchr(*s, *current_quote))
 	{
@@ -80,15 +39,36 @@ void	inner_process(char *current_quote, char **s, bool *is_expand)
 	}
 }
 
-// words: A pointer to a double array of char that can be freed
-// Expands environment variables starting with $
-// No expansion is performed if enclosed in single quotes
-void	variable_expansion(t_token **token_list)
+void	inner_process(t_token **cur_tok, bool *is_expand, t_token **token_list,
+		bool is_heredoc)
 {
 	int		j;
 	char	**splited_words;
-	t_token	*cur_tok;
 	char	cur_quote;
+	t_token	*old;
+
+	splited_words = ft_multi_split_keep_sep((*cur_tok)->str, "$'\" \t");
+	j = -1;
+	cur_quote = '\0';
+	while (splited_words[++j])
+		expand(&cur_quote, &splited_words[j], is_expand);
+	ft_free((void **)&(*cur_tok)->str);
+	(*cur_tok)->str = ft_strjoin_all(splited_words);
+	free_str_array(&splited_words);
+	if (!is_heredoc && !(*cur_tok)->str[0])
+	{
+		old = *cur_tok;
+		*cur_tok = (*cur_tok)->next;
+		del_token(token_list, old);
+	}
+}
+
+// words: A pointer to a double array of char that can be freed
+// Expands environment variables starting with $
+// No expansion is performed if enclosed in single quotes
+void	variable_expansion(t_token **token_list, bool is_heredoc)
+{
+	t_token	*cur_tok;
 	bool	is_expand;
 
 	if (!token_list || !(*token_list))
@@ -98,17 +78,9 @@ void	variable_expansion(t_token **token_list)
 	while (cur_tok)
 	{
 		if (!is_s_eq("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
-		{
-			splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
-			j = -1;
-			cur_quote = '\0';
-			while (splited_words[++j])
-				inner_process(&cur_quote, &splited_words[j], &is_expand);
-			ft_free((void **)&cur_tok->str);
-			cur_tok->str = ft_strjoin_all(splited_words);
-			free_str_array(&splited_words);
-		}
-		cur_tok = cur_tok->next;
+			inner_process(&cur_tok, &is_expand, token_list, is_heredoc);
+		if (cur_tok)
+			cur_tok = cur_tok->next;
 	}
 }
 
@@ -125,7 +97,7 @@ int	parse(t_i_mode_vars *i_vars)
 		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}
-	variable_expansion(&i_vars->token_list);
+	variable_expansion(&i_vars->token_list, false);
 	if (quote_removal(i_vars->token_list) == -1)
 		return (-1);
 	return (0);

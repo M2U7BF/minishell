@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 09:50:06 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:41:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:21:31 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	exec_noninteractive(t_i_mode_vars *i_vars)
 			continue ;
 		if (!i_vars->token_list)
 			continue ;
-		if (parse(i_vars) == -1)
+		if (parse(i_vars) == -1 || !i_vars->token_list)
 			continue ;
 		proc_list = process_division(i_vars);
 		if (process_heredoc(proc_list) == -1)

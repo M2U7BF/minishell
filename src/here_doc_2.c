@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:20:37 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:41:18 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:43:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*expand_heredoc_line(char *line)
 	if (line && line[0] == '\0')
 		return (line);
 	token = tokenize(line);
-	variable_expansion(&token);
+	variable_expansion(&token, true);
 	quote_removal(token);
 	null_to_empty(token);
 	tmp_arr = tokens_to_arr(token);
