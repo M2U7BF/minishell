@@ -6,7 +6,7 @@
 /*   By: atashiro <atashiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 13:47:24 by atashiro          #+#    #+#             */
-/*   Updated: 2025/07/21 14:41:01 by atashiro         ###   ########.fr       */
+/*   Updated: 2025/07/28 09:42:41 by atashiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,17 @@ static void	update_pwd_env_vars(const char *path, t_list *env_list)
 
 int	change_dir_and_update_env(const char *path, t_list *env_list)
 {
-	if (change_directory(path) != 0)
+	char	*path_copy;
+
+	path_copy = ft_strdup(path);
+	if (!path_copy)
+		libc_error();
+	if (change_directory(path_copy) != 0)
+	{
+		free(path_copy);
 		return (1);
-	update_pwd_env_vars(path, env_list);
+	}
+	update_pwd_env_vars(path_copy, env_list);
+	free(path_copy);
 	return (0);
 }
