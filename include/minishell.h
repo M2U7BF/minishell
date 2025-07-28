@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 13:02:27 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:57:51 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:33:17 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ void							variable_expansion(t_token **token_list);
 
 // parse_2.c
 char							*get_var_name(char *s, int *end);
+void							expand_question_mark(char **s);
+void							expand_variable(char **s);
 
 // exec.c
 void							exec(t_i_mode_vars *i_vars,
