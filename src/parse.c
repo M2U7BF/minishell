@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:43:23 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/28 10:32:46 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 10:44:18 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,26 @@ void	expand(char *current_quote, char **s, bool *is_expand)
 	}
 }
 
-void	inner_process(t_token *cur_tok, bool *is_expand, t_token **token_list)
+void	inner_process(t_token **cur_tok, bool *is_expand, t_token **token_list,
+		bool is_heredoc)
 {
 	int		j;
 	char	**splited_words;
 	char	cur_quote;
 	t_token	*old;
 
-	splited_words = ft_multi_split_keep_sep(cur_tok->str, "$'\" \t");
+	splited_words = ft_multi_split_keep_sep((*cur_tok)->str, "$'\" \t");
 	j = -1;
 	cur_quote = '\0';
 	while (splited_words[++j])
 		expand(&cur_quote, &splited_words[j], is_expand);
-	ft_free((void **)&cur_tok->str);
-	cur_tok->str = ft_strjoin_all(splited_words);
+	ft_free((void **)&(*cur_tok)->str);
+	(*cur_tok)->str = ft_strjoin_all(splited_words);
 	free_str_array(&splited_words);
-	if (!cur_tok->str[0])
+	if (!is_heredoc && !(*cur_tok)->str[0])
 	{
-		old = cur_tok;
-		cur_tok = cur_tok->next;
+		old = *cur_tok;
+		*cur_tok = (*cur_tok)->next;
 		del_token(token_list, old);
 	}
 }
@@ -65,7 +66,7 @@ void	inner_process(t_token *cur_tok, bool *is_expand, t_token **token_list)
 // words: A pointer to a double array of char that can be freed
 // Expands environment variables starting with $
 // No expansion is performed if enclosed in single quotes
-void	variable_expansion(t_token **token_list)
+void	variable_expansion(t_token **token_list, bool is_heredoc)
 {
 	t_token	*cur_tok;
 	bool	is_expand;
@@ -77,7 +78,7 @@ void	variable_expansion(t_token **token_list)
 	while (cur_tok)
 	{
 		if (!is_s_eq("$", cur_tok->str, true) && ft_strchr(cur_tok->str, '$'))
-			inner_process(cur_tok, &is_expand, token_list);
+			inner_process(&cur_tok, &is_expand, token_list, is_heredoc);
 		if (cur_tok)
 			cur_tok = cur_tok->next;
 	}
@@ -96,7 +97,7 @@ int	parse(t_i_mode_vars *i_vars)
 		access_exit_status(true, EXIT_SYNTAX_ERROR);
 		return (-1);
 	}
-	variable_expansion(&i_vars->token_list);
+	variable_expansion(&i_vars->token_list, false);
 	if (quote_removal(i_vars->token_list) == -1)
 		return (-1);
 	return (0);
