@@ -6,7 +6,7 @@
 /*   By: kkamei <kkamei@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 15:14:01 by kkamei            #+#    #+#             */
-/*   Updated: 2025/07/23 16:27:06 by kkamei           ###   ########.fr       */
+/*   Updated: 2025/07/28 09:25:01 by kkamei           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	exec_builtin(int status, t_i_mode_vars *i_vars, t_proc_unit *proc)
 		if (close(proc->next->read_fd) == -1)
 			libc_error();
 	}
-	if (is_s_eq(proc->argv[0], "exit", 1))
+	if (is_s_eq(proc->argv[0], "exit", 1) && isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", STDERR_FILENO);
 	status = handle_builtin_cmd(proc->argv);
 	access_exit_status(true, status);
