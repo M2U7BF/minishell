@@ -3,6 +3,7 @@
 !Makefile
 !*.c
 !*.h
+!README*
 tmp*
 *.txt
 .vscode/
