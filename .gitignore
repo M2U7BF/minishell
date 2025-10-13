@@ -4,6 +4,7 @@
 !*.c
 !*.h
 !README*
+!*.png
 tmp*
 *.txt
 .vscode/
