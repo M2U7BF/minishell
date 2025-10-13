@@ -42,7 +42,7 @@ include // ヘッダファイル
 
 # 実行例
 ・echoを実行
-https://github.com/M2U7BF/minishell/blob/main/readme/Screenshot%20from%202025-10-13%2010-41-06.png
+![image](https://github.com/M2U7BF/minishell/blob/main/readme/Screenshot%20from%202025-10-13%2010-41-06.png)
 
 ・pwd, cd, exitを実行
-https://github.com/M2U7BF/minishell/blob/main/readme/Screenshot%20from%202025-10-13%2010-43-25.png
+![image](https://github.com/M2U7BF/minishell/blob/main/readme/Screenshot%20from%202025-10-13%2010-43-25.png)
